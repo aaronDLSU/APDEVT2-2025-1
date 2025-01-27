@@ -20,7 +20,7 @@
 
       .fadeAnimation{
         animation-name: fadeInAnimation;
-        animation-duration: 7s;
+        animation-duration: 6s;
         animation-fill-mode: both;
       }
 
@@ -55,7 +55,6 @@
         width: 80%;
         max-width: 400px;
         text-align: center;
-        opacity: 1;
       }
 
       h1 {
@@ -89,10 +88,6 @@
         border: none;
         border-radius: 6px;
         cursor: pointer;
-      }
-
-      .opacitydown{
-        opacity: 0;
       }
 
     </style>
@@ -144,6 +139,8 @@
       function showLogin() {
         slider.style.transform = "translateX(-100%)"; //move design to left
         slider1.style.transform = "translateX(100%)"; // Move form to right
+        slider.style.transition = "2s";
+        slider1.style.transition = "2s";
         signupBox.style.display = "none"; // Hide Sign Up form
         loginBox.style.display = "block"; // Show Login form
         loginBox.classList.add('fadeAnimation');
@@ -155,6 +152,8 @@
       function showSignUp() {
         slider.style.transform = "translateX(0)"; // move design to rigiht
         slider1.style.transform = "translateX(0)"; // Move form to left
+        slider.style.transition = "2s";
+        slider1.style.transition = "2s";
         signupBox.style.display = "block"; // Show Sign Up form
         loginBox.style.display = "none"; // Hide Login form
         signupBox.classList.add('fadeAnimation');
