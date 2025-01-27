@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial;
+        min-width: 800px;
+      }
+
+      @keyframes fadeInAnimation {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+      .fadeAnimation{
+        animation-name: fadeInAnimation;
+        animation-duration: 7s;
+        animation-fill-mode: both;
+      }
+
+      .container {
+        display: flex;
+        height: 100vh;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .design {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: pink;
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+        transition: transform 1s ease-in-out;
+      }
+
+      .form-container {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 1s ease-in-out;
+      }
+
+      .form-content {
+        width: 80%;
+        max-width: 400px;
+        text-align: center;
+        opacity: 1;
+      }
+
+      h1 {
+        margin-bottom: 20px;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        font-size: 16px;
+      }
+
+      .switch-btn {
+        background: none;
+        color: blue;
+        text-decoration: underline;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        margin-top: 20px;
+      }
+
+      .action-btn {
+        background-color: black;
+        color: white;
+        width: 108%;
+        padding: 10px;
+        font-size: 16px;
+        margin-top: 10px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+
+      .opacitydown{
+        opacity: 0;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+
+      <!-- Form Section -->
+      <div class="form-container" id="slider1">
+
+        <!-- Login Form -->
+        <div class="form-content" id="login-box" style="display: none;">
+          <h1>Login</h1>
+          <input type="text" placeholder="Email" />
+          <input type="password" placeholder="Password" />
+          <button class="action-btn">Login</button>
+          <div>
+            Don't have an account?
+            <button class="switch-btn" onclick="showSignUp()">Sign Up</button>
+          </div>
+        </div>
+
+        <!-- Sign-Up Form -->
+        <div class="form-content" id="signup-box">
+          <h1>Sign Up</h1>
+          <input type="text" placeholder="Email" />
+          <input type="password" placeholder="Password" />
+          <button class="action-btn">Sign Up</button>
+          <div>
+            Have an account?
+            <button class="switch-btn" onclick="showLogin()">Login</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pink Design Section -->
+      <div class="design" id="slider">
+        Welcome to Our App!
+      </div>
+
+    </div>
+
+    <script>
+      const slider = document.getElementById("slider");//design div
+      const slider1 = document.getElementById("slider1");//form div
+      const signupBox = document.getElementById("signup-box");
+      const loginBox = document.getElementById("login-box");
+
+      function showLogin() {
+        slider.style.transform = "translateX(-100%)"; //move design to left
+        slider1.style.transform = "translateX(100%)"; // Move form to right
+        signupBox.style.display = "none"; // Hide Sign Up form
+        loginBox.style.display = "block"; // Show Login form
+        loginBox.classList.add('fadeAnimation');
+        signupBox.classList.remove('fadeAnimation');
+        
+        
+      }
+
+      function showSignUp() {
+        slider.style.transform = "translateX(0)"; // move design to rigiht
+        slider1.style.transform = "translateX(0)"; // Move form to left
+        signupBox.style.display = "block"; // Show Sign Up form
+        loginBox.style.display = "none"; // Hide Login form
+        signupBox.classList.add('fadeAnimation');
+        loginBox.classList.remove('fadeAnimation');
+        
+      }
+    </script>
+  </body>
+</html>
