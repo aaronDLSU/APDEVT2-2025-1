@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
+    
+
     <style>
       body {
         margin: 0;
@@ -20,7 +22,7 @@
 
       .fadeAnimation{
         animation-name: fadeInAnimation;
-        animation-duration: 6s;
+        animation-duration: 4s;
         animation-fill-mode: both;
       }
 
@@ -40,7 +42,6 @@
         color: white;
         font-size: 24px;
         font-weight: bold;
-        transition: transform 1s ease-in-out;
       }
 
       .form-container {
@@ -48,7 +49,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: transform 1s ease-in-out;
+        
       }
 
       .form-content {
@@ -130,36 +131,37 @@
 
     </div>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
-      const slider = document.getElementById("slider");//design div
-      const slider1 = document.getElementById("slider1");//form div
-      const signupBox = document.getElementById("signup-box");
-      const loginBox = document.getElementById("login-box");
+      const slider = $("#slider"); // design div
+      const slider1 = $("#slider1"); // form div
+      const signupBox = $("#signup-box");
+      const loginBox = $("#login-box");
 
       function showLogin() {
-        slider.style.transform = "translateX(-100%)"; //move design to left
-        slider1.style.transform = "translateX(100%)"; // Move form to right
-        slider.style.transition = "2s";
-        slider1.style.transition = "2s";
-        signupBox.style.display = "none"; // Hide Sign Up form
-        loginBox.style.display = "block"; // Show Login form
-        loginBox.classList.add('fadeAnimation');
-        signupBox.classList.remove('fadeAnimation');
-        
-        
+        slider.css("transform", "translateX(-100%)"); // move design to the left
+        slider1.css("transform", "translateX(100%)"); // move form to the right
+        slider.css("transition", "1.5s");
+        slider1.css("transition", "1.5s");
+        signupBox.hide(); // Hide Sign-Up form
+        loginBox.show();  // Show Login form
+        loginBox.addClass('fadeAnimation');
+        signupBox.removeClass('fadeAnimation');
       }
 
       function showSignUp() {
-        slider.style.transform = "translateX(0)"; // move design to rigiht
-        slider1.style.transform = "translateX(0)"; // Move form to left
-        slider.style.transition = "2s";
-        slider1.style.transition = "2s";
-        signupBox.style.display = "block"; // Show Sign Up form
-        loginBox.style.display = "none"; // Hide Login form
-        signupBox.classList.add('fadeAnimation');
-        loginBox.classList.remove('fadeAnimation');
-        
+        slider.css("transform", "translateX(0)"); // move design back to the right
+        slider1.css("transform", "translateX(0)"); // move form back to the left
+        slider.css("transition", "1.5s");
+        slider1.css("transition", "1.5s");
+        signupBox.show(); // Show Sign-Up form
+        loginBox.hide();  // Hide Login form
+        signupBox.addClass('fadeAnimation');
+        loginBox.removeClass('fadeAnimation');
       }
+
+        
+    
     </script>
   </body>
 </html>
