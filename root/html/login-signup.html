@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    
-
+    <title>Sign up | Login</title>
     <style>
       body {
         margin: 0;
@@ -88,11 +87,22 @@
         width: 100%; /* Set width to 100% of its container */
         padding: 10px;
         font-size: 16px;
-        margin-top: 20px;
         border: none;
         border-radius: 20px;
         cursor: pointer;
         box-sizing: border-box;
+      }
+
+      .remember-me-option{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .remember-me-checkbox{
+        margin-right: 10px;
+        height: 16px;
+        width: 16px;
       }
 
     </style>
@@ -107,7 +117,11 @@
         <div class="form-content" id="login-box" style="display: none;">
           <h1>Login</h1>
           <input type="text" placeholder="Email" />
-          <input type="password" placeholder="Password" />
+          <input type="password" placeholder="Password"/>
+          <div class="remember-me-option">
+            <input type="checkbox" value="remembered" class="remember-me-checkbox">
+            <p>Remember me</p>
+          </div>
           <button class="action-btn">Login</button>
           <div>
             Don't have an account?
@@ -120,8 +134,11 @@
           <h1>Sign Up</h1>
           <input type="text" placeholder="Email" />
           <input type="password" placeholder="Password"/>
+          <div class="remember-me-option">
+            <input type="checkbox" value="remembered" class="remember-me-checkbox">
+            <p>Remember me</p>
+          </div>
           <button class="action-btn">Sign Up</button>
-          
           <div>
             Have an account?
             <button class="switch-btn" onclick="showLogin()">Login</button>
@@ -170,5 +187,4 @@
     </script>
   </body>
 </html>
-
 
