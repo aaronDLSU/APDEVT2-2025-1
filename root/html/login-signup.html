@@ -10,27 +10,25 @@
       }
 
       @keyframes fadeInAnimation {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
+        from {
+            opacity: 0;
         }
+        to {
+            opacity: 1;
+        }
+      }
 
-      .fadeAnimation{
+      .fadeAnimation {
         animation-name: fadeInAnimation;
         animation-duration: 4s;
         animation-fill-mode: both;
       }
 
-      .container {
+      .login-signup-container {
         display: flex;
         height: 100vh;
         overflow: hidden;
         position: relative;
-        
       }
 
       .design {
@@ -42,6 +40,7 @@
         color: white;
         font-size: 24px;
         font-weight: bold;
+        height: 100vh;
       }
 
       .form-container {
@@ -50,28 +49,62 @@
         align-items: center;
         justify-content: center;
         margin-top: -40px;
-        
       }
 
       .form-content {
-        width:80%;
+        width: 90%;
         max-width: 400px;
         text-align: center;
       }
 
-      h1 {
+      .login-signup {
         margin-bottom: 20px;
       }
 
-      input {
+      #email-input, #password-input, #signup-email, #signup-password, .role-pick {
         width: 100%;
-        padding:10px;
+        padding: 10px;
         margin: 10px 0;
         font-size: 16px;
         box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 5px;
       }
 
-      .switch-btn {
+      .role-pick{
+        width:87%;
+        margin-left: 10px;
+      }
+
+      .remember-me-option {
+        display: flex;
+        align-items: center;
+      }
+
+      .remember-me-checkbox {
+        margin-right: 10px;
+        height: 16px;
+        width: 16px;
+      }
+
+      .login-signup-btn {
+        background-color: black;
+        color: white;
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        box-sizing: border-box;
+        margin-top: 20px;
+      }
+
+      .login-button {
+        margin-top: 0px;
+      }
+
+      .switch-signup-login {
         background: none;
         color: blue;
         text-decoration: underline;
@@ -80,68 +113,42 @@
         font-size: 14px;
         margin-top: 20px;
       }
-
-      .action-btn {
-        background-color: black;
-        color: white;
-        width: 100%; /* Set width to 100% of its container */
-        padding: 10px;
-        font-size: 16px;
-        border: none;
-        border-radius: 20px;
-        cursor: pointer;
-        box-sizing: border-box;
-      }
-
-      .remember-me-option{
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-      }
-
-      .remember-me-checkbox{
-        margin-right: 10px;
-        height: 16px;
-        width: 16px;
-      }
-
     </style>
   </head>
   <body>
-    <div class="container">
-
+    <div class="login-signup-container">
       <!-- Form Section -->
       <div class="form-container" id="slider1">
-
         <!-- Login Form -->
         <div class="form-content" id="login-box" style="display: none;">
-          <h1>Login</h1>
-          <input type="text" placeholder="Email" />
-          <input type="password" placeholder="Password"/>
+          <h1 class="login-signup">Login</h1>
+          <input id="email-input" type="text" placeholder="Email"/>
+          <input id="password-input" type="password" placeholder="Password"/>
           <div class="remember-me-option">
-            <input type="checkbox" value="remembered" class="remember-me-checkbox">
+            <input type="checkbox" value="notRemembered" class="remember-me-checkbox" id="login-checkbox">
             <p>Remember me</p>
           </div>
-          <button class="action-btn">Login</button>
+          <button class="login-signup-btn login-button" onclick="remembered()">Login</button>
           <div>
             Don't have an account?
-            <button class="switch-btn" onclick="showSignUp()">Sign Up</button>
+            <button class="switch-signup-login" onclick="showSignUp()">Sign Up</button>
           </div>
         </div>
 
         <!-- Sign-Up Form -->
         <div class="form-content" id="signup-box">
-          <h1>Sign Up</h1>
-          <input type="text" placeholder="Email" />
-          <input type="password" placeholder="Password"/>
-          <div class="remember-me-option">
-            <input type="checkbox" value="remembered" class="remember-me-checkbox">
-            <p>Remember me</p>
-          </div>
-          <button class="action-btn">Sign Up</button>
+          <h1 class="login-signup">Sign Up</h1>
+          <input id="signup-email" type="text" placeholder="Email" />
+          <input id="signup-password" type="password" placeholder="Password" />
+          <label for="signup-role">Role:</label>
+          <select id="signup-role" required class="role-pick">
+            <option value="student">Student</option>
+            <option value="lab_technician">Lab Technician</option>
+          </select>
+          <button class="login-signup-btn">Sign Up</button>
           <div>
             Have an account?
-            <button class="switch-btn" onclick="showLogin()">Login</button>
+            <button class="switch-signup-login" onclick="showLogin()">Login</button>
           </div>
         </div>
       </div>
@@ -150,7 +157,6 @@
       <div class="design" id="slider">
         Welcome to Our App!
       </div>
-
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -182,9 +188,15 @@
         loginBox.removeClass('fadeAnimation');
       }
 
-        
-    
+      function remembered() {
+        if ($("#login-checkbox").is(":checked")) {
+            $("#login-checkbox").val("remembered");
+            console.log("Checkbox is checked. remembered.");
+        } else {
+            $("#login-checkbox").val("default");
+            console.log("Checkbox is unchecked. not remembered.");
+        }
+      }
     </script>
   </body>
 </html>
-
