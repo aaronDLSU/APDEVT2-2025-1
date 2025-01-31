@@ -1,203 +1,237 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Sign up | Login</title>
+    <script src="https://kit.fontawesome.com/a39233b32c.js" crossorigin="anonymous"></script>
+    <title>Home Page</title>
     <style>
-      body {
+      p {
         margin: 0;
-        font-family: Arial;
-        min-width: 800px;
       }
 
-      @keyframes fadeInAnimation {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 1;
-        }
+      body {
+        background-color: #F5F5F5;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding-top: 55px; /* To account for the fixed header */
       }
 
-      .fadeAnimation {
-        animation-name: fadeInAnimation;
-        animation-duration: 4s;
-        animation-fill-mode: both;
-      }
-
-      .login-signup-container {
+      .header {
+        height: 55px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
         display: flex;
-        height: 100vh;
-        overflow: hidden;
-        position: relative;
-      }
-
-      .design {
-        flex: 1;
-        display: flex;
+        justify-content: space-between;
         align-items: center;
-        justify-content: center;
-        background-color: pink;
-        color: white;
-        font-size: 24px;
+        border-bottom: 2px solid rgb(240, 240, 240);
+        background-color: white;
+        z-index: 100; /* Ensure header is above other content */
+      }
+
+      .header i {
+        font-size: 26px;
+      }
+
+      .header p {
+        margin-left: 40px;
+        font-size: 18px;
         font-weight: bold;
-        height: 100vh;
       }
 
-      .form-container {
+      .left-section {
+        display: flex;
+        align-items: center;
+        margin-left: 26px;
+      }
+
+      .middle-section {
         flex: 1;
+        max-width: 470px;
+        margin-left: 60px;
         display: flex;
         align-items: center;
-        justify-content: center;
-        margin-top: -40px;
       }
 
-      .form-content {
-        width: 90%;
-        max-width: 400px;
-        text-align: center;
-      }
-
-      .login-signup {
-        margin-bottom: 20px;
-      }
-
-      #email-input, #password-input, #signup-email, #signup-password, .role-pick {
-        width: 100%;
-        padding: 10px;
-        margin: 5px 0;
+      .search-bar {
+        font-family: Roboto, Arial;
+        flex: 1;
+        height: 36px;
+        padding-left: 12px;
         font-size: 16px;
-        box-sizing: border-box;
-        border: 1px solid #ccc;
-        border-radius: 5px;
+        border: 1px solid rgb(204, 204, 204);
+        border-top-left-radius: 2px;
+        border-bottom-left-radius: 2px;
+        box-shadow: inset 0px 1px 2px rgb(238, 238, 238);
+        -webkit-font-smoothing: antialiased;
       }
 
-      .role-pick{
-        width:87%;
-        margin-left: 10px;
+      .search-button {
+        height: 40px;
+        width: 66px;
+        background-color: rgb(247, 247, 247);
+        border: 1px solid rgb(204, 204, 204);
+        margin-left: -1px;
+        margin-right: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s;
       }
 
-      .remember-me-option {
-        display: flex;
-        align-items: center;
-        margin-top: 10px;
+      .search-button:hover {
+        background-color: rgb(230, 230, 230);
       }
 
-      .remember-me-checkbox {
+      .right-section {
+        margin-right: 40px;
+      }
+
+      .right-section i {
+        font-size: 26px;
         margin-right: 10px;
-        height: 16px;
-        width: 16px;
       }
 
-      .login-signup-btn {
-        background-color: black;
-        color: white;
-        width: 100%;
-        padding: 10px;
-        font-size: 16px;
-        border: none;
+      .sign-in-button {
+        display: flex;
+        align-items: center;
+        padding: 8px 10px;
+        border: 1px solid rgb(204, 204, 204);
         border-radius: 20px;
+        background-color: white;
         cursor: pointer;
-        box-sizing: border-box;
-        margin-top: 20px;
+        transition: background-color 0.3s;
       }
 
-      .login-button {
-        margin-top: 0px;
+      .sign-in-button:hover {
+        background-color: rgb(247, 247, 247);
       }
 
-      .switch-signup-login {
-        background: none;
-        color: blue;
-        text-decoration: underline;
+      .sidebar {
+        width: 72px;
+        background-color: white;
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        top: 55px;
+        border-right: 2px solid rgb(240, 240, 240);
+        z-index: 200;
+      }
+
+      .sidebar-link {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .sidebar-link:hover {
+        background-color: rgb(247, 247, 247);
+      }
+
+      .sidebar-link i {
+        font-size: 26px;
+      }
+
+      .sidebar-link p {
+        font-size: 12px;
+        margin-top: 8px;
+      }
+
+      .Home-button{
+        margin-top:20px;
+      }
+
+      .content-section {
+        margin-left: 72px; /* To account for the sidebar */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: calc(100vh - 55px); /* Full height minus header so content will not be covered */
+      }
+
+      .welcome {
+        font-size: 50px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color:#2E3A59;
+      }
+
+      .get-started-button {
+        background-color: #2E3A59;
+        color: white;
         border: none;
+        padding: 10px 40px;
+        font-size: 28px;
         cursor: pointer;
-        font-size: 14px;
-        margin-top: 20px;
+        transition: background-color 0.3s;
+      }
+
+      .get-started-button:hover {
+        background-color: #41527c;
       }
     </style>
   </head>
   <body>
-    <div class="login-signup-container">
-      <!-- Form Section -->
-      <div class="form-container" id="slider1">
-        <!-- Login Form -->
-        <div class="form-content" id="login-box" style="display: none;">
-          <h1 class="login-signup">Login</h1>
-          <input id="email-input" type="text" placeholder="Email"/>
-          <input id="password-input" type="password" placeholder="Password"/>
-          <div class="remember-me-option">
-            <input type="checkbox" value="notRemembered" class="remember-me-checkbox" id="login-checkbox">
-            <p>Remember me</p>
-          </div>
-          <button class="login-signup-btn login-button" onclick="remembered()">Login</button>
-          <div>
-            Don't have an account?
-            <button class="switch-signup-login" onclick="showSignUp()">Sign Up</button>
-          </div>
+    <div class="homepage">
+      <!-- Header -->
+      <div class="header">
+        <div class="left-section">
+          <i class="fa-solid fa-bars" class="hamburger-icon"></i>
+          <p>Lab Reservation</p>
         </div>
 
-        <!-- Sign-Up Form -->
-        <div class="form-content" id="signup-box">
-          <h1 class="login-signup">Sign Up</h1>
-          <input id="signup-email" type="text" placeholder="Email" />
-          <input id="signup-password" type="password" placeholder="Password" />
-          <label for="signup-role">Role:</label>
-          <select id="signup-role" required class="role-pick">
-            <option value="student">Student</option>
-            <option value="lab_technician">Lab Technician</option>
-          </select>
-          <button class="login-signup-btn">Sign Up</button>
-          <div>
-            Have an account?
-            <button class="switch-signup-login" onclick="showLogin()">Login</button>
-          </div>
+        <div class="middle-section">
+          <input class="search-bar" type="text" placeholder="Search" aria-label="Search">
+          <button class="search-button" aria-label="Search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+
+        <div class="right-section">
+          <button class="sign-in-button" onclick="location.href = 'login-signup.html'">
+            <i class="fa-solid fa-circle-user"></i>
+            <div>Sign in</div>
+          </button>
         </div>
       </div>
 
-      <!-- Pink Design Section -->
-      <div class="design" id="slider">
-        Welcome to Our App!
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="sidebar-link Home-button">
+          <i class="fa-solid fa-house"></i>
+          <p>Home</p>
+        </div>
+
+        <div class="sidebar-link">
+          <i class="fa-regular fa-calendar"></i>
+          <p>Calendar</p>
+        </div>
+
+        <div class="sidebar-link">
+          <i class="fa-regular fa-bell"></i>
+          <p>Notification</p>
+        </div>
+
+        <div class="sidebar-link">
+          <i class="fa-solid fa-circle-info"></i>
+          <p>Help</p>
+        </div>
+      </div>
+
+      <!-- Content Section -->
+      <div class="content-section">
+        <div class="welcome">Lab Reservation</div>
+        <button class="get-started-button" 
+        onclick="location.href = 'login-signup.html'">Get Started</button>
       </div>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
-      const slider = $("#slider"); // design div
-      const slider1 = $("#slider1"); // form div
-      const signupBox = $("#signup-box");
-      const loginBox = $("#login-box");
-
-      function showLogin() {
-        slider.css("transform", "translateX(-100%)"); // move design to the left
-        slider1.css("transform", "translateX(100%)"); // move form to the right
-        slider.css("transition", "1.5s");
-        slider1.css("transition", "1.5s");
-        signupBox.hide(); // Hide Sign-Up form
-        loginBox.show();  // Show Login form
-        loginBox.addClass('fadeAnimation');
-        signupBox.removeClass('fadeAnimation');
-      }
-
-      function showSignUp() {
-        slider.css("transform", "translateX(0)"); // move design back to the right
-        slider1.css("transform", "translateX(0)"); // move form back to the left
-        slider.css("transition", "1.5s");
-        slider1.css("transition", "1.5s");
-        signupBox.show(); // Show Sign-Up form
-        loginBox.hide();  // Hide Login form
-        signupBox.addClass('fadeAnimation');
-        loginBox.removeClass('fadeAnimation');
-      }
-
-      function remembered() {
-        if ($("#login-checkbox").is(":checked")) {
-            $("#login-checkbox").val("remembered");
-            console.log("Checkbox is checked. remembered.");
-        } else {
-            $("#login-checkbox").val("default");
-            console.log("Checkbox is unchecked. not remembered.");
-        }
-      }
+      // Add JavaScript functionality here if needed
     </script>
   </body>
 </html>
