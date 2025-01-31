@@ -2,236 +2,327 @@
 <html>
   <head>
     <script src="https://kit.fontawesome.com/a39233b32c.js" crossorigin="anonymous"></script>
-    <title>Home Page</title>
+    <title>Sign up | Login</title>
     <style>
-      p {
-        margin: 0;
+      p{
+        margin:0;
       }
-
       body {
-        background-color: #F5F5F5;
-        font-family: Arial, sans-serif;
         margin: 0;
-        padding-top: 55px; /* To account for the fixed header */
+        font-family: Arial;
+        min-width: 800px;
       }
 
-      .header {
-        height: 55px;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
+      @keyframes fadeInAnimation {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+      }
+
+      .fadeAnimation {
+        animation-name: fadeInAnimation;
+        animation-duration: 4s;
+        animation-fill-mode: both;
+      }
+
+      .login-signup-container {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 2px solid rgb(240, 240, 240);
-        background-color: white;
-        z-index: 100; /* Ensure header is above other content */
+        height: 100vh;
+        overflow: hidden;
+        position: relative;
       }
 
-      .header i {
-        font-size: 26px;
-      }
-
-      .header p {
-        margin-left: 40px;
-        font-size: 18px;
-        font-weight: bold;
-      }
-
-      .left-section {
-        display: flex;
-        align-items: center;
-        margin-left: 26px;
-      }
-
-      .middle-section {
+      .design {
         flex: 1;
-        max-width: 470px;
-        margin-left: 60px;
         display: flex;
         align-items: center;
-      }
-
-      .search-bar {
-        font-family: Roboto, Arial;
-        flex: 1;
-        height: 36px;
-        padding-left: 12px;
-        font-size: 16px;
-        border: 1px solid rgb(204, 204, 204);
-        border-top-left-radius: 2px;
-        border-bottom-left-radius: 2px;
-        box-shadow: inset 0px 1px 2px rgb(238, 238, 238);
-        -webkit-font-smoothing: antialiased;
-      }
-
-      .search-button {
-        height: 40px;
-        width: 66px;
-        background-color: rgb(247, 247, 247);
-        border: 1px solid rgb(204, 204, 204);
-        margin-left: -1px;
-        margin-right: 8px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-      }
-
-      .search-button:hover {
-        background-color: rgb(230, 230, 230);
-      }
-
-      .right-section {
-        margin-right: 40px;
-      }
-
-      .right-section i {
-        font-size: 26px;
-        margin-right: 10px;
-      }
-
-      .sign-in-button {
-        display: flex;
-        align-items: center;
-        padding: 8px 10px;
-        border: 1px solid rgb(204, 204, 204);
-        border-radius: 20px;
-        background-color: white;
-        cursor: pointer;
-        transition: background-color 0.3s;
-      }
-
-      .sign-in-button:hover {
-        background-color: rgb(247, 247, 247);
-      }
-
-      .sidebar {
-        width: 72px;
-        background-color: white;
-        position: fixed;
-        left: 0;
-        bottom: 0;
-        top: 55px;
-        border-right: 2px solid rgb(240, 240, 240);
-        z-index: 200;
-      }
-
-      .sidebar-link {
-        display: flex;
-        flex-direction: column;
         justify-content: center;
-        align-items: center;
-        padding-top: 15px;
-        padding-bottom: 15px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-      }
-
-      .sidebar-link:hover {
-        background-color: rgb(247, 247, 247);
-      }
-
-      .sidebar-link i {
-        font-size: 26px;
-      }
-
-      .sidebar-link p {
-        font-size: 12px;
-        margin-top: 8px;
-      }
-
-      .Home-button{
-        margin-top:20px;
-      }
-
-      .content-section {
-        margin-left: 72px; /* To account for the sidebar */
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: calc(100vh - 55px); /* Full height minus header so content will not be covered */
-      }
-
-      .welcome {
-        font-size: 50px;
-        font-weight: bold;
-        margin-bottom: 20px;
-        color:#2E3A59;
-      }
-
-      .get-started-button {
-        background-color: #2E3A59;
+        background-color: pink;
         color: white;
-        border: none;
-        padding: 10px 40px;
-        font-size: 28px;
-        cursor: pointer;
-        transition: background-color 0.3s;
+        font-size: 24px;
+        font-weight: bold;
+        height: 100vh;
       }
 
-      .get-started-button:hover {
-        background-color: #41527c;
+      .form-container {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: -40px;
       }
+
+      .form-content {
+        width: 90%;
+        max-width: 400px;
+        text-align: center;
+      }
+
+      .login-signup {
+        margin-bottom: 20px;
+      }
+
+      .input-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      .input-container i{
+        position: absolute;
+        font-size: 26px;
+        right: 10px;
+        opacity: 0;
+      }
+
+      .input-container i.show {
+        opacity: 1;
+      }
+
+      #email-input, #password-input, #signup-email, #signup-password, .role-pick {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        font-size: 16px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      .role-pick{
+        width:87%;
+        margin-left: 10px;
+      }
+
+      .invalid-message{
+        color: #ff6f61;
+        display: flex;
+        justify-content: left;
+        opacity:0;
+      }
+
+      .remember-me-option {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+
+      .remember-me-checkbox {
+        margin-right: 10px;
+        height: 16px;
+        width: 16px;
+      }
+
+      .login-signup-btn {
+        background-color: black;
+        color: white;
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        box-sizing: border-box;
+        margin-top: 10px;
+      }
+
+      .login-button {
+        margin-top: 0px;
+      }
+
+      .switch-signup-login {
+        background: none;
+        color: blue;
+        text-decoration: underline;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        margin-top: 20px;
+      }
+
     </style>
   </head>
   <body>
-    <div class="homepage">
-      <!-- Header -->
-      <div class="header">
-        <div class="left-section">
-          <i class="fa-solid fa-bars" class="hamburger-icon"></i>
-          <p>Lab Reservation</p>
+    <div class="login-signup-container">
+      <!-- Form Section -->
+      <div class="form-container" id="slider1">
+        <!-- Login Form -->
+        <div class="form-content" id="login-box" style="display: none;">
+          <h1 class="login-signup">Login</h1>
+          <div class="input-container">
+            <input id="email-input" type="text" placeholder="Email"/>
+            <i class="fa-solid fa-circle-exclamation login-warning" style="color: #ff6f61;"></i>
+          </div>
+
+          <div class="input-container">
+            <input id="password-input" type="password" placeholder="Password"/>
+            <i class="fa-solid fa-circle-exclamation login-warning" style="color: #ff6f61;"></i>
+          </div>
+          
+          
+          <p class="invalid-message">Invalid email or password input!</p>
+          <div class="remember-me-option">
+            <input type="checkbox" value="notRemembered" class="remember-me-checkbox" id="login-checkbox">
+            <p>Remember me</p>
+          </div>
+          <button class="login-signup-btn login-button" onclick="remembered(); checkInvalidLogin();">Login</button>
+          <div>
+            Don't have an account?
+            <button class="switch-signup-login" onclick="showSignUp()">Sign Up</button>
+          </div>
         </div>
 
-        <div class="middle-section">
-          <input class="search-bar" type="text" placeholder="Search" aria-label="Search">
-          <button class="search-button" aria-label="Search">
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </button>
-        </div>
+        <!-- Sign-Up Form -->
+        <div class="form-content" id="signup-box">
+          <h1 class="login-signup">Sign Up</h1>
+          <div class="input-container">
+            <input id="signup-email" type="text" placeholder="Email"/>
+            <i class="fa-solid fa-circle-exclamation signup-warning" style="color: #ff6f61;"></i>
+          </div>
 
-        <div class="right-section">
-          <button class="sign-in-button" onclick="location.href = 'login-signup.html'">
-            <i class="fa-solid fa-circle-user"></i>
-            <div>Sign in</div>
-          </button>
+          <div class="input-container">
+            <input id="signup-password" type="password" placeholder="Password"/>
+            <i class="fa-solid fa-circle-exclamation signup-warning" style="color: #ff6f61;"></i>
+          </div>
+         
+          
+
+          <label for="signup-role">Role:</label>
+          <select id="signup-role" required class="role-pick">
+            <option value="student">Student</option>
+            <option value="lab_technician">Lab Technician</option>
+          </select>
+          <p class="invalid-message">Invalid email or password input!</p>
+          <button class="login-signup-btn" onclick="checkInvalidSignup()">Sign Up</button>
+          <div>
+            Have an account?
+            <button class="switch-signup-login" onclick="showLogin()">Login</button>
+          </div>
         </div>
       </div>
 
-      <!-- Sidebar -->
-      <div class="sidebar">
-        <div class="sidebar-link Home-button">
-          <i class="fa-solid fa-house"></i>
-          <p>Home</p>
-        </div>
-
-        <div class="sidebar-link">
-          <i class="fa-regular fa-calendar"></i>
-          <p>Calendar</p>
-        </div>
-
-        <div class="sidebar-link">
-          <i class="fa-regular fa-bell"></i>
-          <p>Notification</p>
-        </div>
-
-        <div class="sidebar-link">
-          <i class="fa-solid fa-circle-info"></i>
-          <p>Help</p>
-        </div>
-      </div>
-
-      <!-- Content Section -->
-      <div class="content-section">
-        <div class="welcome">Lab Reservation</div>
-        <button class="get-started-button" 
-        onclick="location.href = 'login-signup.html'">Get Started</button>
+      <!-- Design Section -->
+      <div class="design" id="slider">
+        Welcome to Our App!
       </div>
     </div>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
-      // Add JavaScript functionality here if needed
+      const slider = $("#slider"); // design div
+      const slider1 = $("#slider1"); // form div
+      const signupBox = $("#signup-box");
+      const loginBox = $("#login-box");
+
+      function showLogin() {
+        slider.css("transform", "translateX(-100%)"); // move design to the left
+        slider1.css("transform", "translateX(100%)"); // move form to the right
+        slider.css("transition", "1.5s");
+        slider1.css("transition", "1.5s");
+        signupBox.hide(); // Hide Sign-Up form
+        loginBox.show();  // Show Login form
+        loginBox.addClass('fadeAnimation');
+        signupBox.removeClass('fadeAnimation');
+        clearSignUp();
+      }
+
+      function showSignUp() {
+        slider.css("transform", "translateX(0)"); // move design back to the right
+        slider1.css("transform", "translateX(0)"); // move form back to the left
+        slider.css("transition", "1.5s");
+        slider1.css("transition", "1.5s");
+        signupBox.show(); // Show Sign-Up form
+        loginBox.hide();  // Hide Login form
+        signupBox.addClass('fadeAnimation');
+        loginBox.removeClass('fadeAnimation');
+        clearLogin();
+      }
+
+      function remembered() {
+        if ($("#login-checkbox").is(":checked")) {
+            $("#login-checkbox").val("remembered");
+            console.log("Checkbox is checked. remembered.");
+        } else {
+            $("#login-checkbox").val("default");
+            console.log("Checkbox is unchecked. not remembered.");
+        }
+      }
+
+      function checkInvalidSignup(){
+        const email = $("#signup-email").val();
+        const password = $("#signup-password").val();
+        const Invalid = email === '' || password === '';
+
+        if(Invalid){
+          $("#signup-email").css("border-color","red");
+          $("#signup-password").css("border-color","red");
+          $(".invalid-message").css("opacity", "1");
+          $(".signup-warning").addClass("show");
+          console.log('invalid');
+        }else{
+          clearSignUp();
+        }
+      }
+
+      function clearSignUp(){
+          $("#signup-email").css("border-color","#ccc");
+          $("#signup-password").css("border-color","#ccc");
+          $(".invalid-message").css("opacity", "0");
+          $(".signup-warning").removeClass("show");//unshow warning icons
+          $("#signup-email").val('');
+          $("#signup-password").val('');
+          $("#signup-role").prop("selectedIndex", 0); // makes dropdown choice back to student or default
+      }
+
+      function checkInvalidLogin(){
+        const email = $("#email-input").val();
+        const password = $("#password-input").val();
+        const Invalid = email === '' || password === '';
+ 
+        if(Invalid){
+          $("#email-input").css("border-color","red");
+          $("#password-input").css("border-color","red");
+          $(".invalid-message").css("opacity", "1");
+          $(".login-warning").addClass("show");
+          console.log('invalid');
+        }else{
+          clearLogin();
+        }
+      }
+
+      function clearLogin(){
+        $("#email-input").css("border-color","#ccc");
+        $("#password-input").css("border-color","#ccc");
+        $(".invalid-message").css("opacity", "0");
+        $(".login-warning").removeClass("show");
+        $("#email-input").val('');
+        $("#password-input").val('');
+        $("#login-checkbox").prop("checked", false);
+      }
+
+
+      let resizeTimeout;
+
+      $(window).on("resize", function () {
+        // Disable transitions during resize
+        slider.css("transition", "none");
+        slider1.css("transition", "none");
+
+        // Clear the timeout if it exists
+        if (resizeTimeout) clearTimeout(resizeTimeout);
+
+        // Re-enable transitions after a short delay
+        resizeTimeout = setTimeout(function () {
+          slider.css("transition", "1.5s");
+          slider1.css("transition", "1.5s");
+        }, 100);
+      });
+
+
     </script>
   </body>
 </html>
