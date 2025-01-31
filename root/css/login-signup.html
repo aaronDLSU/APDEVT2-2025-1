@@ -1,0 +1,140 @@
+p{
+  margin:0;
+}
+body {
+  margin: 0;
+  font-family: Arial;
+  min-width: 800px;
+}
+
+@keyframes fadeInAnimation {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 1;
+  }
+}
+
+.fadeAnimation {
+  animation-name: fadeInAnimation;
+  animation-duration: 4s;
+  animation-fill-mode: both;
+}
+
+.login-signup-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.design {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: pink;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  height: 100vh;
+}
+
+.form-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: -40px;
+}
+
+.form-content {
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-signup {
+  margin-bottom: 20px;
+}
+
+.input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-container i{
+  position: absolute;
+  font-size: 26px;
+  right: 10px;
+  opacity: 0;
+}
+
+.input-container i.show {
+  opacity: 1;
+}
+
+#email-input, #password-input, #signup-email, #signup-password, .role-pick {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  font-size: 16px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.role-pick{
+  width:87%;
+  margin-left: 10px;
+}
+
+.invalid-message{
+  color: #ff6f61;
+  display: flex;
+  justify-content: left;
+  opacity:0;
+}
+
+.remember-me-option {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.remember-me-checkbox {
+  margin-right: 10px;
+  height: 16px;
+  width: 16px;
+}
+
+.login-signup-btn {
+  background-color: black;
+  color: white;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  box-sizing: border-box;
+  margin-top: 10px;
+}
+
+.login-button {
+  margin-top: 0px;
+}
+
+.switch-signup-login {
+  background: none;
+  color: blue;
+  text-decoration: underline;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 20px;
+}
+
