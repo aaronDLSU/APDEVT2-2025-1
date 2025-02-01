@@ -7,51 +7,7 @@
     <link rel="stylesheet" href="../css/reservation-list.css">
   </head>
   <body>
-    <div class="homepage">
-      <!-- Header -->
-      <div class="header">
-        <div class="left-section">
-          <i class="fa-solid fa-bars" class="hamburger-icon"></i>
-          <p>Lab Reservation</p>
-        </div>
-
-        <div class="middle-section">
-          <input class="search-bar" type="text" placeholder="Search" aria-label="Search">
-          <button class="search-button" aria-label="Search">
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </button>
-        </div>
-
-        <div class="right-section">
-          <button class="sign-in-button" onclick="location.href = 'login-signup.html'">
-            <i class="fa-solid fa-circle-user"></i>
-            <div>Sign in</div>
-          </button>
-        </div>
-      </div>
-
-      <!-- Sidebar -->
-      <div class="sidebar">
-        <div class="sidebar-link Home-button">
-          <i class="fa-solid fa-house"></i>
-          <p>Home</p>
-        </div>
-
-        <div class="sidebar-link">
-          <i class="fa-regular fa-calendar"></i>
-          <p>Calendar</p>
-        </div>
-
-        <div class="sidebar-link">
-          <i class="fa-regular fa-bell"></i>
-          <p>Notification</p>
-        </div>
-
-        <div class="sidebar-link">
-          <i class="fa-solid fa-circle-info"></i>
-          <p>Help</p>
-        </div>
-      </div>
+    <div id="header-sidebar"></div>
 
       <!-- Content Section -->
       <div class="content-section">
@@ -180,10 +136,20 @@
           <button type="button" class="btn btn-primary">Back</button>
         </div>
       </div>
-    </div>
+
     <!-- javascript stuff -->
     <script>
-
-    </script>
+      // Function to load a component
+    function loadComponent(componentId, filePath) {
+      fetch(filePath)
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById(componentId).innerHTML = data;
+        })
+        .catch(error => console.error('Error loading component:', error));
+    }
+      // Load header and sidebar
+      loadComponent('header-sidebar', 'header-sidebar.html');
+  </script>
   </body>
 </html>
