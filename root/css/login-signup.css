@@ -1,10 +1,10 @@
 p{
   margin:0;
 }
+
 body {
   margin: 0;
   font-family: Arial;
-  min-width: 800px;
 }
 
 @keyframes fadeInAnimation {
@@ -34,12 +34,22 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: pink;
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
   height: 100vh;
 }
+
+.image-design{
+  width: 100%;
+  height: 100%;
+  object-fit:fill;
+}
+
+.message{
+  position: absolute;
+  color: #F9F7F7;
+  font-size: 26px;
+  font-weight: 300;
+}
+
 
 .form-container {
   flex: 1;
@@ -86,9 +96,21 @@ body {
   border-radius: 5px;
 }
 
-.role-pick{
-  width:87%;
+.role-pick {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
   margin-left: 10px;
+  font-size: 16px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.role-dropdown{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .invalid-message{
