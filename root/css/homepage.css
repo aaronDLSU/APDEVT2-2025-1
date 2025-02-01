@@ -8,18 +8,18 @@
 }
 
 .welcome {
-  font-size: 50px;
+  font-size: 40px;
   font-weight: bold;
   margin-bottom: 20px;
-  color:#2E3A59;
+  color:#112D4E;
 }
 
 .get-started-button {
-  background-color: #2E3A59;
+  background-color: #112D4E;
   color: white;
   border: none;
-  padding: 10px 40px;
-  font-size: 28px;
+  padding: 10px 20px;
+  font-size: 26px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
