@@ -6,6 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel='stylesheet'>
     <link href='https://fonts.googleapis.com/css?family=Lora' rel='stylesheet'>
     <script src="https://kit.fontawesome.com/a39233b32c.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../css/header-sidebar.css">
     <title>Profile</title>
     <style>
         .profile-image {
@@ -16,7 +17,7 @@
             mix-blend-mode: darken;
         }
 
-        .row {
+        .col {
             --bs-gutter-y: 24px;
         }
 
@@ -27,213 +28,264 @@
 </head>
 
 <body>
-    <div id="header-sidebar"></div>
-
-    <div class="p-5" id="content-section">
-        <div class="row">
-            <div class="col-sm-7">
-                <div id="profile-section">
-
-
-                    <div class="d-flex flex-row gap-3">
-                        <div id="profile-image">
-                            <img src="images/default_profilepic.jpg" alt="image" class="profile-image">
-                        </div>
-                        <div>
-                            <div id="profile-info">
-                                <div class="h3">
-                                    Juan dela Cruz
-                                </div>
-                                <div class="h5">
-                                    Student
-                                </div>
-                            </div>
-
-                            <div id="profile-description">
-                                I am a first-year Computer Science major at De La Salle University (DLSU), specializing
-                                in
-                                Software
-                                Technology.
-                                Passionate about coding and problem-solving, I am eager to explore new technologies and
-                                develop
-                                innovative solutions.
-                                Currently honing my skills in programming, web development, and algorithms, I aspire to
-                                contribute
-                                to impactful projects
-                                in the tech industry.
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-
-                </div>
+    <!-- Start of bars-->
+    <div class="homepage">
+        <!-- Header -->
+        <div class="header">
+            <div class="left-section">
+                <i class="fa-solid fa-bars" class="hamburger-icon"></i>
+                <p>Lab Reservation</p>
             </div>
 
-            <div class="col-sm-5">
+            <div class="middle-section">
+                <input class="search-bar" type="text" placeholder="Search" aria-label="Search">
+                <button class="search-button" aria-label="Search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
 
-                <div class="overflow-y-auto full-vh" id="reservation-section">
+            <div class="right-section">
+                <button class="sign-in-button" onclick="location.href = 'login-signup.html'">
+                    <i class="fa-solid fa-circle-user"></i>
+                    <div>Sign in</div>
+                </button>
+            </div>
+        </div>
 
-                    <div class="row row-cols-2 ">
-                        <div class="col">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Reservation 1</h5>
-                                    <p class="card-text"> Lab 1, Yuchengco Building</p>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">January 31, 2025</li>
-                                    <li class="list-group-item">7:30 AM - 9:30 AM</li>
-                                    <li class="list-group-item">Seat 25</li>
-                                </ul>
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-link Home-button">
+                <i class="fa-solid fa-house"></i>
+                <p>Home</p>
+            </div>
+
+            <div class="sidebar-link">
+                <i class="fa-regular fa-calendar"></i>
+                <p>Calendar</p>
+            </div>
+
+            <div class="sidebar-link">
+                <i class="fa-regular fa-bell"></i>
+                <p>Notification</p>
+            </div>
+
+            <div class="sidebar-link">
+                <i class="fa-solid fa-circle-info"></i>
+                <p>Help</p>
+            </div>
+        </div>
+        <!-- End of bars-->
+
+
+
+        <div class="m-5" id="content-section">
+            <div class="col m-5">
+
+                <div class="row-sm-6">
+                    <div id="profile-section">
+                        <div class="d-flex flex-row gap-3">
+                            <div id="profile-image">
+                                <img src="images/default_profilepic.jpg" alt="image" class="profile-image">
                             </div>
+                            <div>
+                                <div id="profile-info">
+                                    <div class="h3">
+                                        Juan dela Cruz
+                                    </div>
+                                    <div class="h5">
+                                        Student
+                                    </div>
+                                </div>
+
+                                <div id="profile-description">
+                                    I am a first-year Computer Science major at De La Salle University (DLSU),
+                                    specializing
+                                    in
+                                    Software
+                                    Technology.
+                                    Passionate about coding and problem-solving, I am eager to explore new technologies
+                                    and
+                                    develop
+                                    innovative solutions.
+                                    Currently honing my skills in programming, web development, and algorithms, I aspire
+                                    to
+                                    contribute
+                                    to impactful projects
+                                    in the tech industry.
+                                </div>
+
+                            </div>
+
                         </div>
 
-                        <div class="col">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Reservation 1</h5>
-                                    <p class="card-text"> Lab 1, Yuchengco Building</p>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">January 31, 2025</li>
-                                    <li class="list-group-item">7:30 AM - 9:30 AM</li>
-                                    <li class="list-group-item">Seat 25</li>
-                                </ul>
-                            </div>
-                        </div>
 
-                        <div class="col">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Reservation 1</h5>
-                                    <p class="card-text"> Lab 1, Yuchengco Building</p>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">January 31, 2025</li>
-                                    <li class="list-group-item">7:30 AM - 9:30 AM</li>
-                                    <li class="list-group-item">Seat 25</li>
-                                </ul>
-                            </div>
-                        </div>
 
-                        <div class="col">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Reservation 1</h5>
-                                    <p class="card-text"> Lab 1, Yuchengco Building</p>
+                    </div>
+                </div>
+
+                <div class="row-sm-6">
+
+                    <div id="reservation-section">
+
+                        <div class="row row-cols-3 ">
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Reservation 1</h5>
+                                        <p class="card-text"> Lab 1, Yuchengco Building</p>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">January 31, 2025</li>
+                                        <li class="list-group-item">7:30 AM - 9:30 AM</li>
+                                        <li class="list-group-item">Seat 25</li>
+                                    </ul>
                                 </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">January 31, 2025</li>
-                                    <li class="list-group-item">7:30 AM - 9:30 AM</li>
-                                    <li class="list-group-item">Seat 25</li>
-                                </ul>
                             </div>
-                        </div>
-                        <div class="col">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Reservation 1</h5>
-                                    <p class="card-text"> Lab 1, Yuchengco Building</p>
+
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Reservation 1</h5>
+                                        <p class="card-text"> Lab 1, Yuchengco Building</p>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">January 31, 2025</li>
+                                        <li class="list-group-item">7:30 AM - 9:30 AM</li>
+                                        <li class="list-group-item">Seat 25</li>
+                                    </ul>
                                 </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">January 31, 2025</li>
-                                    <li class="list-group-item">7:30 AM - 9:30 AM</li>
-                                    <li class="list-group-item">Seat 25</li>
-                                </ul>
                             </div>
-                        </div>
-                        <div class="col">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Reservation 1</h5>
-                                    <p class="card-text"> Lab 1, Yuchengco Building</p>
+
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Reservation 1</h5>
+                                        <p class="card-text"> Lab 1, Yuchengco Building</p>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">January 31, 2025</li>
+                                        <li class="list-group-item">7:30 AM - 9:30 AM</li>
+                                        <li class="list-group-item">Seat 25</li>
+                                    </ul>
                                 </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">January 31, 2025</li>
-                                    <li class="list-group-item">7:30 AM - 9:30 AM</li>
-                                    <li class="list-group-item">Seat 25</li>
-                                </ul>
                             </div>
-                        </div>
-                        <div class="col">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Reservation 1</h5>
-                                    <p class="card-text"> Lab 1, Yuchengco Building</p>
+
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Reservation 1</h5>
+                                        <p class="card-text"> Lab 1, Yuchengco Building</p>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">January 31, 2025</li>
+                                        <li class="list-group-item">7:30 AM - 9:30 AM</li>
+                                        <li class="list-group-item">Seat 25</li>
+                                    </ul>
                                 </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">January 31, 2025</li>
-                                    <li class="list-group-item">7:30 AM - 9:30 AM</li>
-                                    <li class="list-group-item">Seat 25</li>
-                                </ul>
                             </div>
-                        </div>
-                        <div class="col">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Reservation 1</h5>
-                                    <p class="card-text"> Lab 1, Yuchengco Building</p>
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Reservation 1</h5>
+                                        <p class="card-text"> Lab 1, Yuchengco Building</p>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">January 31, 2025</li>
+                                        <li class="list-group-item">7:30 AM - 9:30 AM</li>
+                                        <li class="list-group-item">Seat 25</li>
+                                    </ul>
                                 </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">January 31, 2025</li>
-                                    <li class="list-group-item">7:30 AM - 9:30 AM</li>
-                                    <li class="list-group-item">Seat 25</li>
-                                </ul>
                             </div>
-                        </div>
-                        <div class="col">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Reservation 1</h5>
-                                    <p class="card-text"> Lab 1, Yuchengco Building</p>
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Reservation 1</h5>
+                                        <p class="card-text"> Lab 1, Yuchengco Building</p>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">January 31, 2025</li>
+                                        <li class="list-group-item">7:30 AM - 9:30 AM</li>
+                                        <li class="list-group-item">Seat 25</li>
+                                    </ul>
                                 </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">January 31, 2025</li>
-                                    <li class="list-group-item">7:30 AM - 9:30 AM</li>
-                                    <li class="list-group-item">Seat 25</li>
-                                </ul>
                             </div>
-                        </div>
-                        <div class="col">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Reservation 1</h5>
-                                    <p class="card-text"> Lab 1, Yuchengco Building</p>
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Reservation 1</h5>
+                                        <p class="card-text"> Lab 1, Yuchengco Building</p>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">January 31, 2025</li>
+                                        <li class="list-group-item">7:30 AM - 9:30 AM</li>
+                                        <li class="list-group-item">Seat 25</li>
+                                    </ul>
                                 </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">January 31, 2025</li>
-                                    <li class="list-group-item">7:30 AM - 9:30 AM</li>
-                                    <li class="list-group-item">Seat 25</li>
-                                </ul>
                             </div>
-                        </div>
-                        <div class="col">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Reservation 1</h5>
-                                    <p class="card-text"> Lab 1, Yuchengco Building</p>
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Reservation 1</h5>
+                                        <p class="card-text"> Lab 1, Yuchengco Building</p>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">January 31, 2025</li>
+                                        <li class="list-group-item">7:30 AM - 9:30 AM</li>
+                                        <li class="list-group-item">Seat 25</li>
+                                    </ul>
                                 </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">January 31, 2025</li>
-                                    <li class="list-group-item">7:30 AM - 9:30 AM</li>
-                                    <li class="list-group-item">Seat 25</li>
-                                </ul>
                             </div>
-                        </div>
-                        <div class="col">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Reservation 1</h5>
-                                    <p class="card-text"> Lab 1, Yuchengco Building</p>
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Reservation 1</h5>
+                                        <p class="card-text"> Lab 1, Yuchengco Building</p>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">January 31, 2025</li>
+                                        <li class="list-group-item">7:30 AM - 9:30 AM</li>
+                                        <li class="list-group-item">Seat 25</li>
+                                    </ul>
                                 </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">January 31, 2025</li>
-                                    <li class="list-group-item">7:30 AM - 9:30 AM</li>
-                                    <li class="list-group-item">Seat 25</li>
-                                </ul>
+                            </div>
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Reservation 1</h5>
+                                        <p class="card-text"> Lab 1, Yuchengco Building</p>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">January 31, 2025</li>
+                                        <li class="list-group-item">7:30 AM - 9:30 AM</li>
+                                        <li class="list-group-item">Seat 25</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Reservation 1</h5>
+                                        <p class="card-text"> Lab 1, Yuchengco Building</p>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">January 31, 2025</li>
+                                        <li class="list-group-item">7:30 AM - 9:30 AM</li>
+                                        <li class="list-group-item">Seat 25</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Reservation 1</h5>
+                                        <p class="card-text"> Lab 1, Yuchengco Building</p>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">January 31, 2025</li>
+                                        <li class="list-group-item">7:30 AM - 9:30 AM</li>
+                                        <li class="list-group-item">Seat 25</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -242,25 +294,8 @@
         </div>
     </div>
     </div>
-    </div>
 
-    <script>
-        // Function to load a component
-        function loadComponent(componentId, filePath) {
-            fetch(filePath)
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById(componentId).innerHTML = data;
-                })
-                .catch(error => console.error('Error loading component:', error));
-        }
-        // Load header and sidebar
-        loadComponent('header-sidebar', 'header-sidebar.html');
-    </script>
 
-    <script>
-        // Add JavaScript functionality here if needed
-    </script>
 
 </body>
 
