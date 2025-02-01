@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://kit.fontawesome.com/a39233b32c.js" crossorigin="anonymous"></script>
+  <title>Seat Availability</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    @media (max-width: 900px) {
+      .seats td{
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width: 806px) {
+      .seats td{
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 740px) {
+     .seats{
+      margin-right:2px;
+     }
+    }
+
+    .label {
+      margin-left: 120px;
+    }
+
+    .availability-container {
+      display: flex;
+      margin-left: 100px;
+      align-items: flex-start; /* Align items to the top */
+      background-color: aliceblue;margin-bottom: 100px;
+    }
+
+    .seats-table, .available-table {
+      position: relative;
+      border-collapse: collapse; /* Ensure both tables use the same border-collapse */
+ 
+    }
+
+    .seats-table th, .seats-table td,
+    .available-table th, .available-table td {
+      border: 1px solid black;
+      padding: 10px; /* Ensure consistent padding */
+      text-align: center;
+      cursor: pointer; /* Change cursor to pointer to indicate clickability */
+      height: 30px; /* Ensure consistent row height */
+    }
+
+    .seats-table th, .available-table th {
+      background-color: white;
+      position: sticky; /* Make headers sticky */
+      top: 0; /* Stick to the top of the container */
+      z-index: 1; /* Ensure headers stay above the table content */
+    }
+
+    .seats {
+      width: 100px; /* Fixed width for the seats table */
+    }
+
+    .seat-availability-container {
+      overflow: auto; /* Enable scrolling */
+    }
+
+    .available-color {
+      background-color: rgb(36, 214, 36);
+      height: 40px;
+      width: 40px;
+    }
+
+    .highlight {
+      background-color: yellow; /* Color to apply when clicked */
+    }
+
+   
+  </style>
+</head>
+<body>
+
+  <div id="header-sidebar"></div>
+  <div class="label">
+    <h2>Availability at lab __</h2>
+    <h3>Date</h3>
+  </div>
+
+  <div class="availability-container">
+    <!-- Seats Table -->
+    <div class="seats">
+      <table class="seats-table">
+        <thead>
+          <tr>
+            <th>Seat</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Seat 1</td></tr>
+          <tr><td>Seat 2</td></tr>
+          <tr><td>Seat 3</td></tr>
+          <tr><td>Seat 4</td></tr>
+          <tr><td>Seat 5</td></tr>
+          <tr><td>Seat 6</td></tr>
+          <tr><td>Seat 7</td></tr>
+          <tr><td>Seat 8</td></tr>
+          <tr><td>Seat 9</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Availability Table -->
+    <div class="seat-availability-container">
+      <table class="available-table">
+        <thead>
+          <tr>
+            <th colspan="2">7:00am</th>
+            <th colspan="2">8:00am</th>
+            <th colspan="2">9:00am</th>
+            <th colspan="2">10:00am</th>
+            <th colspan="2">11:00am</th>
+            <th colspan="2">12:00pm</th>
+            <th colspan="2">1:00pm</th>
+            <th colspan="2">2:00pm</th>
+            <th colspan="2">3:00pm</th>
+            <th colspan="2">4:00pm</th>
+            <th colspan="2">5:00pm</th>
+            <th colspan="2">6:00pm</th>
+            <th colspan="2">7:00pm</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    function loadComponent(componentId, filePath) {
+      fetch(filePath)
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById(componentId).innerHTML = data;
+        })
+        .catch(error => console.error('Error loading component:', error));
+    }
+
+    // Load header and sidebar
+    loadComponent('header-sidebar', 'header-sidebar.html');
+
+    // Add event listeners to all table cells
+    const cells = document.querySelectorAll('td');
+    cells.forEach(cell => {
+      cell.addEventListener('click', () => {
+        // Toggle the 'highlight' class on click
+        cell.classList.toggle('highlight');
+      });
+    });
+  </script>
+
+</body>
+</html>
