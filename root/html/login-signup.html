@@ -47,12 +47,13 @@
             <input id="signup-password" type="password" placeholder="Password"/>
             <i class="fa-solid fa-circle-exclamation signup-warning" style="color: #ff6f61;"></i>
           </div>
-         
+         <div class="role-dropdown">
           <label for="signup-role">Role:</label>
           <select id="signup-role" required class="role-pick">
             <option value="student">Student</option>
             <option value="lab_technician">Lab Technician</option>
           </select>
+         </div>
           <p class="invalid-message">Invalid email or password input!</p>
           <button class="login-signup-btn" onclick="checkInvalidSignup()">Sign Up</button>
           <div>
@@ -64,7 +65,8 @@
 
       <!-- Design Section -->
       <div class="design" id="slider">
-        Welcome to Our App!
+       <img class="image-design" src="images/login-signup-design.jpeg" alt="image">
+        <p class="message">Welcome to Our App!</p>
       </div>
     </div>
 
