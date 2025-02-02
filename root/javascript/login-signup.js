@@ -3,6 +3,20 @@ const slider1 = $("#slider1"); // form div
 const signupBox = $("#signup-box");
 const loginBox = $("#login-box");
 
+let role,username,rememberPeriod;
+
+const user = []; // Initialize as an empty array
+
+function createUser(email, password, role, username, rememberPeriod) {
+  user.push({
+    email,
+    password,
+    role,
+    username,
+    rememberPeriod,
+  });
+}
+
 function showLogin() {
   slider.css("transform", "translateX(-100%)"); // move design to the left
   slider1.css("transform", "translateX(100%)"); // move form to the right
@@ -45,11 +59,23 @@ function checkInvalidSignup(){
   if(Invalid){
     $("#signup-email").css("border-color","red");
     $("#signup-password").css("border-color","red");
+    $(".invalid-message").html("Invalid email or password input!");
     $(".invalid-message").css("opacity", "1");
     $(".signup-warning").addClass("show");
     console.log('invalid');
+  }else if(checkPasswordLength(password)){  
+    $("#signup-email").css("border-color","red");
+    $("#signup-password").css("border-color","red");
+    $(".invalid-message").html("password minimum length is 8 characters");
+    $(".invalid-message").css("opacity", "1");
+    $(".signup-warning").addClass("show");
   }else{
+    role = $("#signup-role").val();
+    createUser(email,password,role,'',0);
     clearSignUp();
+    for(let i=0; i<user.length;i++){
+      console.log(`User: ${user[i].email}, Password: User: ${user[i].password}, Role: ${user[i].role}`);
+    }
   }
 }
 
@@ -63,6 +89,12 @@ function clearSignUp(){
     $("#signup-role").prop("selectedIndex", 0); // makes dropdown choice back to student or default
 }
 
+function checkPasswordLength(password){
+  if(password.length < 8 ){
+    return true;
+  }else return false;
+}
+
 function checkInvalidLogin(){
   const email = $("#email-input").val();
   const password = $("#password-input").val();
@@ -71,10 +103,24 @@ function checkInvalidLogin(){
   if(Invalid){
     $("#email-input").css("border-color","red");
     $("#password-input").css("border-color","red");
+    $(".invalid-message").html("Invalid email or password input!");
     $(".invalid-message").css("opacity", "1");
     $(".login-warning").addClass("show");
     console.log('invalid');
+  }else if(checkPasswordLength(password)){  
+    $("#email-input").css("border-color","red");
+    $("#password-input").css("border-color","red");
+    $(".invalid-message").html("password minimum length is 8 characters");
+    $(".invalid-message").css("opacity", "1");
+    $(".login-warning").addClass("show");
   }else{
+    for(let i=0; i<user.length;i++){
+      if(user[i].email === email && user[i].password === password){
+        user[i].rememberPeriod +=3;
+        console.log(`User: ${user[i].email}, Password: ${user[i].password}, Role: ${user[i].role}, Remember Period: ${user[i].rememberPeriod}`);
+        console.log('login successful');
+      }
+    }
     clearLogin();
   }
 }
@@ -106,3 +152,5 @@ $(window).on("resize", function () {
     slider1.css("transition", "1.5s");
   }, 100);
 });
+
+createUser('adrian','helo','student','',0);
