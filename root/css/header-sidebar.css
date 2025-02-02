@@ -130,8 +130,9 @@ body {
 }
 
 .sidebar-link p {
-  font-size: 12px;
+  font-size: 11px;
   margin-top: 8px;
+  font-weight: bold;
 }
 
 .Home-button{
