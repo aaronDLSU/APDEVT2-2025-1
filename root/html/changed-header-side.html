@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://kit.fontawesome.com/a39233b32c.js" crossorigin="anonymous"></script>
+    <title>Home Page</title>
+    <link rel="stylesheet" href="../css/changedheader.css">
+  </head>
+  <body>
+      <!-- Header -->
+      <div class="header">
+        <div class="left-section"
+        onclick="location.href = 'homepage.html'">
+          <i class="fa-solid fa-bars" class="hamburger-icon"></i>
+          <p>Lab Reservation</p>
+        </div>
+
+        <div class="middle-section">
+          <input class="search-bar" type="text" placeholder="Search" aria-label="Search">
+          <button class="search-button" aria-label="Search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+
+        <div class="right-section">
+          <button class="sign-in-button" onclick="location.href = 'login-signup.html'">
+            <i class="fa-solid fa-circle-user"></i>
+            <div>Sign in</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="sidebar-link Home-button"
+        onclick="location.href = 'homepage.html'">
+          <i class="fa-solid fa-house"></i>
+          <p>Home</p>
+        </div>
+
+        <div class="sidebar-link" style="margin-top: 3px;">
+          <i class="fa-regular fa-calendar"></i>
+          <p>Calendar</p>
+        </div>
+
+        <div class="sidebar-link" style="margin-top: 2px;">
+          <i class="fa-regular fa-bell"></i>
+          <p>Notification</p>
+        </div>
+
+        <div class="sidebar-link" style="margin-top: 3px;"
+        onclick="location.href = 'reservation-list.html'">
+          <i class="fa-regular fa-rectangle-list"></i>
+          <p>Reservations</p>
+        </div>
+
+        <div style="margin-top: 102px;"></div>
+        <div class="sidebar-link">
+          <i class="fa-solid fa-circle-info"></i>
+          <p>Help</p>
+        </div>
+      </div>
+
+  </body>
+</html>
