@@ -1,0 +1,291 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding-top: 100px;
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+    justify-content: flex-start;
+}
+
+/* Real-time Clock */
+.clock-container {
+    font-size: 20px;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+    text-align: center;
+    width: fit-content;
+    position: absolute;
+    top: 50px;
+    right: 20px;
+}
+
+/* Main Container */
+.container {
+    display: flex;
+    gap: 25px;
+    background: white;
+    padding: 25px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    min-width: 850px;
+}
+
+.calendar-container {
+    width: 500px;
+    text-align: center;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.nav-button {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    font-weight: bold;
+    padding: 12px 0;
+    font-size: 18px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    height: 300px;
+    padding: 15px;
+}
+
+.day, .date {
+    padding: 14px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    text-align: center;
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+.date:hover {
+    opacity: 0.8;
+}
+
+.selected {
+    border: 2px solid #000 !important;
+}
+
+/* Color Coding for Availability */
+.low-availability {
+    background-color: #b8e6b8;
+    color: black;
+}
+
+.medium-availability {
+    background-color: #fbe5a5;
+    color: black;
+}
+
+.high-availability {
+    background-color: #f5b5b5;
+    color: black;
+}
+
+.past-date {
+    background: #d3d3d3 !important;
+    cursor: not-allowed;
+    color: #777;
+}
+
+.room-list-container {
+    width: 220px;
+    text-align: center;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    height: 350px;
+    overflow-y: auto;
+}
+
+.room-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.room-item {
+    padding: 10px;
+    background: #f4f4f4;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.room-item:hover {
+    background: #d9d9d9;
+}
+
+.selected-room {
+    background: #4caf50;
+    color: white;
+}
+
+/* Seating Table & Availability */
+.seating-container {
+    display: flex;
+    gap: 20px; 
+    padding: 20px; 
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    align-items: flex-start;
+    overflow-x: auto;
+}
+
+.seats-table,
+.available-table {
+    border-collapse: collapse;
+}
+
+.seats-table th,
+.seats-table td,
+.available-table th,
+.available-table td {
+    border: 1px solid black;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    height: 30px;
+}
+
+.seats-table th,
+.available-table th {
+    background-color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.highlight {
+    background-color: yellow;
+}
+
+/* Seat Styling */
+.seats {
+    min-width: 100px;
+}
+
+.seat-availability-container {
+    overflow-x: auto;
+}
+
+/* Seat Selection */
+.seat {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    background: #e3e3e3;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    user-select: none;
+}
+
+.seat:hover {
+    background: #d1d1d1;
+}
+
+.seat.selected {
+    background: #4caf50;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+}
+
+.seat.reserved {
+    background: #ff6b6b;
+    color: white;
+    cursor: not-allowed;
+    text-decoration: line-through;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+    .seats td {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 806px) {
+    .seats td {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 740px) {
+    .seats {
+        margin-right: 2px;
+    }
+}
+
+@media (max-width: 600px) {
+    .seats-grid {
+        grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    }
+
+    .seat {
+        width: 60px;
+        height: 60px;
+        font-size: 14px;
+    }
+}
+
+/* Selected Date Style */
+.selected-date {
+    background-color: #4caf50 !important;
+    color: white;
+    font-weight: bold;
+    border: 2px solid black;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Disable Past Dates */
+.past-date {
+    background: #d3d3d3 !important;
+    cursor: not-allowed;
+    color: #777;
+    text-decoration: line-through;
+}
+
+/* Disable Past Hours */
+.past-hour {
+    background: #d3d3d3 !important;
+    cursor: not-allowed;
+    color: #777;
+    text-decoration: line-through;
+}
+
