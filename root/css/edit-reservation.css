@@ -1,0 +1,68 @@
+#edit-title{
+  font-size: 25px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+h2 {
+  color: rgb(74, 74, 74);
+  font-size: 20px;
+  margin-top: 10px;
+  margin-left: 16px;
+  font-weight: bold;
+}
+
+.form-label{
+  font-weight: bold;
+}
+
+.options{
+  width: 75%;
+}
+
+.reserve-item{
+  margin: 5px 16px 5px 16px;
+  width: 700px;
+}
+
+.col-pfp {
+  margin: 10px 20px 10px 20px;
+  flex: 0 0 auto;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.list-img{
+  border-radius: 360px;
+  border: 3px solid black;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+.col-buttons button{
+  font-size: 150%;
+}
+
+.reserve-details{
+  padding: 0px;
+}
+
+.res-details-container{
+  margin: 10px 0 5px 10px;
+  padding: 10px
+}
+
+.edit-details {
+  margin-left: 20px;
+  margin-top: 20px;
+}
+
+
+.hidden{
+  display: none;
+}
