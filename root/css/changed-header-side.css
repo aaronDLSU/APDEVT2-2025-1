@@ -31,6 +31,7 @@ body {
   margin-left: 40px;
   font-size: 18px;
   font-weight: bold;
+  margin-top: -9px;
 }
 
 .left-section {
@@ -39,10 +40,19 @@ body {
   margin-left: 26px;
 }
 
+.left-section p {
+  font-family: 'Bungee', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  display: flex; 
+  align-items: center; 
+  color: #2A4E77;
+}
+
 .middle-section {
   flex: 1;
   max-width: 470px;
-  margin-left: 60px;
+  margin-left: 40px;
   display: flex;
   align-items: center;
 }
