@@ -223,5 +223,6 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 55px); /* Full height minus header so content will not be covered */
+  text-align: center;
+  min-height: calc(100vh - 55px); /* Ensures the welcome section is centered */
 }
