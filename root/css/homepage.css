@@ -1,29 +1,141 @@
-.content-section {
-  margin-left: 72px; /* To account for the sidebar */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: calc(100vh - 55px); /* Full height minus header so content will not be covered */
-}
-
 .welcome {
-  font-size: 40px;
+  font-family: 'Bungee Shade', serif;
+  color: #2A4E77;
+  font-size: 64px;
   font-weight: bold;
-  margin-bottom: 20px;
-  color:#112D4E;
+  margin: 50px 0; 
+  margin-top: 100px;
+  padding: 20px;
 }
 
 .get-started-button {
-  background-color: #112D4E;
+  background-color: #2A4E77;
   color: white;
   border: none;
-  padding: 10px 20px;
-  font-size: 26px;
+  padding: 20px 40px;
+  font-size: 30px;
+  font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s;
+  border-radius: 20px;
+  margin-bottom: 100px;
 }
 
 .get-started-button:hover {
-  background-color: #41527c;
+  background-color: #3F72AF;
+}
+
+.why-choose-us{
+  font-size: 40px;
+}
+
+.features,.instructions{
+  padding: 40px 20px;
+  width: 100%; 
+  box-sizing: border-box;
+}
+
+.features h1,.instructions h1{
+  font-size: 40px;
+  margin-bottom: 40px;
+}
+
+.feature-item{
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  max-width: 500px; /* Limit width */
+}
+
+.circle{
+  background-color: #2A4E77;
+  position: absolute;
+  height:50px;
+  width: 50px;
+  border:none;
+  border-radius: 25px;
+  margin-left: 225px;
+  margin-top: 8px;
+  z-index: 1;
+}
+
+
+
+.instructions-number{
+  margin-bottom: 50px;
+}
+
+@media (min-width: 768px) {
+  .feature-item {
+    padding: 60px; /* Larger padding for bigger screens */
+  }
+}
+
+.feature-item i{
+  font-size: 50px;
+  margin-bottom: 20px;
+}
+
+.instructions-number{
+  position: relative;
+  z-index: 100;
+  color: white;
+}
+
+
+
+
+@media (max-width: 877px) {
+  .welcome {
+    font-size: 52px; 
+    padding: 12px; 
+  }
+
+  .get-started-button {
+    font-size: 26px; 
+    padding: 17px 35px;
+    margin-bottom: 75px; 
+  }
+}
+
+@media (max-width: 768px) {
+  .welcome {
+    font-size: 48px;
+    padding: 10px; 
+  }
+
+  .get-started-button {
+    font-size: 24px; 
+    padding: 15px 30px; 
+    margin-bottom: 50px;
+  }
+
+  .features h1 {
+    font-size: 40px; 
+  }
+
+  .feature-item {
+    padding: 20px; 
+  }
+}
+
+@media (max-width: 666px) {
+  .welcome {
+    font-size: 40px;
+    padding: 8px;
+  }
+  .get-started-button {
+    font-size: 22px;
+    padding: 12px 25px; 
+    margin-bottom: 40px; 
+  }
+}
+
+@media (max-width: 568px) {
+  .welcome {
+    font-size: 36px; 
+    padding: 6px;
+  }
 }
