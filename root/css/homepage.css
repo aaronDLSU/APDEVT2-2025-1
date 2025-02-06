@@ -52,12 +52,13 @@
 .circle{
   background-color: #2A4E77;
   position: absolute;
-  height:50px;
+  height: 50px;
   width: 50px;
-  border:none;
+  border: none;
   border-radius: 25px;
-  margin-left: 225px;
-  margin-top: 8px;
+  left: 50%;
+  margin-left: 11px;
+  margin-top:8px;
   z-index: 1;
 }
 
@@ -130,6 +131,19 @@
     font-size: 22px;
     padding: 12px 25px; 
     margin-bottom: 40px; 
+  }  
+  
+  .features h1 {
+    font-size: 30px; 
+  }
+
+  .feature-item {
+    padding: 10px 5px; 
+  }
+
+  .feature-item i{
+    font-size: 30px;
+    margin-bottom: 10px;
   }
 }
 
