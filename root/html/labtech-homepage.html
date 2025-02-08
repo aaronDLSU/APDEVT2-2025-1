@@ -20,7 +20,7 @@
       <button class="get-started-button" 
       onclick="location.href = 'login-signup.html'">Get Started</button>
 
-      <div class=" features">
+      <div class="features">
         <h1>Why Choose Us?</h1>
         <div>
           <div class="feature-item">
@@ -41,7 +41,7 @@
         </div>
       </div>
 
-      <div class=" features instructions">
+      <div class="features instructions">
         <h1>How to Reserve a Lab</h1>
         <div>
           <div class="feature-item">
@@ -73,52 +73,22 @@
 
     </div>
     <div id="footer"></div>
-
+    <!-- Placeholder for footer-->
     <script>
-      function loadComponent(componentId, filePath) {
-        fetch(filePath)
-          .then(response => response.text())
-          .then(data => {
-              document.getElementById(componentId).innerHTML = data;
-              // After content is loaded, bind the event listeners
-              initializeProfileDropdown();
-          })
-          .catch(error => console.error('Error loading component:', error));
-      }
-  
-      // Initialize profile dropdown
-      function initializeProfileDropdown() {
-        const profileDropdown = $("#check-profile");
-        const accountSettings = $("#check-account-setting");
-  
-            document.body.addEventListener("click", (event) => {
-        // Toggle profile dropdown
-        if (event.target.closest(".right-section")) {
-          profileDropdown.toggleClass("visible");
-          accountSettings.removeClass("visible");
-        }
 
-        // Toggle account settings
-        if (event.target.closest("[data-action='account-settings']")) {
-          accountSettings.toggleClass("visible");
-          profileDropdown.removeClass("visible");
+        // Function to load external components
+        function loadComponent(componentId, filePath, callback) {
+          fetch(filePath)
+            .then(response => response.text())
+            .then(data => {
+              $("#" + componentId).html(data);
+              if (typeof callback === "function") {
+                callback();
+              }
+            })
+            .catch(error => console.error('Error loading component:', error));
         }
-
-        // Handle "Back" button
-        if (event.target.closest("[data-action='back-to-profile']")) {
-          profileDropdown.toggleClass("visible");
-          accountSettings.removeClass("visible");
-        }
-
-        // Close dropdowns when clicking outside
-        if (!event.target.closest("#check-profile, .right-section, #check-account-setting")) {
-          profileDropdown.removeClass("visible");
-          accountSettings.removeClass("visible");
-        }
-      });
-      }
-  
-        // Load header and sidebar
+        // Load header and sidebar with a slight delay to ensure they are fully loaded
         loadComponent('header-sidebar', 'labtech-header.html');
         loadComponent('footer', 'footer.html');
     </script>
