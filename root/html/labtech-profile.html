@@ -214,47 +214,16 @@
 
     <script>
         // Function to load a component
-        function loadComponent(componentId, filePath) {
+        function loadComponent(componentId, filePath, callback) {
           fetch(filePath)
             .then(response => response.text())
             .then(data => {
-                document.getElementById(componentId).innerHTML = data;
-                // After content is loaded, bind the event listeners
-                initializeProfileDropdown();
+              $("#" + componentId).html(data);
+              if (typeof callback === "function") {
+                callback();
+              }
             })
             .catch(error => console.error('Error loading component:', error));
-        }
-    
-        // Initialize profile dropdown
-        function initializeProfileDropdown() {
-          const profileDropdown = $("#check-profile");
-          const accountSettings = $("#check-account-setting");
-    
-          document.body.addEventListener("click", (event) => {
-      // Toggle profile dropdown
-      if (event.target.closest(".right-section")) {
-        profileDropdown.toggleClass("visible");
-        accountSettings.removeClass("visible");
-      }
-  
-      // Toggle account settings
-      if (event.target.closest("[data-action='account-settings']")) {
-        accountSettings.toggleClass("visible");
-        profileDropdown.removeClass("visible");
-      }
-  
-      // Handle "Back" button
-      if (event.target.closest("[data-action='back-to-profile']")) {
-        profileDropdown.toggleClass("visible");
-        accountSettings.removeClass("visible");
-      }
-  
-      // Close dropdowns when clicking outside
-      if (!event.target.closest("#check-profile, .right-section, #check-account-setting")) {
-        profileDropdown.removeClass("visible");
-        accountSettings.removeClass("visible");
-      }
-    });
         }
         // Load header and sidebar
         loadComponent('header-sidebar', 'labtech-header-fix.html');
