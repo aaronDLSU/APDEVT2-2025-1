@@ -13,19 +13,23 @@
       <div class="header">
         <div class="left-section">
           <i class="fa-solid fa-bars" class="hamburger-icon"></i>
-          <div class="logo" onclick="location.href = 'labtech-homepage.html'">
+
+          <div class="logo" onclick="location.href = 'student-homepage.html'" style="margin-top: 2px;">
             UniL
             <i class="fa-solid fa-flask" 
               style="font-size: 20px; 
               margin-bottom: 1px; 
-              color: #2A4E77;"></i>
+              color: #2A4E77;
+              margin-top:-1px;"></i>
             <i class="fa-solid fa-blog" 
               style="font-size: 26px; 
               margin-bottom: 7px; 
               color: #2A4E77; 
-              margin-right: 10px;"></i>
+              margin-right: 10px;
+              margin-top:-1px;"></i>
             <span id="booking-logo-design">Booking</span>
           </div>
+
         </div>
 
         <div class="middle-section">
@@ -63,7 +67,7 @@
             &lt; Back
           </button>
          
-          <button class="check-profile-buttons">
+          <button class="check-profile-buttons" onclick="location.href = 'labtech-profile.html'">
             <i class="fa-regular fa-user" style="margin-right: 21px;" ></i>
             View Profile
           </button>
@@ -86,8 +90,7 @@
           <p>Home</p>
         </div>
 
-        <div class="sidebar-link" style="margin-top: 5px;"
-        onclick="location.href = 'labtech-calendar.html'">
+        <div class="sidebar-link" style="margin-top: 5px;"> 
           <i class="fa-regular fa-calendar"></i>
           <p>Calendar</p>
         </div>
@@ -103,12 +106,51 @@
           <p>Reservations</p>
         </div>
 
-        <div class="sidebar-link" style="margin-top: 3px;">
+        <div class="sidebar-link" style="margin-top: 2px;">
           <i class="fa-solid fa-circle-info"></i>
           <p>Help</p>
         </div>
       </div>
     </div>
-   
+    <script>
+      $(document).ready(function () {
+    // Toggle profile dropdown
+    $(".right-section").on("click", function (e) {
+      e.stopPropagation(); // Prevent event from bubbling up
+      console.log('Toggling profile dropdown');
+      $("#check-profile").toggleClass("visible");
+      $("#check-account-setting").removeClass("visible");
+    });
+  
+    // Toggle account settings dropdown
+    $(".js-account-settings").on("click", function (e) {
+      e.stopPropagation(); // Prevent event from bubbling up
+      console.log('Toggling account settings dropdown');
+      $("#check-profile").removeClass("visible");
+      $("#check-account-setting").toggleClass("visible");
+    });
+  
+    // Handle "Back" button in account settings
+    $("[data-action='back-to-profile']").on("click", function (e) {
+      e.stopPropagation(); // Prevent event from bubbling up
+      console.log('Back to profile');
+      $("#check-account-setting").removeClass("visible");
+      $("#check-profile").toggleClass("visible");
+    });
+  
+    // Close dropdowns when clicking outside
+    $(document).on("click", function () {
+      console.log('Closing dropdowns');
+      $("#check-profile").removeClass("visible");
+      $("#check-account-setting").removeClass("visible");
+    });
+  
+    // Prevent dropdowns from closing when clicking inside them
+    $("#check-profile, #check-account-setting").on("click", function (e) {
+      e.stopPropagation();
+    });
+  });
+  
+     </script>
   </body>
 </html>
