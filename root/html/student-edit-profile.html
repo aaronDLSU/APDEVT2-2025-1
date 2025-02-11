@@ -10,11 +10,15 @@
 
     <title>Edit Profile</title>
     <style>
-        .main-content-spacing {
-            margin-top: 40px;
-            margin-left: 96px;
-            margin-right: 26px;
-            margin-bottom: 20px;
+
+        .container{
+          width: 70%;
+          max-width: 800px;
+          margin:20px auto;
+          border-radius: 30px;
+          box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.2);
+          background-color: white;
+          padding:20px;
         }
 
         .left-align-text {
@@ -33,7 +37,6 @@
         }
 
         #icon {
-
             display: flex;
             margin: auto;
         }
@@ -42,6 +45,8 @@
         #button:hover #icon-container {
             background-color: #d4d4d8
         }
+
+       
     </style>
 </head>
 
@@ -51,9 +56,9 @@
     <div id="header-sidebar"></div>
 
 
-    <div class="main-content-spacing">
-
-        <div class="d-flex flex-column w-50">
+    <div class="content-section">
+    
+        <div class="d-flex flex-column w-50 container">
 
             <h1 class="p-3 pb-4">Edit profile</h1>
 
@@ -171,8 +176,8 @@
             </div>
 
         </div>
-
-
+     
+    </div>
 
         <div id="footer"></div>
 
