@@ -11,3 +11,4 @@ function loadComponent(componentId, filePath, callback) {
   }
 
 loadComponent('header-sidebar', 'labtech-header.html');
+loadComponent('footer', 'footer.html');
