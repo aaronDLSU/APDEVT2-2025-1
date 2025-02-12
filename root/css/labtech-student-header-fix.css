@@ -8,7 +8,7 @@ body {
   margin: 0;
   padding-top: 55px; /* To account for the fixed header */
 }
-
+ 
 .header {
   height: 57px;
   position: fixed;

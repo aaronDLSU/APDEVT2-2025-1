@@ -9,7 +9,7 @@ body {
   padding-top: 55px; /* To account for the fixed header */
 }
 
-.header {
+.header { 
   height: 55px;
   position: fixed;
   top: 0;
