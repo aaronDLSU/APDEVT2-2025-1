@@ -280,3 +280,19 @@
     text-decoration: line-through;
 }
 
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.button {
+    background-color: GREEN;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 18px;
+    margin-right: 10px;
+}
