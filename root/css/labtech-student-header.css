@@ -48,7 +48,7 @@ body {
   align-items: center; 
   color: #2A4E77;
   padding-bottom: 10px;
-  margin-left: 40px;
+  margin-left: 20px;
   cursor: pointer;
 }
 
@@ -168,7 +168,7 @@ body {
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-#check-profile.visible, #check-account-setting.visible {
+#check-profile.visible, #check-account-setting.visible,#extended-sidebar.visible {
   opacity: 1;
   visibility: visible;
 }
@@ -231,4 +231,163 @@ body {
   align-items: center;
   text-align: center;
   min-height: calc(100vh - 55px); /* Ensures the welcome section is centered */
+}
+
+#hamburger-icon{
+  cursor: pointer;
+  border: none;
+  margin-left: -14px;
+  height: 50px;
+  width: 50px;
+  border-radius: 25px;
+  background-color: white;
+}
+
+#hamburger-icon:hover{
+  background-color: rgb(247, 247, 247);
+}
+
+#extended-sidebar{
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  top: 55px;
+  background-color: white;
+  width: 220px;
+  z-index: 200;
+  padding-top: 13px;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.extended-sidebar-link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+  padding: 12px 12px; /* Updated padding */
+  cursor: pointer;
+}
+
+.extended-sidebar-link i {
+  font-size: 26px;
+  margin-right: 20px;
+  height: 25px;
+  width: 25px;
+}
+
+.extended-sidebar-link p {
+  font-family: Roboto, Arial;
+  font-size: 16px;
+  margin-left: 18px;
+  margin-top: 6px;
+  font-weight: bold;
+}
+
+.extended-sidebar-link .fa-house {
+  margin-left: 11px;
+}
+
+.extended-sidebar-link .fa-calendar {
+  margin-left: 14px;
+}
+
+.extended-sidebar-link .fa-rectangle-list {
+  margin-left: 10px;
+}
+
+.extended-sidebar-link .fa-circle-info {
+  margin-left: 12px;
+}
+
+.extended-sidebar-link .sidebar-link p {
+  font-family: Roboto, Arial;
+  font-size: 16px;
+  margin-left: 18px;
+}
+
+.extended-sidebar-link #calendar-label{
+  margin-left: 14px;
+}
+
+.extended-sidebar-link #help-label{
+  margin-left: 16px;
+}
+
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 220px;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  display: none; 
+}
+
+#extended-sidebar.visible ~ .overlay {
+  display: block;
+}
+
+
+
+ /* Media query for large screens */
+@media (min-width: 1200.1px) {
+  .sidebar {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    top: 55px;
+    background-color: white;
+    width: 220px;
+    z-index: 200;
+    padding-top: 13px;
+  }
+
+  .sidebar-link {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: left;
+    padding: 12px 12px; /* Updated padding */
+    cursor: pointer;
+  }
+
+  .sidebar-link i {
+    margin-right: 20px;
+    height: 25px;
+    width: 25px;
+  }
+
+  .fa-house {
+    margin-left: 11px;
+  }
+
+  .fa-calendar {
+    margin-left: 14px;
+  }
+
+  .fa-rectangle-list {
+    margin-left: 10px;
+  }
+
+  .fa-circle-info {
+    margin-left: 12px;
+  }
+
+  .sidebar-link p {
+    font-family: Roboto, Arial;
+    font-size: 16px;
+    margin-left: 18px;
+  }
+
+  #calendar-label{
+    margin-left: 14px;
+  }
+
+  #help-label{
+    margin-left: 16px;
+  }
+
 }

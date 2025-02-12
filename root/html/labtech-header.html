@@ -3,7 +3,6 @@
   <head>
     <script src="https://kit.fontawesome.com/a39233b32c.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Lato&display=swap" rel="stylesheet">
-    <title>Home Page</title>
     <link rel="stylesheet" href="../css/labtech-student-header.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   </head>
@@ -12,7 +11,8 @@
       <!-- Header -->
       <div class="header">
         <div class="left-section">
-          <i class="fa-solid fa-bars" class="hamburger-icon"></i>
+          <button id="hamburger-icon"><i class="fa-solid fa-bars" ></i></button>
+          
           <div class="logo" onclick="location.href = 'labtech-homepage.html'">
             UniL
             <i class="fa-solid fa-flask" 
@@ -68,7 +68,8 @@
             <i class="fa-regular fa-user" style="margin-right: 21px;" ></i>
             View Profile
           </button>
-          <button class="check-profile-buttons">
+          <button class="check-profile-buttons"
+          onclick="location.href = 'labtech-edit-profile.html'">
             <i class="fa-solid fa-user-pen"></i>
             Edit Profile
           </button>
@@ -84,28 +85,56 @@
         <div class="sidebar-link Home-button"
         onclick="location.href = 'labtech-homepage.html'">
           <i class="fa-solid fa-house"></i>
-          <p>Home</p>
+          <p id="home-label">Home</p>
         </div>
 
         <div class="sidebar-link" style="margin-top: 3px;"
         onclick="location.href = 'labtech-calendar.html'">
           <i class="fa-regular fa-calendar"></i>
-          <p>Calendar</p>
+          <p id="calendar-label">Calendar</p>
         </div>
 
         <div class="sidebar-link" style="margin-top: 3px;"
         onclick="location.href = 'labtech-reservation-list.html'">
           <i class="fa-regular fa-rectangle-list"></i>
-          <p>Reservations</p>
+          <p id="reservation-label">Reservations</p>
         </div>
 
         <div class="sidebar-link"
         onclick="location.href = 'labtech-help-support.html'">
           <i class="fa-solid fa-circle-info"></i>
-          <p>Help</p>
+          <p id="help-label">Help</p>
         </div>
       </div>
+
+      <div id="extended-sidebar">
+        <div class="extended-sidebar-link Home-button"
+        onclick="location.href = 'labtech-homepage.html'">
+          <i class="fa-solid fa-house"></i>
+          <p id="home-label">Home</p>
+        </div>
+
+        <div class="extended-sidebar-link" style="margin-top: 3px;"
+        onclick="location.href = 'labtech-calendar.html'">
+          <i class="fa-regular fa-calendar"></i>
+          <p id="calendar-label">Calendar</p>
+        </div>
+
+        <div class="extended-sidebar-link" style="margin-top: 3px;"
+        onclick="location.href = 'labtech-reservation-list.html'">
+          <i class="fa-regular fa-rectangle-list"></i>
+          <p id="reservation-label">Reservations</p>
+        </div>
+
+        <div class="extended-sidebar-link"
+        onclick="location.href = 'labtech-help-support.html'">
+          <i class="fa-solid fa-circle-info"></i>
+          <p id="help-label">Help</p>
+        </div>
+      </div>
+      <div class="overlay"></div>
     </div>
+
    <script>
     $(document).ready(function () {
   // Toggle profile dropdown
@@ -137,12 +166,26 @@
     console.log('Closing dropdowns');
     $("#check-profile").removeClass("visible");
     $("#check-account-setting").removeClass("visible");
+    $("#extended-sidebar").removeClass("visible");
+    $(".overlay").removeClass("visible");
   });
 
   // Prevent dropdowns from closing when clicking inside them
   $("#check-profile, #check-account-setting").on("click", function (e) {
     e.stopPropagation();
   });
+
+
+
+ // Toggle sidebar on hamburger icon click
+ $("#hamburger-icon").on("click", function (e) {
+    e.stopPropagation(); // Prevent event from bubbling up
+    console.log('Toggling hamburger icon');
+    $("#extended-sidebar").toggleClass("visible");
+    $(".overlay").toggleClass("visible");
+  });
+
+
 });
 
    </script>

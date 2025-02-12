@@ -12,8 +12,7 @@
       <!-- Header -->
       <div class="header">
         <div class="left-section">
-          <i class="fa-solid fa-bars" class="hamburger-icon"></i>
-
+          <button id="hamburger-icon"><i class="fa-solid fa-bars" ></i></button>
           <div class="logo" onclick="location.href = 'student-homepage.html'">
             UniL
             <i class="fa-solid fa-flask" 
@@ -83,64 +82,98 @@
 
       <!-- Sidebar -->
       <div class="sidebar">
-        <div class="sidebar-link Home-button" 
+        <div class="sidebar-link Home-button"
         onclick="location.href = 'student-homepage.html'">
           <i class="fa-solid fa-house"></i>
-          <p>Home</p>
+          <p id="home-label">Home</p>
         </div>
 
-        <div class="sidebar-link" style="margin-top: 3px;"
+        <div class="sidebar-link" style="margin-top: 5px;"
         onclick="location.href = 'student-calendar.html'"> 
           <i class="fa-regular fa-calendar"></i>
-          <p>Calendar</p>
+          <p id="calendar-label">Calendar</p>
         </div>
 
-        <div class="sidebar-link" onclick="location.href='student-help-support.html'">
+        <div class="sidebar-link" style="margin-top: 2px;"
+        onclick="location.href='student-help-support.html'">
           <i class="fa-solid fa-circle-info"></i>
-          <p>Help</p>
+          <p id="help-label">Help</p>
         </div>
       </div>
+
+      <div id="extended-sidebar">
+        <div class="extended-sidebar-link Home-button"
+        onclick="location.href = 'student-homepage.html'">
+          <i class="fa-solid fa-house"></i>
+          <p id="home-label">Home</p>
+        </div>
+
+        <div class="extended-sidebar-link" style="margin-top: 3px;"
+        onclick="location.href = 'student-calendar.html'">
+          <i class="fa-regular fa-calendar"></i>
+          <p id="calendar-label">Calendar</p>
+        </div>
+
+        <div class="extended-sidebar-link"
+        onclick="location.href = 'student-help-support.html'">
+          <i class="fa-solid fa-circle-info"></i>
+          <p id="help-label">Help</p>
+        </div>
+      </div>
+      <div class="overlay"></div>
     </div>
-   <script>
-    $(document).ready(function () {
-  // Toggle profile dropdown
-  $(".right-section").on("click", function (e) {
-    e.stopPropagation(); // Prevent event from bubbling up
-    console.log('Toggling profile dropdown');
-    $("#check-profile").toggleClass("visible");
-    $("#check-account-setting").removeClass("visible");
-  });
-
-  // Toggle account settings dropdown
-  $(".js-account-settings").on("click", function (e) {
-    e.stopPropagation(); // Prevent event from bubbling up
-    console.log('Toggling account settings dropdown');
-    $("#check-profile").removeClass("visible");
-    $("#check-account-setting").toggleClass("visible");
-  });
-
-  // Handle "Back" button in account settings
-  $("[data-action='back-to-profile']").on("click", function (e) {
-    e.stopPropagation(); // Prevent event from bubbling up
-    console.log('Back to profile');
-    $("#check-account-setting").removeClass("visible");
-    $("#check-profile").toggleClass("visible");
-  });
-
-  // Close dropdowns when clicking outside
-  $(document).on("click", function () {
+    <script>
+      $(document).ready(function () {
+    // Toggle profile dropdown
+    $(".right-section").on("click", function (e) {
+      e.stopPropagation(); // Prevent event from bubbling up
+      console.log('Toggling profile dropdown');
+      $("#check-profile").toggleClass("visible");
+      $("#check-account-setting").removeClass("visible");
+    });
+  
+    // Toggle account settings dropdown
+    $(".js-account-settings").on("click", function (e) {
+      e.stopPropagation(); // Prevent event from bubbling up
+      console.log('Toggling account settings dropdown');
+      $("#check-profile").removeClass("visible");
+      $("#check-account-setting").toggleClass("visible");
+    });
+  
+    // Handle "Back" button in account settings
+    $("[data-action='back-to-profile']").on("click", function (e) {
+      e.stopPropagation(); // Prevent event from bubbling up
+      console.log('Back to profile');
+      $("#check-account-setting").removeClass("visible");
+      $("#check-profile").toggleClass("visible");
+    });
+  
+    // Close dropdowns when clicking outside
+    $(document).on("click", function () {
     console.log('Closing dropdowns');
     $("#check-profile").removeClass("visible");
     $("#check-account-setting").removeClass("visible");
+    $("#extended-sidebar").removeClass("visible");
+    $(".overlay").removeClass("visible");
   });
 
   // Prevent dropdowns from closing when clicking inside them
   $("#check-profile, #check-account-setting").on("click", function (e) {
     e.stopPropagation();
   });
-});
 
-   </script>
+
+
+ // Toggle sidebar on hamburger icon click
+ $("#hamburger-icon").on("click", function (e) {
+    e.stopPropagation(); // Prevent event from bubbling up
+    console.log('Toggling hamburger icon');
+    $("#extended-sidebar").toggleClass("visible");
+    $(".overlay").toggleClass("visible");
+  });
+  });
+  
+     </script>
     
   </body>
 </html>
