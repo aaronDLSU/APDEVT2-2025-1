@@ -6,6 +6,7 @@
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Bungee+Shade&display=swap" rel="stylesheet">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
       <title>Home Page</title>
   </head>
   <body>
@@ -75,11 +76,14 @@
 
     <script>
         // Function to load a component
-      function loadComponent(componentId, filePath) {
+        function loadComponent(componentId, filePath, callback) {
         fetch(filePath)
           .then(response => response.text())
           .then(data => {
-              document.getElementById(componentId).innerHTML = data;
+            $("#" + componentId).html(data);
+            if (typeof callback === "function") {
+              callback();
+            }
           })
           .catch(error => console.error('Error loading component:', error));
       }
