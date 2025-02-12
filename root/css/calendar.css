@@ -283,7 +283,11 @@
 .button-container {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
+    align-items: center;
+    margin-top:0px;
+    margin-bottom: 100px;
+    margin-left: 100px;
+    margin-top: -50px;
 }
 
 .button {
@@ -292,7 +296,6 @@
     border: none;
     padding: 12px 20px;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 6px;
     font-size: 18px;
-    margin-right: 10px;
 }
