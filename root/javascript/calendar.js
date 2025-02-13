@@ -9,14 +9,14 @@ let selectedMonth = currentDate.getMonth();
 let selectedYear = currentDate.getFullYear();
 
 const availableRooms = [
-    "Room 101 - Biology Lab",
-    "Room 102 - Chemistry Lab",
-    "Room 103 - Physics Lab",
-    "Room 201 - Computer Science Lab",
-    "Room 202 - Electronics Lab",
-    "Room 203 - AI & Robotics Lab",
-    "Room 301 - Data Science Lab",
-    "Room 302 - Mechanical Engineering Lab"
+    "Room 101 - Computer Lab",
+    "Room 102 - Computer Lab",
+    "Room 103 - Computer Lab",
+    "Room 201 - Computer Lab",
+    "Room 202 - Computer Lab",
+    "Room 203 - Computer Lab",
+    "Room 301 - Computer Lab",
+    "Room 302 - Computer Lab"
 ];
 
 function updateClock() {
