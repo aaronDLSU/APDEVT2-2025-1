@@ -1,5 +1,7 @@
 #Ignore Macos files
 ._*
 
-#Ignore Node Modules Folder
-node_modules
+#Node Modules Folder
+node_modules/
+
+.env
