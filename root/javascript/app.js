@@ -7,7 +7,7 @@ const expressLayout = require('express-ejs-layouts');
 const app = express();
 const port = process.env.PORT || 3000;
 
-//Change to public if chaging the folder location
+//Change to public if changing the folder location
 app.use(express.static('root'));
 
 // Template
