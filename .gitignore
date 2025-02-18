@@ -4,4 +4,5 @@
 #Node Modules Folder
 node_modules/
 
+#MongoDB accounts
 .env
