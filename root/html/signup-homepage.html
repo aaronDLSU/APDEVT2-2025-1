@@ -2,7 +2,7 @@
 <html>
   <head>
       <script src="https://kit.fontawesome.com/a39233b32c.js" crossorigin="anonymous"></script>
-      <link rel="stylesheet" href="../css/homepage.css">
+      <link rel="stylesheet" type="text/css"  href="../css/homepage.css">
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Bungee+Shade&display=swap" rel="stylesheet">
@@ -88,8 +88,10 @@
           .catch(error => console.error('Error loading component:', error));
       }
         // Load header and sidebar
-        loadComponent('header-sidebar', 'signup-header.html');
-        loadComponent('footer', 'footer.html');
+  
+        loadComponent('header-sidebar', '/html/signup-header.html');
+        loadComponent('footer', '/html/footer.html');
+
     </script>
   </body>
 </html>
