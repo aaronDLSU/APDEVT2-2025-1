@@ -1,17 +1,41 @@
+const mongoose = require('mongoose')
+mongoose.connect('mongodb://localhost/LabReservationDB')
+
 const express = require('express');
-const path = require('path');
 const app = express();
-const exphbs = require("express-handlebars");
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+
+const path = require('path');
+
+
 const hbs = require('hbs');
+app.set('view engine', 'hbs');
+const exphbs = require("express-handlebars");
+app.engine('hbs', require('exphbs'));
 
 app.use(express.json()) // use json
-app.engine('hbs', require('exphbs'));
-app.set('view engine', 'hbs');
+app.use(express.urlencoded( {extended: true})); // files consist of more than strings
+app.use(express.static('public'));// Serve static files from the 'root' directory
 
+app.use(
+  session({
+    secret: "secret-key",
+    resave:false,
+    saveUninitialized: false
+  })  
+);
 
-// Serve static files from the 'root' directory
-app.use(express.static(path.join(__dirname, 'root')));
-console.log(__dirname);
+app.use(cookieParser());
+
+const isAuthenticated = (req,res,next) => {
+  if(req.session.user){
+    next();
+  }else{
+    res.redirect("/login");
+  }
+};
+
 
 // Homepage
 app.get('/', (req, res) => {
