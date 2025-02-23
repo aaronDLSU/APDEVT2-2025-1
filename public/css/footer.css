@@ -1,0 +1,23 @@
+footer {
+  display: flex;
+  flex-direction: column;
+  background: rgb(22,55,94);
+  color: white;
+  padding: 20px;
+  text-align: center; 
+  align-items: center;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+footer p {
+  display: inline-block;
+  color: white;
+  text-decoration: none;
+  margin: 10px;
+}
+
+footer i{
+  display: flex;
+  text-align: center;
+  justify-content: center;
+}

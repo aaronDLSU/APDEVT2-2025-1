@@ -1,21 +1,25 @@
-const mongoose = require('mongoose')
-mongoose.connect('mongodb://localhost/LabReservationDB')
-
 const express = require('express');
 const app = express();
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
-
 const path = require('path');
-
-
-const hbs = require('hbs');
-app.set('view engine', 'hbs');
-
+const exphbs = require('express-handlebars');
 
 app.use(express.json()) // use json
 app.use(express.urlencoded( {extended: true})); // files consist of more than strings
-app.use(express.static('public'));// Serve static files from the 'root' directory
+app.use(express.static(path.join(__dirname, 'public'))); 
+
+const hbs = require('hbs');
+app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, 'views'))
+hbs.registerPartials(path.join(__dirname, 'views/partials'));
+
+// Set up Handlebars with a default layout
+app.engine('hbs', exphbs.engine({ 
+  extname: 'hbs', 
+  defaultLayout: 'index',  // This makes main.hbs the default layout
+  layoutsDir: 'views/layouts' // Ensure layouts are stored here
+}));
 
 app.use(
   session({
@@ -38,7 +42,9 @@ const isAuthenticated = (req,res,next) => {
 
 // Homepage
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'root', 'html', 'signup-homepage.html'));
+  res.render('homepage', {
+    title: "Homepage"
+  });
 });
 
 //PORT
