@@ -11,8 +11,7 @@ const path = require('path');
 
 const hbs = require('hbs');
 app.set('view engine', 'hbs');
-const exphbs = require("express-handlebars");
-app.engine('hbs', require('exphbs'));
+
 
 app.use(express.json()) // use json
 app.use(express.urlencoded( {extended: true})); // files consist of more than strings
