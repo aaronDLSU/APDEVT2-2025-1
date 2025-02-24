@@ -7,7 +7,9 @@ const exphbs = require('express-handlebars');
 
 app.use(express.json()) // use json
 app.use(express.urlencoded( {extended: true})); // files consist of more than strings
-app.use(express.static(path.join(__dirname, 'public'))); 
+app.use(express.static(path.join(__dirname, 'public'), {
+  extensions: ['html', 'css', 'js', 'png', 'jpeg']
+}));
 
 const hbs = require('hbs');
 app.set('view engine', 'hbs');
@@ -45,6 +47,14 @@ app.get('/', (req, res) => {
   res.render('homepage', {
     title: "Homepage"
   });
+});
+
+//login-signup
+app.get('/login-signup', (req,res) => {
+  res.render('login-signup', {
+    title: "Login | Signup",
+    layout: 'login-signup-layout'
+  })
 });
 
 //PORT

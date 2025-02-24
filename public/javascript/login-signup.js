@@ -1,4 +1,5 @@
-const slider = $("#slider"); // design div
+$(document).ready(function() {
+  const slider = $("#slider"); // design div
 const slider1 = $("#slider1"); // form div
 const signupBox = $("#signup-box");
 const loginBox = $("#login-box");
@@ -18,10 +19,13 @@ function createUser(email, password, role, username, rememberPeriod) {
 }
 
 function showLogin() {
+  console.log("showLogin function called");
   slider.css("transform", "translateX(-100%)"); // move design to the left
   slider1.css("transform", "translateX(100%)"); // move form to the right
-  slider.css("transition", "1.5s");
-  slider1.css("transition", "1.5s");
+  requestAnimationFrame(() => {
+    slider.css("transition", "1.5s");
+    slider1.css("transition", "1.5s");
+  });
   signupBox.hide(); // Hide Sign-Up form
   loginBox.show();  // Show Login form
   loginBox.addClass('fadeAnimation');
@@ -153,4 +157,12 @@ $(window).on("resize", function () {
   }, 100);
 });
 
-createUser('adrian','helo','student','',0);
+
+  window.showLogin = showLogin;
+  window.showSignUp = showSignUp;
+  window.checkInvalidLogin = checkInvalidLogin;
+  window.checkInvalidSignup = checkInvalidSignup;
+  window.remembered =remembered;
+
+});
+
