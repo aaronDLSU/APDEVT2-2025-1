@@ -1,0 +1,57 @@
+.profile-image {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 5px solid #2E3A59;
+  mix-blend-mode: darken;
+} 
+
+.button-setting {
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+.col {
+  --bs-gutter-y: 24px;
+}
+
+.full-vh {
+  height: 100vh;
+}
+
+.main-content-spacing {
+  margin-top: 40px;
+  margin-left: 96px;
+  margin-right: 26px;
+  margin-bottom: 20px;
+}
+
+.img-fluid {
+  height: 100%
+}
+
+.thick {
+  border-width: 3px;
+}
+
+.align-button {
+  --bs-btn-padding-x: 0rem;
+  --bs-btn-padding-y: 0rem;
+}
+
+#profile-section {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+#profile-info-section {
+  flex: 1;
+  max-width: 60%;
+}
+
+#dashboard-section {
+  flex: 1;
+  max-width: 35%;
+}

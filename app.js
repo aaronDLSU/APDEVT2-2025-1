@@ -19,7 +19,7 @@ hbs.registerPartials(path.join(__dirname, 'views/partials'));
 // Set up Handlebars with a default layout
 app.engine('hbs', exphbs.engine({ 
   extname: 'hbs', 
-  defaultLayout: 'index',  // This makes main.hbs the default layout
+  defaultLayout: 'index',  // This makes index.hbs the default layout before login layout
   layoutsDir: 'views/layouts' // Ensure layouts are stored here
 }));
 
@@ -54,6 +54,28 @@ app.get('/login-signup', (req,res) => {
   res.render('login-signup', {
     title: "Login | Signup",
     layout: 'login-signup-layout'
+  })
+});
+
+//calendar
+app.get('/calendar', (req,res) => {
+  res.render('calendar', {
+    title: "Reserve your lab room!"
+  })
+});
+
+//help support
+app.get('/help-support', (req,res) => {
+  res.render('help-support', {
+    title: "Help & Support"
+  })
+});
+
+//profile
+app.get('/profile', (req,res) => {
+  res.render('profile', {
+    title: "Profile",
+    layout: "student-login"
   })
 });
 

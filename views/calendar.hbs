@@ -1,0 +1,73 @@
+<!-- Placeholder for header and sidebar-->
+{{> header }}
+<!-- Content Section -->
+<div class="content-section">      
+    <div class="content-section"> 
+        <!-- Real-time Clock -->
+        <div class="clock-container" id="real-time-clock"></div>
+    
+        <div class="container">
+            <!-- Room List Section (Left Side) -->
+            <div class="room-list-container">
+                <h3>Available Rooms</h3>
+                <div class="room-list" id="room-list"></div>
+            </div>
+    
+            <!-- Calendar Section -->
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <button class="nav-button" onclick="changeMonth(-1)">◀ Prev</button>
+                    <h2 id="current-month">Month Year</h2>
+                    <button class="nav-button" onclick="changeMonth(1)">Next ▶</button>
+                </div>
+                <div class="days">
+                    <div class="day">Sun</div>
+                    <div class="day">Mon</div>
+                    <div class="day">Tue</div>
+                    <div class="day">Wed</div>
+                    <div class="day">Thu</div>
+                    <div class="day">Fri</div>
+                    <div class="day">Sat</div>
+                </div>
+                <div class="calendar-grid" id="calendar"></div>
+            </div>
+        </div>
+    
+        <div class="label">
+            <h2 id="room-availability">Seat availability at Lab Room: </h2>
+        </div>
+    
+        <div class="seating-container">
+            <div class="seats">
+                <table class="seats-table">
+                    <thead>
+                        <tr><th>Seat</th></tr>
+                    </thead>
+                    <tbody>
+                        <script>
+                            document.write([...Array(9)].map((_, i) => `<tr><td>Seat ${i + 1}</td></tr>`).join(''));
+                        </script>
+                    </tbody>
+                </table>
+            </div>
+    
+            <div class="seat-availability-container">
+                <table class="available-table">
+                    <thead>
+                        <tr>
+                            <script>
+                                document.write([...Array(12)].map((_, i) => `<th colspan="2">${7 + i}:00${i < 5 ? 'am' : 'pm'}</th>`).join(''));
+                            </script>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <script>
+                            document.write([...Array(9)].map(() => `<tr>${[...Array(24)].map(() => '<td></td>').join('')}</tr>`).join(''));
+                        </script>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{{> footer }}

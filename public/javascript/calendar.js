@@ -1,4 +1,5 @@
 // Real-time Clock
+$(document).ready(function() {
 const clockContainer = document.getElementById("real-time-clock");
 const calendarGrid = document.getElementById("calendar");
 const currentMonthLabel = document.getElementById("current-month");
@@ -167,3 +168,4 @@ document.addEventListener("click", () => {
 // Initialize Functions
 generateCalendar();
 generateRoomList();
+});
