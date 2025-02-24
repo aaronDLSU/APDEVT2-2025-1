@@ -5,6 +5,7 @@
         <!-- Login Form -->
         <div class="form-content" id="login-box" style="display: none;">
           <h1 class="login-signup">Login</h1>
+
           <div class="input-container">
             <input id="email-input" type="text" placeholder="Email"/>
             <i class="fa-solid fa-circle-exclamation login-warning" style="color: #ff6f61;"></i>
@@ -31,24 +32,32 @@
         <!-- Sign-Up Form -->
         <div class="form-content" id="signup-box">
           <h1 class="login-signup">Sign Up</h1>
-          <div class="input-container">
-            <input id="signup-email" type="text" placeholder="Email"/>
-            <i class="fa-solid fa-circle-exclamation signup-warning" style="color: #ff6f61;"></i>
-          </div>
 
-          <div class="input-container">
-            <input id="signup-password" type="password" placeholder="Password"/>
-            <i class="fa-solid fa-circle-exclamation signup-warning" style="color: #ff6f61;"></i>
-          </div>
-         <div class="role-dropdown">
-          <label for="signup-role">Role:</label>
-          <select id="signup-role" required class="role-pick">
-            <option value="student">Student</option>
-            <option value="lab_technician">Lab Technician</option>
-          </select>
-         </div>
-          <p class="invalid-message">Invalid email or password input!</p>
-          <button class="login-signup-btn" onclick="checkInvalidSignup()">Sign Up</button>
+           <form action="/signup" method="post" id="signup-form" onsubmit="return validateSignup()">
+            <div class="input-container">
+              <input id="signup-email" name="signup-email" type="text" placeholder="Email" required >
+              <i class="fa-solid fa-circle-exclamation signup-warning" style="color: #ff6f61;"></i>
+            </div>
+
+            <div class="input-container">
+              <input id="signup-password" name="signup-password" type="password" placeholder="Password" required>
+              <i class="fa-solid fa-circle-exclamation signup-warning" style="color: #ff6f61;"></i>
+            </div>
+
+            <div class="role-dropdown">
+              <label for="signup-role">Role:</label>
+              <select id="signup-role" name="signup-role" required class="role-pick">
+                <option value="student">Student</option>
+                <option value="lab_technician">Lab Technician</option>
+              </select>
+            </div>
+
+            <p class="invalid-message">Invalid email or password input!</p>
+            <button type="submit" class="login-signup-btn">Sign Up</button>
+          </form>
+
+          
+         
           <div>
             Have an account?
             <button class="switch-signup-login" onclick="showLogin()">Login</button>

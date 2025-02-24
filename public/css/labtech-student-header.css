@@ -329,3 +329,15 @@ body {
   display: block;
 }
 
+
+.header {
+  border: 1px solid red; /* Debugging */
+}
+
+.sidebar {
+  border: 1px solid blue; /* Debugging */
+}
+
+.middle-section {
+  border: 1px solid green; /* Debugging */
+}

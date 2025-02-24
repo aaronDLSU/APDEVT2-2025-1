@@ -25,9 +25,8 @@
   background-color: #3F72AF;
 }
 
-.why-choose-us{
-  font-size: 40px;
-}
+
+
 
 .features,.instructions{
   padding: 40px 20px;
@@ -38,6 +37,11 @@
 .features h1,.instructions h1{
   font-size: 40px;
   margin-bottom: 40px;
+  font-weight: 900;
+}
+
+.features h2,.instructions h2{
+  font-weight: bold;
 }
 
 .feature-item{
@@ -46,7 +50,7 @@
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin: 20px auto;
-  max-width: 500px; /* Limit width */
+  max-width: 600px; /* Limit width */
 }
 
 .circle{
@@ -58,14 +62,16 @@
   border-radius: 25px;
   left: 50%;
   margin-left: 11px;
-  margin-top:8px;
+  margin-top:-8px;
   z-index: 1;
 }
 
-
-
 .instructions-number{
-  margin-bottom: 50px;
+  margin-bottom: 25px;
+  position: relative;
+  z-index: 100;
+  color: white;
+  font-weight: bold;
 }
 
 @media (min-width: 768px) {
@@ -78,14 +84,6 @@
   font-size: 50px;
   margin-bottom: 20px;
 }
-
-.instructions-number{
-  position: relative;
-  z-index: 100;
-  color: white;
-}
-
-
 
 
 @media (max-width: 877px) {

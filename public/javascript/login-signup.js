@@ -4,20 +4,6 @@ const slider1 = $("#slider1"); // form div
 const signupBox = $("#signup-box");
 const loginBox = $("#login-box");
 
-let role,username,rememberPeriod;
-
-const user = []; // Initialize as an empty array
-
-function createUser(email, password, role, username, rememberPeriod) {
-  user.push({
-    email,
-    password,
-    role,
-    username,
-    rememberPeriod,
-  });
-}
-
 function showLogin() {
   console.log("showLogin function called");
   slider.css("transform", "translateX(-100%)"); // move design to the left
@@ -55,33 +41,36 @@ function remembered() {
   }
 }
 
-function checkInvalidSignup(){
-  const email = $("#signup-email").val();
-  const password = $("#signup-password").val();
-  const Invalid = email === '' || password === '';
+function validateSignup() {
+  const email = document.getElementById('signup-email').value.trim();
+  const password = document.getElementById('signup-password').value.trim();
+  
 
-  if(Invalid){
+  console.log('Validation running');
+  // Clear previous errors
+  
+  if (!email || !password) {
     $("#signup-email").css("border-color","red");
     $("#signup-password").css("border-color","red");
     $(".invalid-message").html("Invalid email or password input!");
     $(".invalid-message").css("opacity", "1");
     $(".signup-warning").addClass("show");
     console.log('invalid');
-  }else if(checkPasswordLength(password)){  
+    return false; // Block form submission
+  }
+
+  if (password.length < 8) {
     $("#signup-email").css("border-color","red");
     $("#signup-password").css("border-color","red");
     $(".invalid-message").html("password minimum length is 8 characters");
     $(".invalid-message").css("opacity", "1");
     $(".signup-warning").addClass("show");
-  }else{
-    role = $("#signup-role").val();
-    createUser(email,password,role,'',0);
-    clearSignUp();
-    for(let i=0; i<user.length;i++){
-      console.log(`User: ${user[i].email}, Password: User: ${user[i].password}, Role: ${user[i].role}`);
-    }
+    return false; // Block form submission
   }
+  return true; // Allow form submission
+  
 }
+
 
 function clearSignUp(){
     $("#signup-email").css("border-color","#ccc");
@@ -161,7 +150,7 @@ $(window).on("resize", function () {
   window.showLogin = showLogin;
   window.showSignUp = showSignUp;
   window.checkInvalidLogin = checkInvalidLogin;
-  window.checkInvalidSignup = checkInvalidSignup;
+  window.validateSignup = validateSignup;
   window.remembered =remembered;
 
 });

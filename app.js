@@ -1,15 +1,19 @@
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/LabResDB');
+
 const express = require('express');
 const app = express();
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const exphbs = require('express-handlebars');
+const bodyParser = require('body-parser');
 
 app.use(express.json()) // use json
 app.use(express.urlencoded( {extended: true})); // files consist of more than strings
-app.use(express.static(path.join(__dirname, 'public'), {
-  extensions: ['html', 'css', 'js', 'png', 'jpeg']
-}));
+app.use(express.static(path.join(__dirname, 'public')));
+
+const Post = require("./db/models/database");
 
 const hbs = require('hbs');
 app.set('view engine', 'hbs');
@@ -41,6 +45,11 @@ const isAuthenticated = (req,res,next) => {
   }
 };
 
+app.use((req, res, next) => {
+  console.log(`Incoming ${req.method} request to ${req.url}`);
+  console.log('Request Body:', req.body); // Log raw body
+  next();
+});
 
 // Homepage
 app.get('/', (req, res) => {
@@ -50,12 +59,32 @@ app.get('/', (req, res) => {
 });
 
 //login-signup
-app.get('/login-signup', (req,res) => {
-  res.render('login-signup', {
-    title: "Login | Signup",
-    layout: 'login-signup-layout'
+app.get('/signup-login', (req,res) => {
+  res.render('signup-login', {
+    title: "Signup | Login"
   })
 });
+
+app.post('/signup', (req, res) => {
+  console.log('Request Body:', req.body);
+
+  const email = req.body['signup-email']; // Match form name
+  const password = req.body['signup-password']; // Match form name
+  const role = req.body['signup-role'];
+
+  try {
+      Post.create({
+          email: email,
+          password: password,
+          role: role// Add role field
+      });
+      res.redirect('/');
+  } catch (err) {
+      console.error('Signup error:', err);
+      res.status(500).send('Error creating user');
+  }
+});
+
 
 //calendar
 app.get('/calendar', (req,res) => {
@@ -71,12 +100,19 @@ app.get('/help-support', (req,res) => {
   })
 });
 
-//profile
+//student profile
 app.get('/profile', (req,res) => {
-  res.render('profile', {
+  res.render('student-profile', {
     title: "Profile",
     layout: "student-login"
-  })
+  }, function(err, user) {
+    if (err) {
+        console.error('Error creating user:', err);
+        res.status(500).send('Internal Server Error');
+    } else {
+        res.redirect('/');
+    }
+});
 });
 
 //PORT

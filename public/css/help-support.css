@@ -1,13 +1,14 @@
 .content-section{
   background-color: #F9F7F7;
+  margin-top:40px;
 }
 
-h1 {
+.content-section h1 {
   margin: 50px auto;
   color:#2A4E77; 
 }
 
-h2{
+.content-section h2{
   color:#2A4E77;
 }
 

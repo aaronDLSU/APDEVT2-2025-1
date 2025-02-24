@@ -5,6 +5,7 @@ p{
 body {
   margin: 0;
   font-family: Arial;
+  padding:0;
 }
 
 @keyframes fadeInAnimation {
