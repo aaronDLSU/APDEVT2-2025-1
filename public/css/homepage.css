@@ -62,16 +62,16 @@
   border-radius: 25px;
   left: 50%;
   margin-left: 11px;
-  margin-top:-8px;
+  margin-top:-6px;
   z-index: 1;
 }
 
 .instructions-number{
-  margin-bottom: 25px;
+  margin-bottom: 22px;
   position: relative;
   z-index: 100;
   color: white;
-  font-weight: bold;
+  font-weight: 400;
 }
 
 @media (min-width: 768px) {

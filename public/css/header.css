@@ -57,6 +57,13 @@ body {
   background-color: rgb(247, 247, 247);
 }
 
+#booking{
+  font-size: 16px;
+  letter-spacing: 3px;
+  position: absolute;
+  margin-top: 36px;
+}
+
 .middle-section {
   flex: 1;
   max-width: 470px;
@@ -111,9 +118,40 @@ body {
 }
 
 .right-section i {
+  font-size: 26px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.right-section .logged-in-i{
   font-size: 34px;
   cursor: pointer;
   margin-right: 10px;
+}
+
+.right-section p{
+  margin:0;
+  padding:0;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.sign-in-button {
+  display: flex;
+  align-items: center;
+  vertical-align: middle;
+  justify-content: center;
+  width: 110px;
+  height: 44px;
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 20px;
+  background-color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.sign-in-button:hover {
+  background-color: rgb(247, 247, 247);
 }
 
 .profile-pic-name-container{
@@ -234,11 +272,6 @@ body {
   min-height: calc(100vh - 55px); /* Ensures the welcome section is centered */
 }
 
-
-
-
-
-
 #hamburger-icon{
   cursor: pointer;
   border: none;
@@ -258,9 +291,10 @@ body {
   left: 0;
   bottom: 0;
   top: 55px;
+  height: 100%;
   background-color: white;
-  width: 218px;
-  z-index: 200;
+  width: 220px;
+  z-index: 300;
   padding-top: 13px;
   opacity: 0;
   visibility: hidden;
@@ -328,7 +362,7 @@ body {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 100;
+  z-index: 300;
   display: none; 
 }
 
@@ -336,3 +370,8 @@ body {
   display: block;
 }
 
+.body-no-scroll {
+  position: fixed;
+  overflow: hidden;
+  width: 100%;
+}

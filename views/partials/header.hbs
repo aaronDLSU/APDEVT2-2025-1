@@ -19,12 +19,58 @@
         </button>
       </div>
 
-      <div class="right-section">
-        <button class="sign-in-button" onclick="location.href = '/signup-login'">
-          <i class="fa-solid fa-circle-user"></i>
-          <p>Sign up</p>
-        </button>
-      </div>
+      {{#if user}}
+         <div class="right-section">
+            <i class="fa-solid fa-circle-user logged-in-i"></i>
+        </div>
+
+        <div id="check-profile">
+          <div class="profile-pic-name-container">
+            <i class="fa-solid fa-circle-user" 
+              style=" font-size: 50px; 
+              margin-left: 20px;"></i>
+            <p>Name</p>
+          </div>    
+          
+          <button class="check-profile-buttons js-account-settings"             
+            data-action="account-settings">
+            <i class="fa-solid fa-gear"></i>
+            Account Settings
+          </button>
+          <button class="check-profile-buttons"
+          onclick="location.href = 'signup-homepage.html'">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            Sign out
+          </button>
+        </div>
+
+        <div id="check-account-setting">
+          <button class="back-to-prof-dropdown" data-action="back-to-profile">
+            &lt; Back
+          </button>
+         
+          <button class="check-profile-buttons" onclick="location.href = 'student-profile.html'">
+            <i class="fa-regular fa-user" style="margin-right: 21px;" ></i>
+            View Profile
+          </button>
+          <button class="check-profile-buttons"
+          onclick="location.href = 'student-edit-profile.html'">
+            <i class="fa-solid fa-user-pen"></i>
+            Edit Profile
+          </button>
+          <button class="check-profile-buttons" onclick="location.href = 'student-manage-account.html'">
+            <i class="fa-solid fa-user-gear" style="margin-right: 17px;"></i>
+            Manage Account
+          </button>
+        </div>
+      {{else}}
+        <div class="right-section">
+          <button class="sign-in-button" onclick="location.href = '/signup-login'">
+            <i class="fa-solid fa-circle-user"></i>
+            <p>Sign up</p>
+          </button>
+        </div>
+      {{/if}}
     </div>
 
     <!-- Sidebar -->

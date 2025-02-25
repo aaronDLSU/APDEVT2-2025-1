@@ -1,7 +1,7 @@
 <!-- Placeholder for header and sidebar-->
 {{> header }}
 <!-- Content Section -->
-<div class="content-section">      
+    
     <div class="content-section"> 
         <!-- Real-time Clock -->
         <div class="clock-container" id="real-time-clock"></div>
@@ -69,5 +69,11 @@
             </div>
         </div>
     </div>
-</div>
+
+    {{#if user}}
+        <div class ="button-container">
+            <button class="button" onclick="window.location.href='labtech-reservation.html'">Reserve Slot</button>
+        </div>
+    {{/if}}
+
 {{> footer }}

@@ -6,23 +6,26 @@
         <div class="form-content" id="login-box" style="display: none;">
           <h1 class="login-signup">Login</h1>
 
-          <div class="input-container">
-            <input id="email-input" type="text" placeholder="Email"/>
-            <i class="fa-solid fa-circle-exclamation login-warning" style="color: #ff6f61;"></i>
-          </div> 
+           <form action="/login" method="post" onsubmit="validateLogin()">
+            <div class="input-container">
+              <input id="email-input" name="email-input" type="text" placeholder="Email"/>
+              <i class="fa-solid fa-circle-exclamation login-warning" style="color: #ff6f61;"></i>
+            </div> 
 
-          <div class="input-container">
-            <input id="password-input" type="password" placeholder="Password"/>
-            <i class="fa-solid fa-circle-exclamation login-warning" style="color: #ff6f61;"></i>
-          </div>
-          
-          
-          <p class="invalid-message">Invalid email or password input!</p>
-          <div class="remember-me-option">
-            <input type="checkbox" value="notRemembered" class="remember-me-checkbox" id="login-checkbox">
-            <p>Remember me</p>
-          </div>
-          <button class="login-signup-btn login-button" onclick="remembered(); checkInvalidLogin();">Login</button>
+            <div class="input-container">
+              <input id="password-input" name="password-input" type="password" placeholder="Password"/>
+              <i class="fa-solid fa-circle-exclamation login-warning" style="color: #ff6f61;"></i>
+            </div>
+
+            <p class="invalid-message">Invalid email or password input!</p>
+            <div class="remember-me-option">
+              <input type="checkbox" value="notRemembered" class="remember-me-checkbox" id="login-checkbox" name="login-checkbox">
+              <p>Remember me</p>
+            </div>
+            <button class="login-signup-btn login-button" 
+            onclick="remembered(); checkInvalidLogin();" type="submit">Login</button>
+          </form>
+
           <div>
             Don't have an account?
             <button class="switch-signup-login" onclick="showSignUp()">Sign Up</button>
@@ -33,17 +36,15 @@
         <div class="form-content" id="signup-box">
           <h1 class="login-signup">Sign Up</h1>
 
-           <form action="/signup" method="post" id="signup-form" onsubmit="return validateSignup()">
+           <form action="/signup" method="post" onsubmit="return validateSignup()">
             <div class="input-container">
-              <input id="signup-email" name="signup-email" type="text" placeholder="Email" required >
+              <input id="signup-email" name="signup-email" type="text" placeholder="Email">
               <i class="fa-solid fa-circle-exclamation signup-warning" style="color: #ff6f61;"></i>
             </div>
-
             <div class="input-container">
-              <input id="signup-password" name="signup-password" type="password" placeholder="Password" required>
+              <input id="signup-password" name="signup-password" type="password" placeholder="Password">
               <i class="fa-solid fa-circle-exclamation signup-warning" style="color: #ff6f61;"></i>
             </div>
-
             <div class="role-dropdown">
               <label for="signup-role">Role:</label>
               <select id="signup-role" name="signup-role" required class="role-pick">

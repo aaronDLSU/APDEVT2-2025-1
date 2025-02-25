@@ -67,8 +67,8 @@ function validateSignup() {
     $(".signup-warning").addClass("show");
     return false; // Block form submission
   }
+  alert('Account Successfully Added!');
   return true; // Allow form submission
-  
 }
 
 
@@ -88,7 +88,7 @@ function checkPasswordLength(password){
   }else return false;
 }
 
-function checkInvalidLogin(){
+function validateLogin(){
   const email = $("#email-input").val();
   const password = $("#password-input").val();
   const Invalid = email === '' || password === '';
@@ -100,21 +100,24 @@ function checkInvalidLogin(){
     $(".invalid-message").css("opacity", "1");
     $(".login-warning").addClass("show");
     console.log('invalid');
+    return false;
   }else if(checkPasswordLength(password)){  
     $("#email-input").css("border-color","red");
     $("#password-input").css("border-color","red");
     $(".invalid-message").html("password minimum length is 8 characters");
     $(".invalid-message").css("opacity", "1");
     $(".login-warning").addClass("show");
+    return false;
   }else{
     for(let i=0; i<user.length;i++){
       if(user[i].email === email && user[i].password === password){
-        user[i].rememberPeriod +=3;
+        user[i].rememberPeriod =3;
         console.log(`User: ${user[i].email}, Password: ${user[i].password}, Role: ${user[i].role}, Remember Period: ${user[i].rememberPeriod}`);
         console.log('login successful');
+        
       }
     }
-    clearLogin();
+    return true;
   }
 }
 
@@ -149,7 +152,7 @@ $(window).on("resize", function () {
 
   window.showLogin = showLogin;
   window.showSignUp = showSignUp;
-  window.checkInvalidLogin = checkInvalidLogin;
+  window.validateLogin = validateLogin;
   window.validateSignup = validateSignup;
   window.remembered =remembered;
 

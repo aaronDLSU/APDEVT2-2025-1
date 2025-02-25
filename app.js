@@ -66,8 +66,7 @@ app.get('/signup-login', (req,res) => {
 });
 
 app.post('/signup', (req, res) => {
-  console.log('Request Body:', req.body);
-
+  //console.log('Request Body:', req.body);
   const email = req.body['signup-email']; // Match form name
   const password = req.body['signup-password']; // Match form name
   const role = req.body['signup-role'];
@@ -78,11 +77,23 @@ app.post('/signup', (req, res) => {
           password: password,
           role: role// Add role field
       });
-      res.redirect('/');
+      res.redirect('/signup-login');
   } catch (err) {
       console.error('Signup error:', err);
       res.status(500).send('Error creating user');
   }
+});
+
+app.post('/login', async(req, res) => {
+  const email = req.body['email-input']; // Match form name
+  const password = req.body['password-input']; // Match form name
+  const remembered = req.body['login-checkbox'];
+  const user = await Post.findOne({email:email, password: password});
+  console.log('hello:'+ user);
+  res.render('homepage',{
+    user,
+    title: "Homepage"
+  });
 });
 
 
