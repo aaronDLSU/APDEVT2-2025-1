@@ -41,15 +41,11 @@ const isAuthenticated = (req,res,next) => {
   if(req.session.user){
     next();
   }else{
-    res.redirect("/login");
+    res.redirect("/");
   }
 };
 
-app.use((req, res, next) => {
-  console.log(`Incoming ${req.method} request to ${req.url}`);
-  console.log('Request Body:', req.body); // Log raw body
-  next();
-});
+
 
 // Homepage
 app.get('/', (req, res) => {
@@ -61,7 +57,8 @@ app.get('/', (req, res) => {
 //login-signup
 app.get('/signup-login', (req,res) => {
   res.render('signup-login', {
-    title: "Signup | Login"
+    title: "Signup | Login",
+    layout: "signup-login"
   })
 });
 
@@ -84,16 +81,21 @@ app.post('/signup', (req, res) => {
   }
 });
 
-app.post('/login', async(req, res) => {
+app.post('/login', express.urlencoded({extended:true}), async(req, res) => {
   const email = req.body['email-input']; // Match form name
   const password = req.body['password-input']; // Match form name
   const remembered = req.body['login-checkbox'];
   const user = await User.findOne({email:email, password: password});
   console.log('hello:'+ user);
-  res.render('homepage',{
-    user,
-    title: "Homepage"
-  });
+  if(user.email === email && user.password === password){
+    req.session.user = user;
+    res.cookie("sessionId", req.sessionID);
+    res.redirect('/');
+  }else{
+    res.send("invalid Credentials. <a href='/signup-login'> ");
+  }
+  
+
 });
 
 
@@ -112,18 +114,10 @@ app.get('/help-support', (req,res) => {
 });
 
 //student profile
-app.get('/profile', (req,res) => {
-  res.render('student-profile', {
-    title: "Profile",
-    layout: "student-login"
-  }, function(err, user) {
-    if (err) {
-        console.error('Error creating user:', err);
-        res.status(500).send('Internal Server Error');
-    } else {
-        res.redirect('/');
-    }
-});
+app.get('/profile', isAuthenticated, (req,res) => {
+  const userData = req.session.user;
+  res.render('student-profile', 
+    {title: "Profile", userData});
 });
 
 //PORT

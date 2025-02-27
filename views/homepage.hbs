@@ -1,11 +1,10 @@
-<!-- Placeholder for header and sidebar-->
-{{> header }}
+
 <!-- Content Section -->
 <div class="content-section">      
       <div class="welcome">
         RESERVE YOUR LAB<br/> SPACES NOW
       </div>
-      {{#if user}}
+      {{#if req.session.user}}
         <button class="get-started-button" 
         onclick="location.href = '/'">Get Started</button>
       {{else}}
@@ -65,4 +64,3 @@
       </div>
 
     </div>
-{{> footer }}
