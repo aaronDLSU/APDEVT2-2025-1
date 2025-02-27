@@ -5,9 +5,14 @@
       <div class="welcome">
         RESERVE YOUR LAB<br/> SPACES NOW
       </div>
-     <button class="get-started-button" 
-      onclick="location.href = 'login-signup.html'">Get Started</button>
-
+      {{#if user}}
+        <button class="get-started-button" 
+        onclick="location.href = '/'">Get Started</button>
+      {{else}}
+        <button class="get-started-button" 
+        onclick="location.href = '/signup-login'">Get Started</button>
+      {{/if}}
+     
       <div class=" features">
         <h1 class="why-choose-us">Why Choose Us?</h1>
         <div>
@@ -47,7 +52,7 @@
           <div class="feature-item">
             <div class="circle"></div>
             <h2 class="instructions-number">3</h2>
-            <h2>Pick Date & Time</h2>
+            <h2>Pick Date &amp; Time</h2>
             <p>Use the calendar to find available slots.</p>
           </div>
           <div class="feature-item">

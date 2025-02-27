@@ -13,7 +13,7 @@ app.use(express.json()) // use json
 app.use(express.urlencoded( {extended: true})); // files consist of more than strings
 app.use(express.static(path.join(__dirname, 'public')));
 
-const Post = require("./db/models/database");
+const User = require("./db/models/database");
 
 const hbs = require('hbs');
 app.set('view engine', 'hbs');
@@ -72,7 +72,7 @@ app.post('/signup', (req, res) => {
   const role = req.body['signup-role'];
 
   try {
-      Post.create({
+    User.create({
           email: email,
           password: password,
           role: role// Add role field
@@ -88,7 +88,7 @@ app.post('/login', async(req, res) => {
   const email = req.body['email-input']; // Match form name
   const password = req.body['password-input']; // Match form name
   const remembered = req.body['login-checkbox'];
-  const user = await Post.findOne({email:email, password: password});
+  const user = await User.findOne({email:email, password: password});
   console.log('hello:'+ user);
   res.render('homepage',{
     user,
