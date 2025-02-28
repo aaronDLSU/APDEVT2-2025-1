@@ -59,7 +59,7 @@ function validateSignup() {
     return false; // Block form submission
   }
 
-  if (password.length < 8) {
+  if (checkPasswordLength(password)) {
     $("#signup-email").css("border-color","red");
     $("#signup-password").css("border-color","red");
     $(".invalid-message").html("password minimum length is 8 characters");
@@ -83,9 +83,7 @@ function clearSignUp(){
 }
 
 function checkPasswordLength(password){
-  if(password.length < 8 ){
-    return true;
-  }else return false;
+  return password.length < 8;
 }
 
 function validateLogin(){
@@ -100,13 +98,6 @@ function validateLogin(){
     $(".invalid-message").css("opacity", "1");
     $(".login-warning").addClass("show");
     console.log('invalid');
-    return false;
-  }else if(checkPasswordLength(password)){  
-    $("#email-input").css("border-color","red");
-    $("#password-input").css("border-color","red");
-    $(".invalid-message").html("password minimum length is 8 characters");
-    $(".invalid-message").css("opacity", "1");
-    $(".login-warning").addClass("show");
     return false;
   }else{
     for(let i=0; i<user.length;i++){

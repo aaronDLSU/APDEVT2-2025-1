@@ -182,3 +182,7 @@ body {
   transition: transform 1.5s ease-in-out;
 }
 
+.return-to-login{
+  display: inline-block;
+  text-decoration: underline;
+}

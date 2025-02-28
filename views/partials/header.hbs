@@ -19,7 +19,7 @@
         </button>
       </div>
 
-      {{#if user}}
+      {{#if student}}
          <div class="right-section">
             <i class="fa-solid fa-circle-user logged-in-i"></i>
         </div>
@@ -29,7 +29,52 @@
             <i class="fa-solid fa-circle-user" 
               style=" font-size: 50px; 
               margin-left: 20px;"></i>
-            <p>Name</p>
+            <p>{{student.name}}</p>
+          </div>    
+          
+          <button class="check-profile-buttons js-account-settings"             
+            data-action="account-settings">
+            <i class="fa-solid fa-gear"></i>
+            Account Settings
+          </button>
+          <button class="check-profile-buttons"
+          onclick="location.href = '/'">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            Sign out
+          </button>
+        </div>
+
+        <div id="check-account-setting">
+          <button class="back-to-prof-dropdown" data-action="back-to-profile">
+            &lt; Back
+          </button>
+         
+          <button class="check-profile-buttons" onclick="location.href = 'student-profile.html'">
+            <i class="fa-regular fa-user" style="margin-right: 21px;" ></i>
+            View Profile
+          </button>
+          <button class="check-profile-buttons"
+          onclick="location.href = 'student-edit-profile.html'">
+            <i class="fa-solid fa-user-pen"></i>
+            Edit Profile
+          </button>
+          <button class="check-profile-buttons" onclick="location.href = 'student-manage-account.html'">
+            <i class="fa-solid fa-user-gear" style="margin-right: 17px;"></i>
+            Manage Account
+          </button>
+        </div>
+
+        {{else if labtech}}
+         <div class="right-section">
+            <i class="fa-solid fa-circle-user logged-in-i"></i>
+        </div>
+
+        <div id="check-profile">
+          <div class="profile-pic-name-container">
+            <i class="fa-solid fa-circle-user" 
+              style=" font-size: 50px; 
+              margin-left: 20px;"></i>
+            <p>{{labtech.name}}</p>
           </div>    
           
           <button class="check-profile-buttons js-account-settings"             
@@ -63,6 +108,7 @@
             Manage Account
           </button>
         </div>
+
       {{else}}
         <div class="right-section">
           <button class="sign-in-button" onclick="location.href = '/signup-login'">
@@ -85,6 +131,14 @@
         <p id="calendar-label">Calendar</p>
       </div>
 
+      {{#if labtech}}
+        <div class="sidebar-link" style="margin-top: 5px;"
+        onclick="location.href = 'labtech-reservation-list.html'">
+          <i class="fa-regular fa-rectangle-list"></i>
+          <p id="reservation-label">Reservations</p>
+        </div>
+      {{/if}}
+
       <div class="sidebar-link" onclick="location.href = '/help-support'">
         <i class="fa-solid fa-circle-info"></i>
         <p id="help-label">Help</p>
@@ -104,6 +158,14 @@
         <i class="fa-regular fa-calendar"></i>
         <p id="calendar-label">Calendar</p>
       </div>
+
+      {{#if labtech}}
+       <div class="extended-sidebar-link" style="margin-top: 3px;"
+        onclick="location.href = 'labtech-reservation-list.html'">
+          <i class="fa-regular fa-rectangle-list"></i>
+          <p id="reservation-label">Reservations</p>
+        </div>
+      {{/if}}
 
       <div class="extended-sidebar-link" 
       onclick="location.href = '/help-support'">

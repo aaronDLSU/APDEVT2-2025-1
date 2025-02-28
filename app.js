@@ -3,17 +3,14 @@ mongoose.connect('mongodb://localhost/LabResDB');
 
 const express = require('express');
 const app = express();
-const session = require('express-session');
-const cookieParser = require('cookie-parser');
 const path = require('path');
 const exphbs = require('express-handlebars');
-const bodyParser = require('body-parser');
 
 app.use(express.json()) // use json
 app.use(express.urlencoded( {extended: true})); // files consist of more than strings
 app.use(express.static(path.join(__dirname, 'public')));
 
-const User = require("./db/models/database");
+const User = require("./db/models/DB_users");
 
 const hbs = require('hbs');
 app.set('view engine', 'hbs');
@@ -26,26 +23,6 @@ app.engine('hbs', exphbs.engine({
   defaultLayout: 'index',  // This makes index.hbs the default layout before login layout
   layoutsDir: 'views/layouts' // Ensure layouts are stored here
 }));
-
-app.use(
-  session({
-    secret: "secret-key",
-    resave:false,
-    saveUninitialized: false
-  })  
-);
-
-app.use(cookieParser());
-
-const isAuthenticated = (req,res,next) => {
-  if(req.session.user){
-    next();
-  }else{
-    res.redirect("/");
-  }
-};
-
-
 
 // Homepage
 app.get('/', (req, res) => {
@@ -81,23 +58,43 @@ app.post('/signup', (req, res) => {
   }
 });
 
-app.post('/login', express.urlencoded({extended:true}), async(req, res) => {
+const student = {
+  name: "Charlie"
+}; 
+
+const labtech = {
+  name: "Adrian"
+}
+
+
+
+app.post('/login', express.urlencoded({extended:true}), (req, res) => {
   const email = req.body['email-input']; // Match form name
   const password = req.body['password-input']; // Match form name
   const remembered = req.body['login-checkbox'];
-  const user = await User.findOne({email:email, password: password});
-  console.log('hello:'+ user);
-  if(user.email === email && user.password === password){
-    req.session.user = user;
-    res.cookie("sessionId", req.sessionID);
-    res.redirect('/');
-  }else{
-    res.send("invalid Credentials. <a href='/signup-login'> ");
+
+  console.log(email);
+  console.log(password);
+
+  if (!email || !password) {
+    return res.status(400);
   }
-  
 
+  if(email === 'student@dlsu.edu.ph' && password === 'student'){
+    res.render('homepage', {
+      title: "Homepage",
+      student
+    });
+    console.log(student);
+  }else if(email === 'labtech@dlsu.edu.ph' && password === 'labtech'){
+    res.render('homepage', {
+      title: "Homepage",
+      labtech
+    });
+  }else{
+    res.send('Invalid Credentials. <p style="color:blue; text-decoration: underline; display:inline-block" onclick= history.back()>Try Again</p>');
+  }
 });
-
 
 //calendar
 app.get('/calendar', (req,res) => {
@@ -113,12 +110,6 @@ app.get('/help-support', (req,res) => {
   })
 });
 
-//student profile
-app.get('/profile', isAuthenticated, (req,res) => {
-  const userData = req.session.user;
-  res.render('student-profile', 
-    {title: "Profile", userData});
-});
 
 //PORT
 const port = process.env.PORT || 3000;
