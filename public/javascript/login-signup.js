@@ -99,17 +99,8 @@ function validateLogin(){
     $(".login-warning").addClass("show");
     console.log('invalid');
     return false;
-  }else{
-    for(let i=0; i<user.length;i++){
-      if(user[i].email === email && user[i].password === password){
-        user[i].rememberPeriod =3;
-        console.log(`User: ${user[i].email}, Password: ${user[i].password}, Role: ${user[i].role}, Remember Period: ${user[i].rememberPeriod}`);
-        console.log('login successful');
-        
-      }
-    }
-    return true;
-  }
+  }else return true;
+  
 }
 
 function clearLogin(){

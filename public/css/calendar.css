@@ -1,5 +1,6 @@
 .content-section{
     margin-left: 30px;
+    background-color: #f7f7f7;
 }
 
 /* Real-time Clock */
@@ -16,7 +17,7 @@
     position: fixed;
     top: 70px;
     right: 20px;
-    z-index:100;
+    z-index:1;
 }
 
 /* Main Container */
@@ -24,17 +25,21 @@
     display: flex;
     gap: 25px;
     background: white;
-    padding: 30px 25px;
+    padding: 30px 0px;
     padding-bottom: 40px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
-    min-width: 840px;
+    width: 880px;
+    height: 600px;
     margin-top: 100px;
     margin-bottom: 50px;
+    margin-left: 100px;
+    margin-right: 80px;
     justify-content: center;
 }
 
 .calendar-container {
+    margin-top:10px;
     width: 500px;
     text-align: center;
 }
@@ -60,8 +65,9 @@
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     font-weight: bold;
-    padding: 12px 0;
-    font-size: 18px;
+    font-size: 16px;
+    padding: 15px;
+    gap: 2px;
 }
 
 .calendar-grid {
@@ -72,7 +78,23 @@
     padding: 15px;
 }
 
-.day, .date {
+#current-month{
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.day{
+    padding: 14px 0px;
+    border-radius: 5px;
+    width:65px;
+    border: 1px solid #ccc;
+    text-align: center;
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.3s;
+} 
+
+.date {
     padding: 14px;
     border-radius: 5px;
     border: 1px solid #ccc;
@@ -123,6 +145,19 @@
     overflow-y: auto;
 }
 
+.room-list-container h3{
+    font-size: 18px;
+    font-weight: bold;
+    margin:20px 0px;
+   width:220px;
+}
+
+#room-availability{
+    font-weight: bold;
+    font-size: 24px;
+    margin: 30px 0px;
+}
+
 .room-list {
     display: flex;
     flex-direction: column;
@@ -130,7 +165,7 @@
 }
 
 .room-item {
-    padding: 10px;
+    padding: 6px 10px;
     background: #f4f4f4;
     border-radius: 5px;
     cursor: pointer;
@@ -264,9 +299,10 @@
     justify-content: center;
     align-items: center;
     margin-top:0px;
-    margin-bottom: 100px;
+    padding-bottom: 100px;
     margin-left: 100px; 
     margin-top: -50px;
+    background-color: #f7f7f7;
 }
 
 .button {

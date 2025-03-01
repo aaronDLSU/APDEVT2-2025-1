@@ -1,4 +1,3 @@
-
 <!-- Content Section -->
     
     <div class="content-section"> 
@@ -69,9 +68,15 @@
         </div>
     </div>
 
-    {{#if user}}
+    {{#if student}}
         <div class ="button-container">
             <button class="button" onclick="window.location.href='labtech-reservation.html'">Reserve Slot</button>
         </div>
+    {{else if labtech}}
+        <div class ="button-container">
+            <button class="button" onclick="window.location.href='labtech-reservation.html'">Reserve Slot</button>
+        </div>
+    {{else}}
+        <div></div>
     {{/if}}
 

@@ -17,6 +17,18 @@ app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'))
 hbs.registerPartials(path.join(__dirname, 'views/partials'));
 
+const student = {
+  name: "Charlie",
+  type: "student"
+}; 
+
+const labtech = {
+  name: "Sir",
+  type: "labtech"
+}
+
+var user = '';
+
 // Set up Handlebars with a default layout
 app.engine('hbs', exphbs.engine({ 
   extname: 'hbs', 
@@ -27,7 +39,12 @@ app.engine('hbs', exphbs.engine({
 // Homepage
 app.get('/', (req, res) => {
   res.render('homepage', {
-    title: "Homepage"
+    title: "Homepage",
+    pageStyle: "homepage",
+    pageScripts:["header-dropdowns"],
+    user:user,
+    labtech: user.type === 'labtech',
+    student: user.type === 'student'
   });
 });
 
@@ -35,7 +52,9 @@ app.get('/', (req, res) => {
 app.get('/signup-login', (req,res) => {
   res.render('signup-login', {
     title: "Signup | Login",
-    layout: "signup-login"
+    pageStyle: "login-signup",
+    pageScripts:["login-signup"],
+    layout:"signup-login"
   })
 });
 
@@ -58,15 +77,6 @@ app.post('/signup', (req, res) => {
   }
 });
 
-const student = {
-  name: "Charlie"
-}; 
-
-const labtech = {
-  name: "Adrian"
-}
-
-
 
 app.post('/login', express.urlencoded({extended:true}), (req, res) => {
   const email = req.body['email-input']; // Match form name
@@ -81,16 +91,13 @@ app.post('/login', express.urlencoded({extended:true}), (req, res) => {
   }
 
   if(email === 'student@dlsu.edu.ph' && password === 'student'){
-    res.render('homepage', {
-      title: "Homepage",
-      student
-    });
-    console.log(student);
+    user = student;
+    res.redirect('/');
+    console.log(user);
   }else if(email === 'labtech@dlsu.edu.ph' && password === 'labtech'){
-    res.render('homepage', {
-      title: "Homepage",
-      labtech
-    });
+    user = labtech;
+    res.redirect('/');
+    console.log(user);
   }else{
     res.send('Invalid Credentials. <p style="color:blue; text-decoration: underline; display:inline-block" onclick= history.back()>Try Again</p>');
   }
@@ -99,14 +106,46 @@ app.post('/login', express.urlencoded({extended:true}), (req, res) => {
 //calendar
 app.get('/calendar', (req,res) => {
   res.render('calendar', {
-    title: "Reserve your lab room!"
+    title: "Reserve your lab room!",
+    pageStyle: "calendar",
+    pageScripts:["header-dropdowns","calendar"],
+    user:user,
+    labtech: user.type === 'labtech',
+    student: user.type === 'student'
   })
 });
 
 //help support
 app.get('/help-support', (req,res) => {
   res.render('help-support', {
-    title: "Help & Support"
+    title: "Help & Support",
+    pageStyle: "help-support",
+    pageScripts:["header-dropdowns"],
+    user:user,
+    labtech: user.type === 'labtech',
+    student: user.type === 'student'
+  })
+});
+
+app.get('/profile', (req,res) => {
+  res.render('profile', {
+    title: "Profile Page",
+    pageStyle: "profile",
+    pageScripts:["header-dropdowns"],
+    user:user,
+    labtech: user.type === 'labtech',
+    student: user.type === 'student'
+  })
+});
+
+app.get('/edit-reservation', (req,res) => {
+  res.render('edit-reservation', {
+    title: "Edit Reservation",
+    pageStyle: "edit-reservation",
+    pageScripts:["header-dropdowns", "edit-reservation"],
+    user:user,
+    labtech: user.type === 'labtech',
+    student: user.type === 'student'
   })
 });
 

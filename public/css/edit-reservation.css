@@ -1,5 +1,9 @@
+.content-section{
+  background-color: white;
+}
+
 .content-container {
-  margin-top:20px;
+  margin:100px 0;
   width: 100%; 
   max-width: 800px; 
   padding: 20px; 
@@ -14,16 +18,13 @@
   text-align: center;
 }
 
-h2 {
+.edit-reserve h2{
+  margin-left: 20px;
   color: rgb(74, 74, 74);
   font-size: 20px;
   margin-top: 10px;
   text-align: left;
   font-weight: bold;
-}
-
-.edit-reserve h2{
-  margin-left: 20px;
 }
 
 .options {
