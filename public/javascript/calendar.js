@@ -1,34 +1,34 @@
 // Real-time Clock
 $(document).ready(function() {
-const clockContainer = document.getElementById("real-time-clock");
-const calendarGrid = document.getElementById("calendar");
-const currentMonthLabel = document.getElementById("current-month");
-const roomListContainer = document.getElementById("room-list");
+    const clockContainer = document.getElementById("real-time-clock");
+    const calendarGrid = document.getElementById("calendar");
+    const currentMonthLabel = document.getElementById("current-month");
+    const roomListContainer = document.getElementById("room-list");
 
-let currentDate = new Date();
-let selectedMonth = currentDate.getMonth();
-let selectedYear = currentDate.getFullYear();
+    let currentDate = new Date();
+    let selectedMonth = currentDate.getMonth();
+    let selectedYear = currentDate.getFullYear();
 
-const availableRooms = [
-    "Room 101 - Computer Lab",
-    "Room 102 - Computer Lab",
-    "Room 103 - Computer Lab",
-    "Room 201 - Computer Lab",
-    "Room 202 - Computer Lab",
-    "Room 203 - Computer Lab",
-    "Room 301 - Computer Lab",
-    "Room 302 - Computer Lab"
-];
+    const availableRooms = [
+        "Room 101 - Computer Lab",
+        "Room 102 - Computer Lab",
+        "Room 103 - Computer Lab",
+        "Room 201 - Computer Lab",
+        "Room 202 - Computer Lab",
+        "Room 203 - Computer Lab",
+        "Room 301 - Computer Lab",
+        "Room 302 - Computer Lab"
+    ];
 
-function updateClock() {
-    const now = new Date();
-    clockContainer.innerHTML = now.toLocaleDateString() + " | " + now.toLocaleTimeString();
-}
+    function updateClock() {
+        const now = new Date();
+        clockContainer.innerHTML = now.toLocaleDateString() + " | " + now.toLocaleTimeString();
+    }
 
-setInterval(updateClock, 1000);
-updateClock();
+    setInterval(updateClock, 1000);
+    updateClock();
 
-function generateCalendar() {
+    function generateCalendar() {
     calendarGrid.innerHTML = "";
     let firstDay = new Date(selectedYear, selectedMonth, 1).getDay();
     let daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
@@ -77,12 +77,12 @@ function generateCalendar() {
     }
 }
 
-function changeMonth(offset) {
-    selectedMonth += offset;
-    generateCalendar();
-}
+    function changeMonth(offset) {
+        selectedMonth += offset;
+        generateCalendar();
+    }
 
-function generateRoomList() {
+    function generateRoomList() {
     roomListContainer.innerHTML = "";
     const roomAvailabilityHeader = document.getElementById("room-availability");
 
@@ -102,15 +102,13 @@ function generateRoomList() {
     });
 }
 
-// Highlight selected seat slots
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('td').forEach(cell => {
-        cell.addEventListener('click', () => cell.classList.toggle('highlight'));
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('td').forEach(cell => {
+            cell.addEventListener('click', () => cell.classList.toggle('highlight'));
+        });
     });
-});
 
-// Update Seat Availability
-function updateSeatAvailability() {
+    function updateSeatAvailability() {
     let now = new Date();
     let currentHour = now.getHours();
     let currentMinutes = now.getMinutes();
@@ -163,9 +161,10 @@ function updateSeatAvailability() {
 // Call the function when a date is selected
 document.addEventListener("click", () => {
     setTimeout(updateSeatAvailability, 100); // Delay to ensure the selected date is detected
+    window.scrollTo(window.scrollX, window.scrollY);
 });
 
-// Initialize Functions
-generateCalendar();
-generateRoomList();
+    generateCalendar();
+    generateRoomList();
+    window.changeMonth = changeMonth;
 });
