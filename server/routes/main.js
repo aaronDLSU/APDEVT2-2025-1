@@ -36,7 +36,7 @@ router.post('/signup', async (req, res) => {
         const { 'signup-email': email, 'signup-password': password, 'signup-role': role } = req.body;
         
         // Create new user in MongoDB
-        await User.create({ email, password, role });
+        await User.create({ email, password, role});
         res.redirect('/signup-login'); // Redirect back to login page
     } catch (err) {
         console.error('Signup error:', err);
