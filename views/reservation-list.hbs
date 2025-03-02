@@ -1,0 +1,42 @@
+<!-- HAVENT TESTED -->
+<div class="content-section">
+    <div style="margin-top: 10px;">
+        <h1 id="reservation-list-title">Reservation List</h1>
+    </div>
+    <div class="list-details">
+        <p>
+            <strong>Room:</strong> {{roomData.name}}, {{roomData.building}} Building
+            <span style="float: right; margin-left: 16px"><strong>Date:</strong> {{date}}</span>
+        </p>
+    </div>
+
+    <div class="list-container overflow-y-auto full-vh" >
+        {{#each reservations}}
+        <div class="card reserve-item">
+            <div class ="row g-0" style="align-items: center;">
+                <div class="col-pfp">
+                    <!-- idk if im doing this correctly -->
+                    <img class="mr-3 list-img" src="{{this.user.profile}}" alt="{{this.user.name}}">
+                </div>
+                <div class="col res-details-container">
+                    <div class="card-body reserve-details">
+                        <h5 class="card-title"><strong>{{this.user.name}}</strong></h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">{{this.startTime}} - {{this.endTime}}</li>
+                            <li class="list-group-item">Seat {{this.seat}}"</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-buttons">
+                    <button class="btn">
+                        <i class="fa-regular fa-pen-to-square"></i></button>
+                    <button class="btn"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+    <div class="back-button">
+        <button type="button" class="btn btn-primary">Back</button>
+    </div>
+</div>

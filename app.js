@@ -11,6 +11,8 @@ app.use(express.urlencoded( {extended: true})); // files consist of more than st
 app.use(express.static(path.join(__dirname, 'public')));
 
 const User = require("./db/models/DB_users");
+const Reservation = require("./db/models/DB_reservation");
+const Labs = require("./db/models/DB_labs");
 
 const hbs = require('hbs');
 app.set('view engine', 'hbs');
@@ -149,6 +151,35 @@ app.get('/edit-reservation', (req,res) => {
   })
 });
 
+//have yet to test
+app.get('/reservation-list', async (req, res) => {
+  try {
+    const {room, building, date} = req.query;
+    if (!room || !building || !date) {
+      res.send("Missing parameters");
+    }
+    else {
+      const roomData = await Labs.findOne({name: room, building: building});
+
+      if (!roomData) {
+        res.send("Room not found!");
+      }
+      else {
+        const reservations = await Reservation.find({lab: roomData._id, date: date});
+
+        if (!reservations.length) {
+          res.send("No Reservation Found!");
+        }
+        else {
+          res.render('reservation-list', {roomData, reservations, date, cssFile: 'public/css/labtech-reservation-list.css'});
+        }
+      }
+    }
+  } catch (err) {
+    console.error('Error:', err);
+    res.status(500).send('Error loading reservation list');
+  }
+});
 
 //PORT
 const port = process.env.PORT || 3000;
