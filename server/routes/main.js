@@ -3,8 +3,8 @@ const router = express.Router();
 const User = require("../../db/models/DB_users");
 
 // Sample user roles
-const student = { name: "Charlie", type: "student" };
-const labtech = { name: "Sir", type: "labtech" };
+const student = { name: "Charlie", type: "student", description: "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology. Passionate about coding and problem-solving, I am eager to explore new technologies and develop innovative solutions. Currently honing my skills in programming, web development, and algorithms, I aspire to contribute to impactful projects in the tech industry." };
+const labtech = { name: "Sir", type: "labtech", description: "i am a lab technician"};
 let user = ''; // Stores the current logged-in user
 
 // Homepage Route
@@ -99,6 +99,30 @@ router.get('/profile', (req, res) => {
     });
 });
 
+// edit profile Page
+router.get('/edit-profile', (req, res) => {
+    res.render('edit-profile', {
+        title: "Edit Profile",
+        pageStyle: "edit-profile",
+        pageScripts: ["header-dropdowns"],
+        user,
+        labtech: user.type === 'labtech',
+        student: user.type === 'student'
+    });
+});
+
+// manage account Page
+router.get('/manage-account', (req, res) => {
+    res.render('manage-account', {
+        title: "Manage Account",
+        pageStyle: "manage-account",
+        pageScripts: ["header-dropdowns","manage-account"],
+        user,
+        labtech: user.type === 'labtech',
+        student: user.type === 'student'
+    });
+});
+
 // Edit Reservation Page
 router.get('/edit-reservation', (req, res) => {
     res.render('edit-reservation', {
@@ -109,6 +133,25 @@ router.get('/edit-reservation', (req, res) => {
         labtech: user.type === 'labtech',
         student: user.type === 'student'
     });
+});
+
+// Reservation list Page
+router.get('/reservation-list', (req, res) => {
+    res.render('reservation-list', {
+        title: "Reservation List",
+        pageStyle: "labtech-reservation-list",
+        pageScripts: ["header-dropdowns", "reservation-list"],
+        user,
+        labtech: user.type === 'labtech',
+        student: user.type === 'student'
+    });
+});
+
+//signout
+router.post('/signout', (req, res) => {
+    user = '';
+    console.log('User signed out:' + user);
+    res.redirect('/');
 });
 
 // API Health Check (For debugging purposes)

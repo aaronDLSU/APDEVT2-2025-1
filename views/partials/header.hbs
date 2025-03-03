@@ -37,11 +37,13 @@
             <i class="fa-solid fa-gear"></i>
             Account Settings
           </button>
-          <button class="check-profile-buttons"
-          onclick="location.href = '/'">
-            <i class="fa-solid fa-arrow-right-from-bracket"></i>
-            Sign out
-          </button>
+          <form id="signoutForm" action="/signout" method="POST">
+            <button class="check-profile-buttons" type="submit">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                Sign out
+              </button>
+          </form>
+          
         </div>
 
         <div id="check-account-setting">
@@ -49,23 +51,23 @@
             &lt; Back
           </button>
          
-          <button class="check-profile-buttons" onclick="location.href = 'student-profile.html'">
+          <button class="check-profile-buttons" onclick="location.href = '/profile'">
             <i class="fa-regular fa-user" style="margin-right: 21px;" ></i>
             View Profile
           </button>
           <button class="check-profile-buttons"
-          onclick="location.href = 'student-edit-profile.html'">
+          onclick="location.href = '/edit-profile'">
             <i class="fa-solid fa-user-pen"></i>
             Edit Profile
           </button>
-          <button class="check-profile-buttons" onclick="location.href = 'student-manage-account.html'">
+          <button class="check-profile-buttons" onclick="location.href = '/manage-account'">
             <i class="fa-solid fa-user-gear" style="margin-right: 17px;"></i>
             Manage Account
           </button>
         </div>
 
         {{else if labtech}}
-         <div class="right-section">
+          <div class="right-section">
             <i class="fa-solid fa-circle-user logged-in-i"></i>
         </div>
 
@@ -82,11 +84,12 @@
             <i class="fa-solid fa-gear"></i>
             Account Settings
           </button>
-          <button class="check-profile-buttons"
-          onclick="location.href = 'signup-homepage.html'">
-            <i class="fa-solid fa-arrow-right-from-bracket"></i>
-            Sign out
-          </button>
+         <form id="signoutForm" action="/signout" method="POST">
+            <button class="check-profile-buttons" type="submit">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                Sign out
+              </button>
+          </form>
         </div>
 
         <div id="check-account-setting">
@@ -94,16 +97,16 @@
             &lt; Back
           </button>
          
-          <button class="check-profile-buttons" onclick="location.href = 'student-profile.html'">
+          <button class="check-profile-buttons" onclick="location.href = '/profile'">
             <i class="fa-regular fa-user" style="margin-right: 21px;" ></i>
             View Profile
           </button>
           <button class="check-profile-buttons"
-          onclick="location.href = 'student-edit-profile.html'">
+          onclick="location.href = '/edit-profile'">
             <i class="fa-solid fa-user-pen"></i>
             Edit Profile
           </button>
-          <button class="check-profile-buttons" onclick="location.href = 'student-manage-account.html'">
+          <button class="check-profile-buttons" onclick="location.href = '/manage-account'">
             <i class="fa-solid fa-user-gear" style="margin-right: 17px;"></i>
             Manage Account
           </button>
@@ -133,7 +136,7 @@
 
       {{#if labtech}}
         <div class="sidebar-link" style="margin-top: 5px;"
-        onclick="location.href = 'labtech-reservation-list.html'">
+        onclick="location.href = '/reservation-list'">
           <i class="fa-regular fa-rectangle-list"></i>
           <p id="reservation-label">Reservations</p>
         </div>

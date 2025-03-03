@@ -1,7 +1,7 @@
 {
   "name": "apdevt2-2025-1",
   "version": "1.0.0",
-  "description": "",
+  "description": "1. run 'npm i' 2. Set up .env file     - PORT = 3000     - MONGO_URI = mongodb://localhost:27017/ 3. run 'npm run dev'",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
