@@ -1,4 +1,6 @@
- <div class="content-section">
+<!-- WIP -->
+
+<div class="content-section">
         <div class="content-container">
           <div style="margin-top: 10px;">
             <h1 id="edit-title">Edit Reservation</h1>
@@ -8,6 +10,7 @@
             <h2>Selected:</h2>
             <div class="chosen-reservation">
               <!-- Lab tech view -->
+            {{#if (eq userData.role "labtech")}}
               <div class="card reserve-item hidden" id="labtech-view">
                 <div class="row g-0" style="align-items: center;">
                   <div class="col-pfp">
@@ -15,30 +18,32 @@
                   </div>
                   <div class="col res-details-container">
                     <div class="card-body reserve-details">
-                      <h5 class="card-title"><strong>John Torres</strong></h5>
-                      <p class="card-text">Lab 5, Gokongwei Building</p>
+                      <h5 class="card-title"><strong>{student.name}</strong></h5>
+                      <p class="card-text">{{roomData.name}}, {{roomData.building}} Building</p>
                     </div>
-                    <ul class="list-group list-group-flush">
-                      <li class="list-group-item">February 2, 2025</li>
-                      <li class="list-group-item">10:00 AM - 10:30 AM</li>
-                      <li class="list-group-item">Seat 14</li>
-                    </ul>
+                      <ul class="list-group list-group-flush">
+                          <li class="list-group-item">{{reserveData.date}}</li>
+                          <li class="list-group-item">{{reserveData.startTime}} - {{reserveData.endTime}}</li>
+                          <li class="list-group-item">Seat {{reserveData.seat}}</li>
+                      </ul>
                   </div>
                 </div>
               </div>
               <!-- Student view -->
+            {{else}}
               <div class="card reserve-item hidden" id="student-view">
                 <div class="card-body">
-                  <h5 class="card-title"><strong>Reservation 5</strong></h5>
-                  <p class="card-text">Lab 4, Yuchengco Building</p>
+                  <h5 class="card-title"><strong>{{reserveData.name}}</strong></h5>
+                  <p class="card-text">{{roomData.name}}, {{roomData.building}} Building</p>
                 </div>
                 <ul class="list-group list-group-flush">
-                  <li class="list-group-item">February 2, 2025</li>
-                  <li class="list-group-item">8:30 AM - 9:30 AM</li>
-                  <li class="list-group-item">Seat 6</li>
+                  <li class="list-group-item">{{reserveData.date}}</li>
+                  <li class="list-group-item">{{reserveData.startTime}} - {{reserveData.endTime}}</li>
+                  <li class="list-group-item">Seat {{reserveData.seat}}</li>
                 </ul>
               </div>
             </div>
+            {{/if}}
     
             <div class="edit-details">
               <form id="details">
@@ -86,4 +91,42 @@
             </div>
           </div>
         </div>
-      </div>
+ </div>
+<script>
+    $(document).ready(function () {
+        const details = document.getElementById('details');
+        const submit = document.getElementById('view-avail');
+
+        function checkForm(){
+            const required = details.querySelectorAll('[required]');
+            let isFilled = true;
+            required.forEach((field) => {
+                if (!field.value || field.value === "Choose...") {
+                    isFilled = false;
+                }
+            });
+
+            submit.disabled = !isFilled;
+        }
+
+        details.addEventListener('input', checkForm);
+        details.addEventListener('change', checkForm);
+
+        checkForm();
+        //for lab tech/student view
+        const accountType = "labtech"; //set to lab tech for now
+        const studentView = document.getElementById('student-view');
+        const labtechView = document.getElementById('labtech-view');
+
+        if(accountType === "labtech"){
+            labtechView.classList.remove('hidden');
+        }
+        else if(accountType === "student"){
+            studentView.classList.remove('hidden');
+        }
+        else {
+            console.log("account not found");
+        }
+
+    });
+</script>

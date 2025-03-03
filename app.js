@@ -19,6 +19,14 @@ app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'))
 hbs.registerPartials(path.join(__dirname, 'views/partials'));
 
+const isAuthenticated = (req, res, next) => {
+  if (req.session.user) {
+    next();
+  } else {
+    res.redirect("/login");
+  }
+};
+
 const student = {
   name: "Charlie",
   type: "student"
@@ -140,19 +148,8 @@ app.get('/profile', (req,res) => {
   })
 });
 
-app.get('/edit-reservation', (req,res) => {
-  res.render('edit-reservation', {
-    title: "Edit Reservation",
-    pageStyle: "edit-reservation",
-    pageScripts:["header-dropdowns", "edit-reservation"],
-    user:user,
-    labtech: user.type === 'labtech',
-    student: user.type === 'student'
-  })
-});
-
 //have yet to test
-app.get('/reservation-list', async (req, res) => {
+app.get('/reservation-list', isAuthenticated, async (req, res) => {
   try {
     const {room, building, date} = req.query;
     if (!room || !building || !date) {
@@ -180,6 +177,35 @@ app.get('/reservation-list', async (req, res) => {
     res.status(500).send('Error loading reservation list');
   }
 });
+
+/*WIP
+app.get('/edit-reservation', isAuthenticated, function (req, res) {
+  try{
+    userData = req.session.user;
+    if (userData.role === 'labtech') {
+
+    }
+    else {
+
+    }
+  }
+  catch(err){
+    res.status(500).send('Error loading edit reservation');
+  }
+});
+*/
+
+/*
+app.get('/edit-reservation', (req,res) => {
+  res.render('edit-reservation', {
+    title: "Edit Reservation",
+    pageStyle: "edit-reservation",
+    pageScripts:["header-dropdowns", "edit-reservation"],
+    user:user,
+    labtech: user.type === 'labtech',
+    student: user.type === 'student'
+  })
+});*/
 
 //PORT
 const port = process.env.PORT || 3000;

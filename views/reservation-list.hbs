@@ -29,14 +29,70 @@
                 </div>
                 <div class="col-buttons">
                     <button class="btn">
-                        <i class="fa-regular fa-pen-to-square"></i></button>
-                    <button class="btn"><i class="fa-solid fa-trash"></i></button>
+                        <i class="fa-regular fa-pen-to-square"></i>
+                    </button>
+                    <button id="submit-delete" class="btn"><i class="fa-solid fa-trash"></i></button>
                 </div>
             </div>
         </div>
         {{/each}}
     </div>
-    <div class="back-button">
-        <button type="button" class="btn btn-primary">Back</button>
+
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirm-delete-label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirm-delete-label">Confirm Deletion</h5>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this reservation?
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="confirm-btn">Yes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div class="modal fade" id="delete-success" tabindex="-1" aria-labelledby="delete-success-label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="delete-success-label">Success</h5>
+                </div>
+                <div class="modal-body text-center">
+                    Reservation deleted successfully.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="back-button">
+        <a href='../public/html/labtech-calendar.html'><button type="button" class="btn btn-primary">Back</button></a>
+    </div>
+    <script>
+    const confirmDeleteSubmit = $('.submit-delete');
+
+    confirmDeleteSubmit.on("click", function () {
+        var confirmModal = new bootstrap.Modal(document.getElementById('confirm-delete'));
+        confirmModal.show();
+
+        // When "Yes" is clicked
+        $('#confirm-btn').off('click').on("click", function () {
+            confirmModal.hide(); // Hide the confirmation modal
+
+            setTimeout(() => {
+                var successModal = new bootstrap.Modal(document.getElementById('delete-success'));
+                successModal.show();
+
+                $('#delete-success .btn-success').off('click').on("click", function () {
+                    location.reload();
+                });
+            }, 500);
+        });
+    });
+    </script>
 </div>
