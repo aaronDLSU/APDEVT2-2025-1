@@ -117,6 +117,12 @@ $(document).ready(function() {
     let currentYear = now.getFullYear();
 
     document.querySelectorAll(".available-table tbody tr").forEach((row) => {
+        document.querySelectorAll('.available-table td').forEach(cell => {
+            cell.addEventListener('click', () => {
+                cell.classList.toggle('highlight');
+            });
+        });
+        
         row.querySelectorAll("td").forEach((cell, index) => {
             let slotHour = 7 + Math.floor(index / 2); // Convert index to 24-hour format
             let isFirstHalf = index % 2 === 0; // True if it's the first 30-min slot, False if second
@@ -152,7 +158,9 @@ $(document).ready(function() {
                 // Future time slots remain selectable
                 cell.classList.remove("past-hour");
                 cell.style.pointerEvents = "auto";
-                cell.innerHTML = "";
+                if (!cell.classList.contains("highlight")) {
+                    cell.innerHTML = "";
+                }                
             }
         });
     });
