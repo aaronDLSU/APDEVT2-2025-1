@@ -5,12 +5,8 @@ const UserSchema = new mongoose.Schema({
     name: { type: String},
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },                 // Should be hashed
-<<<<<<< HEAD
     profile: { type: String }, //for profile picture
     role: { type: String, enum: ['student', 'staff', 'admin'], default: 'student' },
-=======
-    role: { type: String, enum: ['student', 'labtech'], default: 'student' },
->>>>>>> routes
     isActivated: { type: Boolean, default: false },             // If account for deletion: can deactivate first
     activationToken: { type: String },                          // Token for emails activation / verification; can delete
     createdAt: { type: Date, default: Date.now }
