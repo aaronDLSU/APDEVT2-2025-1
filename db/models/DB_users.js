@@ -5,7 +5,7 @@ const UserSchema = new mongoose.Schema({
     name: { type: String},
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },                 // Should be hashed
-    profile: { type: String }, //for profile picture
+    profilePic: { type: String }, //for profile picture
     role: { type: String, enum: ['student', 'labtech'], default: 'student' },
     isActivated: { type: Boolean, default: false },             // If account for deletion: can deactivate first
     activationToken: { type: String },                          // Token for emails activation / verification; can delete
