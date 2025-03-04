@@ -1,0 +1,54 @@
+[{
+  "_id": {
+    "$oid": "67c6bd83b0ce105ba934bca1"
+  },
+  "name": "G302A",
+  "building": {
+    "$oid": "67c6eb447a6785de84dff471"
+  },
+  "capacity": 20,
+  "equipment": [
+    "Computers",
+    "Projector",
+    "Whiteboard",
+    "3D Printer",
+    "Microcontrollers"
+  ],
+  "availability": true
+},
+{
+  "_id": {
+    "$oid": "67c6ccf6b0ce105ba934bcc6"
+  },
+  "name": "V505",
+  "building": {
+    "$oid": "67c6eb907a6785de84dff472"
+  },
+  "capacity": 30,
+  "equipment": [
+    "Computers",
+    "Projector",
+    "Whiteboard",
+    "3D Printer",
+    "Microcontrollers"
+  ],
+  "availability": true
+},
+{
+  "_id": {
+    "$oid": "67c6e344b0ce105ba934bce5"
+  },
+  "name": "A1706",
+  "building": {
+    "$oid": "67c6ebc67a6785de84dff474"
+  },
+  "capacity": 30,
+  "equipment": [
+    "Computers",
+    "Projector",
+    "Whiteboard",
+    "3D Printer",
+    "Microcontrollers"
+  ],
+  "availability": true
+}]

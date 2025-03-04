@@ -1,11 +1,23 @@
-
-
 .content-section {
   margin-left: 72px; /* To account for the sidebar */
   display: flex;
   flex-direction: column;
   align-items: center;
   height: calc(100vh - 55px); /* Full height minus header so content will not be covered */
+}
+
+.inner-section {
+  display: flex;
+  flex-direction: row;
+  min-height: calc(100vh - 95px);
+}
+
+.empty-list{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 100px 100px 100px 100px;
 }
 
 #reservation-list-title{
@@ -17,12 +29,18 @@
   margin: 10px 0 20px 0;
 }
 .list-details{
-  margin: 10px 10px 10px 10px;
+  margin: 10px 20px 10px 20px;
+  text-align: left;
 }
 
 .list-details p{
   text-align: left;
   font-size: 100%;
+}
+
+.list-container p{
+  font-size: 120%;
+  text-align: center;
 }
 
 .reserve-item{
@@ -74,9 +92,7 @@
 }
 
 .back-button{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 10px;
+
+  margin-top: 10px;
 }
  

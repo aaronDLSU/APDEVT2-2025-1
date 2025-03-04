@@ -31,7 +31,14 @@ hbs.registerPartials(path.join(__dirname, 'views/partials')); // Register Handle
 app.engine('hbs', exphbs.engine({
   extname: 'hbs',
   defaultLayout: 'index',       // This makes index.hbs the default layout before login layout
-  layoutsDir: 'views/layouts'   // Ensure layouts are stored here
+  layoutsDir: 'views/layouts',   // Ensure layouts are stored here
+  helpers: {
+    formatDate: function(date) { //hbs helper to format Date into String
+      console.log(date)
+      if (!date) return "";
+      return new Date(date).toDateString();
+    }
+  }
 }));
 
 // Use Routes from `main.js`

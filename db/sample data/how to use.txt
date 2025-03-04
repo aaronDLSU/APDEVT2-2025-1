@@ -1,0 +1,6 @@
+1. Open MongoDB Compass 
+2. Connect to the DB
+3. go to test 
+	- if it doesn't exist, click plus symbol next to the connection name and add it.
+4. Create collections "labs", "reservations", and "users" (if it doesn't exist yet)
+5. for each collection, click "add data", then import JSON, then open the respective JSON file. 

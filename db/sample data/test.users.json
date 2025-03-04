@@ -1,0 +1,55 @@
+[{
+  "_id": {
+    "$oid": "67c66192b0ce105ba934bc95"
+  },
+  "username": "juan123",
+  "name": "Juan De La Cruz",
+  "email": "juan.delacruz@dlsu.edu.ph",
+  "password": "12345",
+  "role": "student",
+  "profilePic": "/images/default_profilepic.jpg"
+},
+{
+  "_id": {
+    "$oid": "67c661b1b0ce105ba934bc96"
+  },
+  "username": "john_torres",
+  "name": "John Torres",
+  "email": "john.torres@dlsu.edu.ph",
+  "password": "12345",
+  "role": "student",
+  "profilePic": "/images/default_profilepic.jpg"
+},
+{
+  "_id": {
+    "$oid": "67c661c6b0ce105ba934bc97"
+  },
+  "username": "maria_s",
+  "name": "Maria Sanchez",
+  "email": "maria.sanchez@dlsu.edu.ph",
+  "password": "12345",
+  "role": "student",
+  "profilePic": "/images/default_profilepic.jpg"
+},
+{
+  "_id": {
+    "$oid": "67c661f0b0ce105ba934bc98"
+  },
+  "username": "anna_g",
+  "name": "Anna Garcia",
+  "email": "anna.garcia@dlsu.edu.ph",
+  "password": "12345",
+  "role": "student",
+  "profilePic": "/images/default_profilepic.jpg"
+},
+{
+  "_id": {
+    "$oid": "67c661feb0ce105ba934bc99"
+  },
+  "username": "thomas_sy",
+  "name": "Thomas Sy",
+  "email": "thomas.sy@dlsu.edu.ph",
+  "password": "12345",
+  "role": "student",
+  "profilePic": "/images/default_profilepic.jpg"
+}]
