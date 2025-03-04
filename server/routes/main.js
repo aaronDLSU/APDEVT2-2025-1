@@ -132,15 +132,29 @@ router.get('/manage-account', (req, res) => {
 });
 
 // Edit Reservation Page
-router.get('/edit-reservation', (req, res) => {
-    res.render('edit-reservation', {
-        title: "Edit Reservation",
-        pageStyle: "edit-reservation",
-        pageScripts: ["header-dropdowns", "edit-reservation"], // Include edit-reservation scripts
-        user,
-        labtech: user.type === 'labtech',
-        student: user.type === 'student'
-    });
+router.post('/edit-reservation', async (req, res) => {
+    try {
+        const current_user = { name: "Sir", type: "labtech", description: "i am a lab technician"}; //change when we add sessions
+        const {id} = req.body;
+        if (!id) {
+            return res.status(400).send("Reservation ID is required");
+        }
+        const reservation = await Reservation.findOne({_id: id}).populate('user lab').lean();
+        if (!reservation) {
+            return res.status(404).send("Reservation not found");
+        }
+        console.log(id, reservation, current_user)
+        res.render('edit-reservation', {
+            title: "Edit Reservation",
+            pageStyle: "edit-reservation",
+            pageScripts: ["header-dropdowns", "edit-reservation"], // Include edit-reservation scripts
+            user: current_user,
+            reservation
+        });
+    } catch(err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
 });
 
 //returns the ObjectID of lab. returns null if the lab does not exist in the DB
@@ -153,8 +167,6 @@ async function getLabId(buildName, labName) {
         return null
     }
 }
-
-
 
 // Reservation list Page
 router.get('/reservation-list', async (req, res) => {

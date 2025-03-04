@@ -5,128 +5,82 @@
           <div style="margin-top: 10px;">
             <h1 id="edit-title">Edit Reservation</h1>
           </div>
-    
           <div class="edit-reserve">
             <h2>Selected:</h2>
             <div class="chosen-reservation">
               <!-- Lab tech view -->
-            {{#if (eq userData.role "labtech")}}
-              <div class="card reserve-item hidden" id="labtech-view">
+            {{#if (eq user.type 'labtech')}}
+              <div class="card reserve-item" id="labtech-view">
                 <div class="row g-0" style="align-items: center;">
                   <div class="col-pfp">
-                    <img class="mr-3 list-img" src="images/default_profilepic.jpg" alt="John Torres">
+                    <img class="mr-3 list-img" src="images/default_profilepic.jpg" alt="{{reservation.user.name}}">
                   </div>
                   <div class="col res-details-container">
                     <div class="card-body reserve-details">
-                      <h5 class="card-title"><strong>{student.name}</strong></h5>
-                      <p class="card-text">{{roomData.name}}, {{roomData.building}} Building</p>
+                      <h5 class="card-title"><strong>{{reservation.user.name}}</strong></h5>
+                      <p class="card-text">Room {{reservation.lab.name}}</p>
                     </div>
                       <ul class="list-group list-group-flush">
-                          <li class="list-group-item">{{reserveData.date}}</li>
-                          <li class="list-group-item">{{reserveData.startTime}} - {{reserveData.endTime}}</li>
-                          <li class="list-group-item">Seat {{reserveData.seat}}</li>
+                          <li class="list-group-item">{{formatDate reservation.date}}</li>
+                          <li class="list-group-item">{{reservation.startTime}} - {{reservation.endTime}}</li>
+                          <li class="list-group-item">Seat {{reservation.seat}}</li>
                       </ul>
                   </div>
                 </div>
               </div>
               <!-- Student view -->
             {{else}}
-              <div class="card reserve-item hidden" id="student-view">
+              <div class="card reserve-item" id="student-view">
                 <div class="card-body">
-                  <h5 class="card-title"><strong>{{reserveData.name}}</strong></h5>
-                  <p class="card-text">{{roomData.name}}, {{roomData.building}} Building</p>
+                  <h5 class="card-title"><strong>{{reservation.user.name}}</strong></h5>
+                  <p class="card-text">Room {{reservation.lab.name}}</p>
                 </div>
                 <ul class="list-group list-group-flush">
-                  <li class="list-group-item">{{reserveData.date}}</li>
-                  <li class="list-group-item">{{reserveData.startTime}} - {{reserveData.endTime}}</li>
-                  <li class="list-group-item">Seat {{reserveData.seat}}</li>
+                  <li class="list-group-item">{{formatDate reservation.date}}</li>
+                  <li class="list-group-item">{{reservation.startTime}} - {{reservation.endTime}}</li>
+                  <li class="list-group-item">Seat {{reservation.seat}}</li>
                 </ul>
               </div>
             </div>
             {{/if}}
     
             <div class="edit-details">
-              <form id="details">
+              <a id="details">
                 <div class="form-group options">
                   <label for="building" class="form-label">Building</label>
                   <select class="form-select mb-3" id="building" required>
-                    <option selected>Choose...</option>
-                    <option value="1">LS Hall</option>
-                    <option value="2">Yuchengco</option>
-                    <option value="3">Velasco</option>
-                    <option value="4">Miguel</option>
-                    <option value="5">Gokongwei</option>
-                    <option value="6">Andrew</option>
+                      <option value="">Select Building</option>
+                      <option value="LS">LS Hall</option>
+                      <option value="Yuchengco">Yuchengco</option>
+                      <option value="Velasco">Velasco</option>
+                      <option value="Miguel">Miguel</option>
+                      <option value="Gokongwei">Gokongwei</option>
+                      <option value="Andrew">Andrew</option>
                   </select>
                 </div>
-    
-                <div class="form-group options">
-                  <label for="lab" class="form-label">Lab</label>
-                  <select class="form-select mb-3" id="lab" required>
-                    <option selected>Choose...</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                  </select>
-                </div>
-    
-                <div class="mb-3 options">
-                  <label for="date" class="form-label">Reserve Date</label>
-                  <input type="date" class="form-control" id="date" required>
-                </div>
-    
-                <div class="buttons">
-                  <button type="submit" id="view-avail" class="btn btn-primary" disabled>View Availability</button>
-                  <a href="reservation-list.html">
-                    <button type="button" class="btn btn-secondary" id="cancel">Cancel</button>
-                  </a>
-                </div>
+
+                  <div class="form-group options">
+                      <label for="lab" class="form-label">Lab</label>
+                      <select class="form-select mb-3" id="lab" required>
+                          <option value="">Select Lab</option>
+                      </select>
+                  </div>
+
+                    <div class="mb-3 options">
+                      <label for="date" class="form-label">Reserve Date</label>
+                      <input type="date" class="form-control" id="date" required>
+                    </div>
+
+                    <div class="buttons">
+                    <a href="/calendar">
+                        <button type="button" id="view-avail" class="btn btn-primary" disabled>View Availability</button>
+                    </a>
+                      <a href="/reservation-list">
+                        <button type="button" class="btn btn-secondary" id="cancel">Cancel</button>
+                      </a>
+                    </div>
               </form>
             </div>
           </div>
         </div>
  </div>
-<script>
-    $(document).ready(function () {
-        const details = document.getElementById('details');
-        const submit = document.getElementById('view-avail');
-
-        function checkForm(){
-            const required = details.querySelectorAll('[required]');
-            let isFilled = true;
-            required.forEach((field) => {
-                if (!field.value || field.value === "Choose...") {
-                    isFilled = false;
-                }
-            });
-
-            submit.disabled = !isFilled;
-        }
-
-        details.addEventListener('input', checkForm);
-        details.addEventListener('change', checkForm);
-
-        checkForm();
-        //for lab tech/student view
-        const accountType = "labtech"; //set to lab tech for now
-        const studentView = document.getElementById('student-view');
-        const labtechView = document.getElementById('labtech-view');
-
-        if(accountType === "labtech"){
-            labtechView.classList.remove('hidden');
-        }
-        else if(accountType === "student"){
-            studentView.classList.remove('hidden');
-        }
-        else {
-            console.log("account not found");
-        }
-
-    });
-</script>

@@ -37,6 +37,9 @@ app.engine('hbs', exphbs.engine({
       console.log(date)
       if (!date) return "";
       return new Date(date).toDateString();
+    },
+    eq: function (a, b) {
+      return a === b;
     }
   }
 }));
