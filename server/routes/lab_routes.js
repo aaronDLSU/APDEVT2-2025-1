@@ -5,7 +5,7 @@ const router = express.Router();
 // API Route to Fetch All Buildings
 router.get('/', async (req, res) => {
     try {
-        const buildings = await Building.find({}, 'name'); // Fetch all fields
+        const buildings = await Lab.find({name});
         res.json(buildings);
     } catch (error) {
         console.error('Error fetching buildings:', error);

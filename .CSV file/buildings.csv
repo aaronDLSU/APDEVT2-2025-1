@@ -1,6 +1,0 @@
-name,address,isActive,createdAt
-Science Center,123 Science St,TRUE,2024-03-04T12:00:00Z
-Engineering Hall,456 Tech Ave,TRUE,2024-03-04T12:05:00Z
-Medical Complex,789 Health Blvd,TRUE,2024-03-04T12:10:00Z
-Business Tower,101 Commerce Rd,FALSE,2024-03-04T12:15:00Z
-Arts Pavilion,202 Creative Ln,TRUE,2024-03-04T12:20:00Z
