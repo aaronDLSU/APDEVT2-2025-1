@@ -27,7 +27,6 @@ $(document).ready(function() {
 
     // Drop down event listener
     document.addEventListener("DOMContentLoaded", function() {
-        console.log("📢 Fetching buildings from API...");
     fetch('/api/buildings')  // Calls the API route from `server/routes/buildings.js`
         .then(response => response.json())
         .then(buildings => {

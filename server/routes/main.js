@@ -6,7 +6,6 @@ const User = require("../../db/models/DB_users");
 const buildingsRoutes = require('./buildings');
 const Reservation = require("../../db/models/DB_reservation");
 const Lab = require("../../db/models/DB_labs");
-const Building = require("../../db/models/DB_building");
 
 // Sample user roles
 const student = { name: "Charlie", type: "student", description: "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology. Passionate about coding and problem-solving, I am eager to explore new technologies and develop innovative solutions. Currently honing my skills in programming, web development, and algorithms, I aspire to contribute to impactful projects in the tech industry." };
@@ -24,9 +23,6 @@ router.get('/', (req, res) => {
         student: user.type === 'student'
     });
 });
-
-// Building Routes
-router.use('/api/buildings', buildingsRoutes);
 
 
 // Signup/Login Page
@@ -188,12 +184,12 @@ router.get('/reservation-list', async (req, res) => {
         const reservations = await Reservation.find(filter).populate('user lab').sort({date: 1}).lean();
         console.log(reservations)
 
-        res.render('reservation-list', {
-            title: "Reservation List",
-            pageStyle: "labtech-reservation-list",
-            pageScripts: ["header-dropdowns", "reservation-list"],
+    res.render('reservation-list', {
+        title: "Reservation List",
+        pageStyle: "labtech-reservation-list",
+        pageScripts: ["header-dropdowns", "reservation-list"],
             reservations
-        });
+    });
     }
     catch(err){
         console.error(err);
