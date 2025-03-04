@@ -3,7 +3,6 @@ const router = express.Router();
 
 // Add model routes here
 const User = require("../../db/models/DB_users");
-const buildingsRoutes = require('./buildings');
 const Reservation = require("../../db/models/DB_reservation");
 const Lab = require("../../db/models/DB_labs");
 
