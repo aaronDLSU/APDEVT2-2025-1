@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const Building = require('../../db/models/DB_building'); // Ensure correct path
+
 
 // API Route to Fetch All Buildings
 router.get('/', async (req, res) => {
     try {
-        const buildings = await Building.find({}, 'name address isActive createdAt'); // Fetch all fields
+        const buildings = await Building.find({}, 'name'); // Fetch all fields
         res.json(buildings);
     } catch (error) {
         console.error('Error fetching buildings:', error);
