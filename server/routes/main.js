@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
+
+// Add model routes here
 const User = require("../../db/models/DB_users");
+const buildingsRoutes = require('./buildings'); 
 
 // Sample user roles
 const student = { name: "Charlie", type: "student", description: "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology. Passionate about coding and problem-solving, I am eager to explore new technologies and develop innovative solutions. Currently honing my skills in programming, web development, and algorithms, I aspire to contribute to impactful projects in the tech industry." };
@@ -18,6 +21,10 @@ router.get('/', (req, res) => {
         student: user.type === 'student'
     });
 });
+
+// Building Routes
+router.use('/api/buildings', buildingsRoutes);
+
 
 // Signup/Login Page
 router.get('/signup-login', (req, res) => {

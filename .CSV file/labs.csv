@@ -1,0 +1,8 @@
+name,building,capacity,availability,status,createdAt
+Physics Lab,Science Center,30,TRUE,available,2024-03-04T12:30:00Z
+Chemistry Lab,Science Center,25,FALSE,booked,2024-03-04T12:35:00Z
+Robotics Lab,Engineering Hall,20,TRUE,available,2024-03-04T12:40:00Z
+AI Research Lab,Engineering Hall,15,FALSE,under_maintenance,2024-03-04T12:45:00Z
+Medical Simulation Lab,Medical Complex,40,TRUE,available,2024-03-04T12:50:00Z
+Business Analytics Lab,Business Tower,35,FALSE,closed,2024-03-04T12:55:00Z
+Design Studio,Arts Pavilion,20,TRUE,available,2024-03-04T13:00:00Z

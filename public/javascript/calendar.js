@@ -9,14 +9,6 @@ $(document).ready(function() {
     let selectedMonth = currentDate.getMonth();
     let selectedYear = currentDate.getFullYear();
 
-    const campusBldg = [
-        "Building A", 
-        "Building B", 
-        "Building C", 
-        "Building D", 
-        "Building E"];
-
-
     const availableRooms = [
         "Room 101 - Computer Lab",
         "Room 102 - Computer Lab",
@@ -33,6 +25,21 @@ $(document).ready(function() {
         clockContainer.innerHTML = now.toLocaleDateString() + " | " + now.toLocaleTimeString();
     }
 
+    // Drop down event listener
+    document.addEventListener("DOMContentLoaded", function() {
+    fetch('/api/buildings')  // Calls the API route from `server/routes/buildings.js`
+        .then(response => response.json())
+        .then(buildings => {
+            const dropdown = document.getElementById('dropbtn');
+            
+            // Populate the dropdown with only building names
+            dropdown.innerHTML = buildings.map(building => 
+                `<option value="${building.name}">${building.name}</option>`
+            ).join('');
+        })
+        .catch(error => console.error('Error fetching buildings:', error));
+});
+    
     setInterval(updateClock, 1000);
     updateClock();
 
