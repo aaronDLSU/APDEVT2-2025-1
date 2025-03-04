@@ -144,25 +144,17 @@ router.get('/edit-reservation', (req, res) => {
 });
 
 //returns the ObjectID of lab. returns null if the lab does not exist in the DB
-async function getLabId(buildID, labName) {
+async function getLabId(buildName, labName) {
     try {
-        const doc = await Lab.findOne({building: buildID, name: labName}).select("_id");
+        const doc = await Lab.findOne({building: buildName, name: labName}).select("_id");
         return doc ? doc._id : null;
-    } catch(error) {
+    } catch (error) {
         console.log(error);
         return null
     }
 }
 
-async function getBuildId(building) {
-    try {
-        const doc = await Building.findOne({name: building}).select("_id");
-        return doc ? doc._id : null;
-    } catch(error) {
-        console.log(error);
-        return null
-    }
-}
+
 
 // Reservation list Page
 router.get('/reservation-list', async (req, res) => {
@@ -171,9 +163,7 @@ router.get('/reservation-list', async (req, res) => {
 
         let filter = {};
         console.log(building,lab, date);
-        const buildID = await getBuildId(building)
-        console.log(buildID);
-        const labId = await getLabId(buildID, lab); //call getlabId function to get the ObjectId of the lab
+        const labId = await getLabId(building, lab); //call getlabId function to get the ObjectId of the lab
 
         if(labId || date){ //only apply filters if there are actual queries in the filter.
             filter = {lab: labId, date: new Date(date)};
