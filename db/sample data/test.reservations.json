@@ -1,0 +1,108 @@
+[{
+  "_id": {
+    "$oid": "67c6bdbab0ce105ba934bca3"
+  },
+  "name": "Reservation 1",
+  "user": {
+    "$oid": "67c66192b0ce105ba934bc95"
+  },
+  "lab": {
+    "$oid": "67c6bd83b0ce105ba934bca1"
+  },
+  "seat": 25,
+  "date": {
+    "$date": "2025-03-22T00:00:00.000Z"
+  },
+  "startTime": "07:30 AM",
+  "endTime": "09:30 AM"
+},
+{
+  "_id": {
+    "$oid": "67c6cd73b0ce105ba934bcc8"
+  },
+  "name": "Reservation 2",
+  "user": {
+    "$oid": "67c66192b0ce105ba934bc95"
+  },
+  "lab": {
+    "$oid": "67c6ccf6b0ce105ba934bcc6"
+  },
+  "seat": 15,
+  "date": {
+    "$date": "2025-01-22T00:00:00.000Z"
+  },
+  "startTime": "01:30 PM",
+  "endTime": "02:30 PM"
+},
+{
+  "_id": {
+    "$oid": "67c6df20b0ce105ba934bcdc"
+  },
+  "name": "Reservation 2",
+  "user": {
+    "$oid": "67c661b1b0ce105ba934bc96"
+  },
+  "lab": {
+    "$oid": "67c6bd83b0ce105ba934bca1"
+  },
+  "seat": 14,
+  "date": {
+    "$date": "2025-03-22T00:00:00.000Z"
+  },
+  "startTime": "10:00 AM",
+  "endTime": "10:30 AM"
+},
+{
+  "_id": {
+    "$oid": "67c6e3c8b0ce105ba934bce9"
+  },
+  "name": "Reservation 3",
+  "user": {
+    "$oid": "67c661c6b0ce105ba934bc97"
+  },
+  "lab": {
+    "$oid": "67c6bd83b0ce105ba934bca1"
+  },
+  "seat": 5,
+  "date": {
+    "$date": "2025-03-22T00:00:00.000Z"
+  },
+  "startTime": "12:00 PM",
+  "endTime": "01:30 PM"
+},
+{
+  "_id": {
+    "$oid": "67c6e3dbb0ce105ba934bcea"
+  },
+  "name": "Reservation 4",
+  "user": {
+    "$oid": "67c661f0b0ce105ba934bc98"
+  },
+  "lab": {
+    "$oid": "67c6bd83b0ce105ba934bca1"
+  },
+  "seat": 12,
+  "date": {
+    "$date": "2025-03-22T00:00:00.000Z"
+  },
+  "startTime": "02:00 PM",
+  "endTime": "03:00 PM"
+},
+{
+  "_id": {
+    "$oid": "67c6e3e4b0ce105ba934bceb"
+  },
+  "name": "Reservation 5",
+  "user": {
+    "$oid": "67c661feb0ce105ba934bc99"
+  },
+  "lab": {
+    "$oid": "67c6bd83b0ce105ba934bca1"
+  },
+  "seat": 20,
+  "date": {
+    "$date": "2025-03-22T00:00:00.000Z"
+  },
+  "startTime": "04:00 PM",
+  "endTime": "05:00 PM"
+}]

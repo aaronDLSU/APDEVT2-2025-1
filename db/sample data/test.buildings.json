@@ -1,0 +1,24 @@
+[{
+  "_id": {
+    "$oid": "67c6eb447a6785de84dff471"
+  },
+  "name": "Gokongwei",
+  "address": "2401 Taft Ave, Malate, Manila, 1004 Metro Manila",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "67c6eb907a6785de84dff472"
+  },
+  "name": "Velasco",
+  "address": "2401 Taft Ave, Malate, Manila, 1004 Metro Manila",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "67c6ebc67a6785de84dff474"
+  },
+  "name": "Andrew",
+  "address": "2401 Taft Ave, Malate, Manila, 1004 Metro Manila",
+  "isActive": true
+}]

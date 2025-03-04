@@ -3,7 +3,10 @@ const router = express.Router();
 
 // Add model routes here
 const User = require("../../db/models/DB_users");
-const buildingsRoutes = require('./buildings'); 
+const buildingsRoutes = require('./buildings');
+const Reservation = require("../../db/models/DB_reservation");
+const Lab = require("../../db/models/DB_labs");
+const Building = require("../../db/models/DB_building");
 
 // Sample user roles
 const student = { name: "Charlie", type: "student", description: "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology. Passionate about coding and problem-solving, I am eager to explore new technologies and develop innovative solutions. Currently honing my skills in programming, web development, and algorithms, I aspire to contribute to impactful projects in the tech industry." };
@@ -43,7 +46,10 @@ router.post('/signup', async (req, res) => {
         const { 'signup-email': email, 'signup-password': password, 'signup-role': role } = req.body;
         
         // Create new user in MongoDB
-        await User.create({ email, password, role});
+        await User.create({
+            email: email,
+            password: password,
+            role: role});
         res.redirect('/signup-login'); // Redirect back to login page
     } catch (err) {
         console.error('Signup error:', err);
@@ -142,16 +148,57 @@ router.get('/edit-reservation', (req, res) => {
     });
 });
 
+//returns the ObjectID of lab. returns null if the lab does not exist in the DB
+async function getLabId(buildID, labName) {
+    try {
+        const doc = await Lab.findOne({building: buildID, name: labName}).select("_id");
+        return doc ? doc._id : null;
+    } catch(error) {
+        console.log(error);
+        return null
+    }
+}
+
+async function getBuildId(building) {
+    try {
+        const doc = await Building.findOne({name: building}).select("_id");
+        return doc ? doc._id : null;
+    } catch(error) {
+        console.log(error);
+        return null
+    }
+}
+
 // Reservation list Page
-router.get('/reservation-list', (req, res) => {
-    res.render('reservation-list', {
-        title: "Reservation List",
-        pageStyle: "labtech-reservation-list",
-        pageScripts: ["header-dropdowns", "reservation-list"],
-        user,
-        labtech: user.type === 'labtech',
-        student: user.type === 'student'
-    });
+router.get('/reservation-list', async (req, res) => {
+    try{
+        const {building, lab, date} = req.query; //get filter query
+
+        let filter = {};
+        console.log(building,lab, date);
+        const buildID = await getBuildId(building)
+        console.log(buildID);
+        const labId = await getLabId(buildID, lab); //call getlabId function to get the ObjectId of the lab
+
+        if(labId || date){ //only apply filters if there are actual queries in the filter.
+            filter = {lab: labId, date: new Date(date)};
+        }
+        console.log(filter);
+        //select data based on filter (returns everything if there are no filters)
+        const reservations = await Reservation.find(filter).populate('user lab').sort({date: 1}).lean();
+        console.log(reservations)
+
+        res.render('reservation-list', {
+            title: "Reservation List",
+            pageStyle: "labtech-reservation-list",
+            pageScripts: ["header-dropdowns", "reservation-list"],
+            reservations
+        });
+    }
+    catch(err){
+        console.error(err);
+        res.status(500).send("Server Error");
+    }
 });
 
 //signout
