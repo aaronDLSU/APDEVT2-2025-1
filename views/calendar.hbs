@@ -7,11 +7,14 @@
         <div class="container">
             <div class="left-selection-container">
                 <!-- Campus Section (Left Side) -->
-                <div class="dropdown">
-                    <button class="dropbtn" onclick="toggleDropdown()">Select Building ▼</button>
-                    <div class="dropdown-content" id="dropdown-menu"></div>
+                <div class="role-dropdown">
+                    <label for="campus-bldg">Campus Bldg:</label>
+                    <select id="dropdownbtn" name="dropdownbtn" required class="dropdownbtn">
+                        <option value="Velasco">Velasco</option>
+                        <option value="Yunchengco">Yunchengco</option>
+                    </select>
                 </div>
-                    
+
                 <!-- Room List Section (Left Side) -->
                 <div class="room-list-container">                
                     <h3>Available Rooms</h3>
