@@ -5,12 +5,23 @@
         <div class="clock-container" id="real-time-clock"></div>
     
         <div class="container">
-            <!-- Room List Section (Left Side) -->
-            <div class="room-list-container">
-                <h3>Available Rooms</h3>
-                <div class="room-list" id="room-list"></div>
+            <div class="left-selection-container">
+                <!-- Campus Section (Left Side) -->
+                <div class="dropdown">
+                    <button class="dropbtn" onclick="toggleDropdown()">Select Building ▼</button>
+                    <div class="dropdown-content" id="dropdown-menu"></div>
+                </div>
+                    
+                <!-- Room List Section (Left Side) -->
+                <div class="room-list-container">                
+                    <h3>Available Rooms</h3>
+                    <div class="room-list" id="room-list"></div>
+                </div>
+
+                <!-- Reserve Room Button -->
+                <button class="button reserve-room-btn" onclick="reserveRoom()">Reserve Room</button>
             </div>
-    
+            
             <!-- Calendar Section -->
             <div class="calendar-container">
                 <div class="calendar-header">
@@ -28,8 +39,6 @@
                     <div class="day">Sat</div>
                 </div>
                 <div class="calendar-grid" id="calendar"></div>
-                <!-- Reserve Room Button -->
-                <button class="button reserve-room-btn" onclick="reserveRoom()">Reserve Room</button>
             </div>
         </div>
     

@@ -9,6 +9,14 @@ $(document).ready(function() {
     let selectedMonth = currentDate.getMonth();
     let selectedYear = currentDate.getFullYear();
 
+    const campusBldg = [
+        "Building A", 
+        "Building B", 
+        "Building C", 
+        "Building D", 
+        "Building E"];
+
+
     const availableRooms = [
         "Room 101 - Computer Lab",
         "Room 102 - Computer Lab",
@@ -164,24 +172,24 @@ $(document).ready(function() {
             }
         });
     });
-}
 
-// Temporary reserve room function
-function reserveRoom() {
-    const roomList = document.getElementById('room-list').children;
-    if (roomList.length === 0) {
-        alert("No rooms available to reserve.");
-        return;
-    }
+    // Temporary reserve room function
+    function reserveRoom() {
+        const roomList = document.getElementById('room-list').children;
+        if (roomList.length === 0) {
+            alert("No rooms available to reserve.");
+            return;
+        }
 
-    const roomNames = [...roomList].map(room => room.textContent);
-    const selectedRoom = prompt(`Select a room to reserve:\n${roomNames.join("\n")}`);
+        const roomNames = [...roomList].map(room => room.textContent);
+        const selectedRoom = prompt(`Select a room to reserve:\n${roomNames.join("\n")}`);
 
-    if (selectedRoom && roomNames.includes(selectedRoom)) {
-        alert(`Room "${selectedRoom}" has been reserved successfully!`);
-        // implement actual reservation logic here (updating a database or UI)
-    } else {
-        alert("Invalid room selection.");
+        if (selectedRoom && roomNames.includes(selectedRoom)) {
+            alert(`Room "${selectedRoom}" has been reserved successfully!`);
+            // implement actual reservation logic here (updating a database or UI)
+        } else {
+            alert("Invalid room selection.");
+        }
     }
 }
 

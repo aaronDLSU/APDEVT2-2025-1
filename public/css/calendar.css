@@ -20,7 +20,7 @@
     z-index:1;
 }
 
-/* Main Container , Top Middle Container*/
+/* Main Container , Top Middle Box enclosing calendar*/
 .container {
     display: flex;
     gap: 25px;
@@ -134,8 +134,34 @@
     color: #777;
 }
 
+/* Campus Dropdown starts here*/
+/* Dropdown container */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown button */
+.dropbtn {
+    background-color: gray;
+    color: white;
+    padding: 10px 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+/* Campus Dropdown ends here*/
+
+.left-selection-container{
+    display: flex;
+    flex-direction: column;
+}
+
+/* Box for Room Selector */
 .room-list-container {
-    min-width: 220px;
+    min-width: 35%;
+    min-height: 85%;
     text-align: center;
     background: white;
     padding: 15px;
@@ -143,6 +169,8 @@
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     height: 350px;
     overflow-y: auto;
+    position: relative;
+    top: 2%;
 }
 
 .room-list-container h3{
@@ -318,16 +346,14 @@
 /*Reserve Button Styling Start*/
 .reserve-room-btn {
     display: block;
-    margin-top: 10px;
-    padding: 8px 12px;
+    margin-top: 10%;
+    padding: 4px 8px;
     background-color: #007BFF;
     color: white;
     border: none;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 10px;
     position: relative;
-    right: 47%;
-    bottom: 5%;
 }
 
 .reserve-room-btn:hover {
