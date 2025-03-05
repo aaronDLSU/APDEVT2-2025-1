@@ -110,15 +110,4 @@ $(document).ready(function () {
     });
   });
 
-  //enable/disable checkboxes in notif settings based on "enable notifs" option
-  $("#enable-notif").on("change", function () {
-    const checkboxes = $(".notif-checkbox");
-
-    checkboxes.each(function () {
-      if (!$('#enable-notif').prop("checked")) {
-        $(this).prop("checked", false);
-      }
-      $(this).prop("disabled", !$('#enable-notif').prop("checked"));
-    });
-  });
 });
