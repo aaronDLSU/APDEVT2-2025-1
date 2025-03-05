@@ -100,10 +100,8 @@
                                             aria-expanded="false"> <i class="fa-solid fa-ellipsis"></i></button>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <form method="POST" action="/edit-reservation">
-                                                    <input type="hidden" name="id" value="{{this._id}}">
-                                                    <button type="submit" class="dropdown-item">Edit</button>
-                                                </form>
+                                                <input type="hidden" name="id" value="{{this._id}}">
+                                                <button type="submit" class="dropdown-item">Edit</button>
                                             </li>
                                             <li><button class="dropdown-item cancel-reservation"
                                                     data-id="{{this._id}}">Cancel</button></li>
@@ -111,8 +109,10 @@
                                     </div>
                                 </div>
                             </div>
-                        
-                            <h5 class="card-title">{{this.name}}</h5>
+
+
+                            <h5 class="card-title">Reservation {{this.originalNumber}}</h5>
+
                             <p class="card-text">{{#if this.lab}}{{this.lab.name}}, {{this.lab.building}}
                                 Building{{else}}Lab information unavailable{{/if}}</p>
                         </div>
@@ -133,7 +133,7 @@
                         <a href="/calendar" class="btn btn-primary mt-2">Book a Reservation</a>
                     </div>
                 </div>
-                {{/if}} 
+                {{/if}}
             </div>
         </div>
     </div>

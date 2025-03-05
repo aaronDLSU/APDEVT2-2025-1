@@ -104,17 +104,66 @@ router.get('/profile', async (req, res) => {
             return res.redirect('/signup-login');
         }
 
+        console.log("Current user:", user);
+
         // Fetch user's reservations
         let reservations = [];
-        if (user._id) {
-            console.log("Fetching reservations for user ID:", user._id);
+        if (user._id || user.id) {
+            try {
+                // Get user ID as string
+                const userIdString = user._id || user.id;
+                console.log("Looking for reservations with user ID:", userIdString);
 
-            reservations = await Reservation.find({ user: user._id })
-                .populate('lab')
-                .sort({ date: 1 })
-                .lean();
+                // Get all reservations
+                const allReservations = await Reservation.find()
+                    .populate('lab')
+                    .sort({ date: 1 }) // Sort by date to get original order
+                    .lean();
 
-            console.log(`Found ${reservations.length} reservations for ${user.name}`);
+                console.log(`Total reservations in database: ${allReservations.length}`);
+
+                // Filter reservations for this user by comparing string IDs
+                const userReservations = allReservations.filter(reservation => {
+                    // Handle both ObjectId and string comparisons
+                    const resUserId = reservation.user ?
+                        (reservation.user.toString ? reservation.user.toString() : reservation.user)
+                        : null;
+
+                    return resUserId === userIdString;
+                });
+
+                console.log(`Found ${userReservations.length} reservations for ${user.name}`);
+
+                // Assign sequential numbers based on original order
+                userReservations.forEach((reservation, index) => {
+                    reservation.originalNumber = index + 1; // Start from 1
+                });
+
+                // Define status priority
+                const statusPriority = {
+                    'approved': 1,
+                    'pending': 2,
+                    'rejected': 3,
+                    'cancelled': 4
+                };
+
+                // Sort reservations by status priority, then by date
+                reservations = userReservations.sort((a, b) => {
+                    // First sort by status priority
+                    const priorityA = statusPriority[a.status] || 99;
+                    const priorityB = statusPriority[b.status] || 99;
+
+                    if (priorityA !== priorityB) {
+                        return priorityA - priorityB;
+                    }
+
+                    // If same status, sort by date (earliest first)
+                    return new Date(b.date) - new Date(a.date);
+                });
+
+            } catch (error) {
+                console.error("Error fetching reservations:", error);
+            }
         }
 
         res.render('profile', {
@@ -136,6 +185,9 @@ router.get('/profile', async (req, res) => {
                 },
                 eq: function (a, b) {
                     return a === b;
+                },
+                add: function (a, b) {
+                    return parseInt(a) + parseInt(b);
                 }
             }
         });
@@ -220,7 +272,7 @@ router.get('/reservation-list', async (req, res) => {
         }
         //console.log(filter);
         //select data based on filter (returns everything if there are no filters)
-        const reservations = await Reservation.find(filter).populate('user lab').sort({date: 1}).lean();
+        const reservations = await Reservation.find(filter).populate('user lab').sort({ date: 1 }).lean();
         //console.log(reservations)
 
         res.render('reservation-list', {
@@ -237,14 +289,14 @@ router.get('/reservation-list', async (req, res) => {
 });
 
 router.post('/delete-reservation', async (req, res) => {
-    try{
-        const {id} = req.body;
+    try {
+        const { id } = req.body;
         if (!id) {
             return res.status(400).send("Reservation not found");
         }
         const selectedReserve = await Reservation.findById(id);
 
-        if(!selectedReserve) {
+        if (!selectedReserve) {
             return res.status(404).send("Reservation not found");
         }
 
@@ -252,7 +304,7 @@ router.post('/delete-reservation', async (req, res) => {
         const deletedRes = await Reservation.findByIdAndDelete(ObjID);
         console.log(deletedRes);
 
-        if(!deletedRes) {
+        if (!deletedRes) {
             return res.status(404).send("Reservation not found");
         }
         res.status(200).json({ success: true, message: "Reservation deleted successfully" });
