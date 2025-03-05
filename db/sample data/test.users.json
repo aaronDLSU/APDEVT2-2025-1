@@ -52,4 +52,18 @@
   "password": "12345",
   "role": "student",
   "profilePic": "/images/default_profilepic.jpg"
-}]
+},
+
+{
+  "_id": {
+    "$oid": "67c6e500b0ce105ba934bcf7"
+  },
+  "username": "charlie123",
+  "name": "Charlie Chaplin",
+  "email": "student@dlsu.edu.ph",
+  "password": "student",
+  "role": "student",
+  "profilePic": "/images/default_profilepic.jpg"
+}
+
+]

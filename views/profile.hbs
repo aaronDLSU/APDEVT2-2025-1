@@ -1,265 +1,140 @@
-
 <!-- Content Section -->
 <div class="main-content-spacing">
 
-        <div class="d-flex justify-content-around" id="profile-section">
-            <div class="w-50" id="profile-info-section">
-                <div class="d-flex gap-3 align-prof-desc">
-                    <div id="profile-image">
-                        <img src="/images/default_profilepic.jpg" alt="image" class="profile-image">
+    <div class="d-flex justify-content-around" id="profile-section">
+        <div class="w-50" id="profile-info-section">
+            <div class="d-flex gap-3 align-prof-desc">
+                <div id="profile-image">
+                    <img src="/images/default_profilepic.jpg" alt="image" class="profile-image">
+                </div>
+
+                <div>
+                    <div class="pt-3" id="profile-info">
+                        <div class="h3">
+                            {{user.name}}
+                        </div>
+                        <div class="h5">
+                            {{user.type}}
+                        </div>
                     </div>
 
-                    <div>
-                        <div class="pt-3" id="profile-info">
-                            <div class="h3">
-                                {{user.name}}
-                            </div>
-                            <div class="h5">
-                                {{user.type}}
-                            </div>
-                        </div>
-
-                        <div id="profile-description" style="text-align: justify; text-justify: inter-word;">
-                            {{user.description}}
-                        </div>
-
+                    <div id="profile-description" style="text-align: justify; text-justify: inter-word;">
+                        {{user.description}}
                     </div>
 
                 </div>
-            </div>
 
-            <!--DAshboard-->
-            <div class="pr-5" id="dashboard-section">
-                <div class="card" style="width: 100%;">
-                    <div class="card-header">
-                        Student Statistics
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Attendance rate</h5>
-                        <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="90"
-                            aria-valuemin="0" aria-valuemax="100" style="height:5px;">
-                            <div class="progress-bar" style="width: 90%"></div>
-                        </div>
-
-                        <h5 class="card-title mt-3">On-time Arrival</h5>
-                        <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="70"
-                            aria-valuemin="0" aria-valuemax="100" style="height:5px;">
-                            <div class="progress-bar" style="width: 70%"></div>
-                        </div>
-
-                        <h5 class="card-title mt-3">Session Completion</h5>
-                        <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="80"
-                            aria-valuemin="0" aria-valuemax="100" style="height:5px;">
-                            <div class="progress-bar" style="width: 80%"></div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
-        <!-- My Reservations-->
-        <div class="row-sm-2">
-            <div id="reservations-title">
-                <div class="flex-row pt-4">
-                    <div class="h2">
-                        My Reservations
-                    </div>
-
+        <!--DAshboard-->
+        <div class="pr-5" id="dashboard-section">
+            <div class="card" style="width: 100%;">
+                <div class="card-header">
+                    Student Statistics
                 </div>
-
-            </div>
-
-        </div>
-
-        <div class="row-sm-5">
-
-            <div id="reservation-section">
-                <div class="row row-cols-3 ">
-                    <div class="col">
-                        <div class="card">
-                            <div class="card-body">
-                                <div id="badges-settings-section">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="">
-                                            <span class="badge rounded-pill bg-success mb-2">Booked</span>
-                                        </div>
-                                        <div class="dropdown">
-                                            <button class="align-button btn" type="button" data-bs-toggle="dropdown"
-                                                aria-expanded="false"> <i class="fa-solid fa-ellipsis"></i></button>
-                                            <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" href="#">Edit</a></li>
-                                                <li><a class="dropdown-item" href="#">Remove</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-
-                                <h5 class="card-title">Reservation 6</h5>
-                                <p class="card-text"> Lab 3, Gokongwei Building</p>
-                            </div>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">February 7, 2025</li>
-                                <li class="list-group-item">10:45 AM - 11:45 AM</li>
-                                <li class="list-group-item">Seat 3</li>
-                            </ul>
-                        </div>
+                <div class="card-body">
+                    <h5 class="card-title">Attendance rate</h5>
+                    <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="90"
+                        aria-valuemin="0" aria-valuemax="100" style="height:5px;">
+                        <div class="progress-bar" style="width: 90%"></div>
                     </div>
 
-                    <div class="col">
-                        <div class="card">
-                            <div class="card-body">
-                                <div id="badges-settings-section">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="">
-                                            <span class="badge rounded-pill bg-warning text-dark mb-2">On-going</span>
-                                        </div>
-                                        <div class="dropdown">
-                                            <button class="align-button btn" type="button" data-bs-toggle="dropdown"
-                                                aria-expanded="false"> <i class="fa-solid fa-ellipsis"></i></button>
-                                            <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" href="#">Edit</a></li>
-                                                <li><a class="dropdown-item" href="#">Remove</a></li>
-                                            </ul>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                <h5 class="card-title">Reservation 5</h5>
-                                <p class="card-text"> Lab 4, Yuchengco Building</p>
-                            </div>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">February 2, 2025</li>
-                                <li class="list-group-item">8:30 AM - 9:30 AM</li>
-                                <li class="list-group-item">Seat 6</li>
-                            </ul>
-                        </div>
+                    <h5 class="card-title mt-3">On-time Arrival</h5>
+                    <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="70"
+                        aria-valuemin="0" aria-valuemax="100" style="height:5px;">
+                        <div class="progress-bar" style="width: 70%"></div>
                     </div>
 
-                    <div class="col">
-                        <div class="card">
-                            <div class="card-body">
-                                <div id="badges-settings-section">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="">
-                                            <span class="badge rounded-pill bg-dark mb-2">Completed</span>
-                                        </div>
-                                        <div class="dropdown">
-                                            <button class="align-button btn" type="button" data-bs-toggle="dropdown"
-                                                aria-expanded="false"> <i class="fa-solid fa-ellipsis"></i></button>
-                                            <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" href="#">Edit</a></li>
-                                                <li><a class="dropdown-item" href="#">Remove</a></li>
-                                            </ul>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                                <h5 class="card-title">Reservation 4</h5>
-                                <p class="card-text"> Lab 2, St. Miguel Building</p>
-                            </div>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">January 27, 2025</li>
-                                <li class="list-group-item">7:30 AM - 9:30 AM</li>
-                                <li class="list-group-item">Seat 9</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="card">
-                            <div class="card-body">
-                                <div id="badges-settings-section">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="">
-                                            <span class="badge rounded-pill bg-dark mb-2">Completed</span>
-                                        </div>
-                                        <div class="dropdown">
-                                            <button class="align-button btn" type="button" data-bs-toggle="dropdown"
-                                                aria-expanded="false"> <i class="fa-solid fa-ellipsis"></i></button>
-                                            <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" href="#">Edit</a></li>
-                                                <li><a class="dropdown-item" href="#">Remove</a></li>
-                                            </ul>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                                <h5 class="card-title">Reservation 3</h5>
-                                <p class="card-text"> Lab 3, Velasco Building</p>
-                            </div>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">January 26, 2025</li>
-                                <li class="list-group-item">3:30 PM - 4:30 PM</li>
-                                <li class="list-group-item">Seat 4</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card">
-                            <div class="card-body">
-                                <div id="badges-settings-section">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="">
-                                            <span class="badge rounded-pill bg-dark mb-2">Completed</span>
-                                        </div>
-                                        <div class="dropdown">
-                                            <button class="align-button btn" type="button" data-bs-toggle="dropdown"
-                                                aria-expanded="false"> <i class="fa-solid fa-ellipsis"></i></button>
-                                            <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" href="#">Edit</a></li>
-                                                <li><a class="dropdown-item" href="#">Remove</a></li>
-                                            </ul>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                                <h5 class="card-title">Reservation 2</h5>
-                                <p class="card-text"> Lab 4, Gokongwei Building</p>
-                            </div>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">January 24, 2025</li>
-                                <li class="list-group-item">4:00 PM - 5:00 PM</li>
-                                <li class="list-group-item">Seat 8</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card">
-                            <div class="card-body">
-                                <div id="badges-settings-section">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="">
-                                            <span class="badge rounded-pill bg-dark mb-2">Completed</span>
-                                        </div>
-                                        <div class="dropdown">
-                                            <button class="align-button btn" type="button" data-bs-toggle="dropdown"
-                                                aria-expanded="false"> <i class="fa-solid fa-ellipsis"></i></button>
-                                            <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" href="#">Edit</a></li>
-                                                <li><a class="dropdown-item" href="#">Remove</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <h5 class="card-title">Reservation 1</h5>
-                                <p class="card-text"> Lab 2, Velasco Building</p>
-                            </div>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">January 21, 2025</li>
-                                <li class="list-group-item">11:30 AM - 12:30 PM</li>
-                                <li class="list-group-item">Seat 23</li>
-                            </ul>
-                        </div>
+                    <h5 class="card-title mt-3">Session Completion</h5>
+                    <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="80"
+                        aria-valuemin="0" aria-valuemax="100" style="height:5px;">
+                        <div class="progress-bar" style="width: 80%"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- My Reservations-->
+    <div class="row-sm-2">
+        <div id="reservations-title">
+            <div class="flex-row pt-4">
+                <div class="h2">
+                    My Reservations
+                </div>
+                {{#if reservations.length}}
+                <div class="text-muted small">
+                    Showing {{reservations.length}} reservation(s)
+                </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+
+    <div class="row-sm-5">
+        <div id="reservation-section">
+            <div class="row row-cols-3">
+                {{#if reservations.length}}
+                {{#each reservations}}
+                <div class="col mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="badges-settings-section">
+                                <div class="d-flex justify-content-between">
+                                    <div class="">
+                                        {{#if (eq this.status "approved")}}
+                                        <span class="badge rounded-pill bg-success mb-2">Approved</span>
+                                        {{else if (eq this.status "pending")}}
+                                        <span class="badge rounded-pill bg-warning text-dark mb-2">Pending</span>
+                                        {{else if (eq this.status "rejected")}}
+                                        <span class="badge rounded-pill bg-danger mb-2">Rejected</span>
+                                        {{else if (eq this.status "cancelled")}}
+                                        <span class="badge rounded-pill bg-secondary mb-2">Cancelled</span>
+                                        {{else}}
+                                        <span class="badge rounded-pill bg-dark mb-2">Completed</span>
+                                        {{/if}}
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="align-button btn" type="button" data-bs-toggle="dropdown"
+                                            aria-expanded="false"> <i class="fa-solid fa-ellipsis"></i></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <form method="POST" action="/edit-reservation">
+                                                    <input type="hidden" name="id" value="{{this._id}}">
+                                                    <button type="submit" class="dropdown-item">Edit</button>
+                                                </form>
+                                            </li>
+                                            <li><button class="dropdown-item cancel-reservation"
+                                                    data-id="{{this._id}}">Cancel</button></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <h5 class="card-title">{{this.name}}</h5>
+                            <p class="card-text">{{#if this.lab}}{{this.lab.name}}, {{this.lab.building}}
+                                Building{{else}}Lab information unavailable{{/if}}</p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">{{formatDate this.date}}</li>
+                            <li class="list-group-item">{{this.startTime}} - {{this.endTime}}</li>
+                            <li class="list-group-item">Seat {{this.seat}}</li>
+                        </ul>
+                    </div>
+                </div>
+                {{/each}}
+                {{else}}
+                <div class="col-12 text-center py-5">
+                    <div class="text-muted">
+                        <i class="fa-solid fa-calendar-xmark fa-3x mb-3"></i>
+                        <h4>No reservations found</h4>
+                        <p>You haven't made any reservations yet.</p>
+                        <a href="/calendar" class="btn btn-primary mt-2">Book a Reservation</a>
+                    </div>
+                </div>
+                {{/if}} 
+            </div>
+        </div>
+    </div>
+</div>
