@@ -5,6 +5,7 @@ const router = express.Router();
 const User = require("../../db/models/DB_users");
 const Reservation = require("../../db/models/DB_reservation");
 const Lab = require("../../db/models/DB_labs");
+const Settings = require('../../db/models/DB_settings');
 
 // Sample user roles
 const student = { _id: "67c6e500b0ce105ba934bcf7", name: "Charlie Chaplin", type: "student", description: "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology. Passionate about coding and problem-solving, I am eager to explore new technologies and develop innovative solutions. Currently honing my skills in programming, web development, and algorithms, I aspire to contribute to impactful projects in the tech industry." };
@@ -211,15 +212,36 @@ router.get('/edit-profile', (req, res) => {
 
 // manage account Page
 router.get('/manage-account', (req, res) => {
-    res.render('manage-account', {
-        title: "Manage Account",
-        pageStyle: "manage-account",
-        pageScripts: ["header-dropdowns", "manage-account"],
-        user,
-        labtech: user.type === 'labtech',
-        student: user.type === 'student'
-    });
+    if (!user) {
+        return res.redirect('/signup-login');
+    }
+    try {
+        res.render('manage-account', {
+            title: "Manage Account",
+            pageStyle: "manage-account",
+            pageScripts: ["header-dropdowns", "manage-account"],
+            user,
+            labtech: user.type === 'labtech',
+            student: user.type === 'student'
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
 });
+
+router.post('/manage-account', (req, res) => {
+    if (!user) {
+        return res.redirect('/signup-login');
+    }
+
+    try{
+
+    } catch(err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+})
 
 // Edit Reservation Page
 router.post('/edit-reservation', async (req, res) => {
