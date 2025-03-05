@@ -205,6 +205,11 @@ router.post('/delete-reservation', async (req, res) => {
             return res.status(400).send("Reservation not found");
         }
         const selectedReserve = await Reservation.findById(id);
+
+        if(!selectedReserve) {
+            return res.status(404).send("Reservation not found");
+        }
+
         const ObjID = selectedReserve._id;
         const deletedRes = await Reservation.findByIdAndDelete(ObjID);
         console.log(deletedRes);
