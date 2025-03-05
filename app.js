@@ -40,6 +40,9 @@ app.engine('hbs', exphbs.engine({
     },
     eq: function (a, b) {
       return a === b;
+    },
+    json: function (a) {
+      return JSON.stringify(a);
     }
   }
 }));

@@ -211,45 +211,48 @@ router.get('/edit-profile', (req, res) => {
 });
 
 // manage account Page
-router.get('/manage-account', (req, res) => {
-    if (!user) {
-        return res.redirect('/signup-login');
-    }
-    try {
+router.get('/manage-account', async (req, res) => {
+    try{
+        if (!user) {
+            return res.redirect('/signup-login');
+        }
+        //console.log("Current user:", user._id);
+
+        const objID = await User.findById(user._id);
+        //console.log(objID)
+        const userSettings = await Settings.findOne({user: objID}).populate("user").lean();
+        console.log(userSettings)
         res.render('manage-account', {
             title: "Manage Account",
             pageStyle: "manage-account",
-            pageScripts: ["header-dropdowns", "manage-account"],
-            user,
+            pageScripts: ["header-dropdowns"],
+            user, userSettings,
             labtech: user.type === 'labtech',
             student: user.type === 'student'
         });
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Server Error');
-    }
-});
-
-router.post('/manage-account', (req, res) => {
-    if (!user) {
-        return res.redirect('/signup-login');
-    }
-
-    try{
-
     } catch(err) {
         console.error(err);
         res.status(500).send('Server Error');
     }
 })
 
+router.post('/change-password', (req, res) => {
+
+})
+
+router.post('/change-privacy-settings', (req, res) => {
+
+})
+
+router.post('/delete-account', (req, res) => {})
+
 // Edit Reservation Page
 router.post('/edit-reservation', async (req, res) => {
-    if (!user) {
-        return res.redirect('/signup-login');
-    }
-
     try {
+        if (!user) {
+            return res.redirect('/signup-login');
+        }
+
         const { id } = req.body;
         if (!id) {
             return res.status(400).send("Reservation ID is required");
@@ -293,14 +296,14 @@ async function getLabId(buildName, labName) {
 
 // Reservation list Page
 router.get('/reservation-list', async (req, res) => {
-    if (!user) {
-        return res.redirect('/signup-login');
-    }
-    if(user.type === 'student'){
-        return res.redirect('/')
-    }
-
     try {
+        if (!user) {
+            return res.redirect('/signup-login');
+        }
+        if(user.type === 'student'){
+            return res.redirect('/')
+        }
+
         const { building, lab, date } = req.query; //get filter query
 
         let filter = {};
