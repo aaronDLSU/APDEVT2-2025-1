@@ -17,7 +17,7 @@
     "$oid": "67c844fc670347785d585287"
   },
   "user": {
-    "$oid": "67c661c6b0ce105ba934bc97"
+    "$oid": "67c661b1b0ce105ba934bc96"
   },
   "accountVisibility": "public",
   "showStats": false,
@@ -31,7 +31,7 @@
     "$oid": "67c84549670347785d585288"
   },
   "user": {
-    "$oid": "67c661f0b0ce105ba934bc98"
+    "$oid": "67c661c6b0ce105ba934bc97"
   },
   "accountVisibility": "public",
   "showStats": false,
@@ -61,10 +61,10 @@
   "user": {
     "$oid": "67c6e500b0ce105ba934bcf7"
   },
-  "accountVisibility": "public",
-  "showStats": false,
-  "showReserves": false,
-  "showBooked": false,
+  "accountVisibility": "private",
+  "showStats": true,
+  "showReserves": true,
+  "showBooked": true,
   "showOngoing": false,
   "showPrevious": false
 }]
