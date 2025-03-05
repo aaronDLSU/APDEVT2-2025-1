@@ -223,8 +223,11 @@ router.get('/manage-account', (req, res) => {
 
 // Edit Reservation Page
 router.post('/edit-reservation', async (req, res) => {
+    if (!user) {
+        return res.redirect('/signup-login');
+    }
+
     try {
-        const current_user = { name: "Sir", type: "labtech", description: "i am a lab technician" }; //change when we add sessions
         const { id } = req.body;
         if (!id) {
             return res.status(400).send("Reservation ID is required");
@@ -233,13 +236,15 @@ router.post('/edit-reservation', async (req, res) => {
         if (!reservation) {
             return res.status(404).send("Reservation not found");
         }
-        console.log(id, reservation, current_user)
+        console.log(id, reservation, user)
         res.render('edit-reservation', {
             title: "Edit Reservation",
             pageStyle: "edit-reservation",
             pageScripts: ["header-dropdowns", "edit-reservation"], // Include edit-reservation scripts
-            user: current_user,
-            reservation
+            user,
+            reservation,
+            labtech: user.type === 'labtech',
+            student: user.type === 'student'
         });
     } catch (err) {
         console.error(err);
@@ -260,6 +265,10 @@ async function getLabId(buildName, labName) {
 
 // Reservation list Page
 router.get('/reservation-list', async (req, res) => {
+    if (!user) {
+        return res.redirect('/signup-login');
+    }
+
     try {
         const { building, lab, date } = req.query; //get filter query
 
@@ -279,7 +288,9 @@ router.get('/reservation-list', async (req, res) => {
             title: "Reservation List",
             pageStyle: "labtech-reservation-list",
             pageScripts: ["header-dropdowns", "reservation-list"],
-            reservations
+            reservations,
+            labtech: user.type === 'labtech',
+            student: user.type === 'student'
         });
     }
     catch (err) {
