@@ -50,7 +50,7 @@
                                 <div class="card-body reserve-details">
                                     <h5 class="card-title"><strong>{{this.user.name}}</strong></h5>
                                     <ul class="list-group list-group-flush">
-                                        <li class="list-group-item">{{formatDate this.date}}<br/> {{this.startTime}} - {{this.endTime}}</li>
+                                        <li class="list-group-item">{{formatDate this.bdate}}<br/> {{this.startTime}} - {{this.endTime}}</li>
                                         <li class="list-group-item">{{this.lab.name}}, Seat {{this.seat}}</li>
                                     </ul>
                                 </div>
@@ -62,7 +62,7 @@
                                         <i class="fa-regular fa-pen-to-square"></i>
                                     </button>
                                 </form>
-                                <button id="submit-delete" class="btn"><i class="fa-solid fa-trash"></i></button>
+                                <button class="btn submit-delete" data-id="{{this._id}}"><i class="fa-solid fa-trash"></i></button>
                             </div>
                         </div>
                     </div>
@@ -84,7 +84,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" id="confirm-btn">Yes</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="no-confirm">No</button>
+                        <button type="button" class="btn btn-secondary no-confirm" data-bs-dismiss="modal">No</button>
                     </div>
                 </div>
             </div>
@@ -101,6 +101,22 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="delete-fail" tabindex="-1" aria-labelledby="delete-fail-label" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="delete-fail-label">Failed</h5>
+                    </div>
+                    <div class="modal-body text-center">
+                        Reservation deletion failed.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary no-confirm" data-bs-dismiss="modal">OK</button>
                     </div>
                 </div>
             </div>

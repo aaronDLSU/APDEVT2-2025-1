@@ -1,23 +1,3 @@
-const confirmDeleteSubmit = $('#submit-delete');
-
-confirmDeleteSubmit.on("click", function () {
-  var confirmModal = new bootstrap.Modal(document.getElementById('confirm-delete'));
-  confirmModal.show();
-
-  // When "Yes" is clicked
-  $('#confirm-btn').off('click').on("click", function () {
-    confirmModal.hide(); // Hide the confirmation modal
-
-    setTimeout(() => {
-      var successModal = new bootstrap.Modal(document.getElementById('delete-success'));
-      successModal.show();
-
-      $('#delete-success .btn-success').off('click').on("click", function () {
-        location.reload();
-      });
-    }, 500);
-  });
-});
 $(document).ready(function () {
   /*add more labs if needed. these are all computer labs*/
   var labs = {
@@ -58,4 +38,42 @@ $(document).ready(function () {
     const date = $("#date").val();
     window.location.href = `?building=${building}&lab=${lab}&date=${date}`;
   });
+
+  const confirmDelete = $('.submit-delete')
+  confirmDelete.on("click", function () {
+    const reserveId = $(this).data('id');
+    const confirmModal = new bootstrap.Modal($('#confirm-delete'));
+    console.log("click")
+
+    confirmModal.show();
+
+    // When "Yes" is clicked
+    $('#confirm-btn').off('click').on("click", function () {
+      $.ajax({
+        url: "/delete-reservation",
+        type: "POST",
+        data: {id: reserveId},
+        success: function (response) {
+          confirmModal.hide();
+          if (response.success) {
+            setTimeout(() => {
+              const successModal = new bootstrap.Modal($('#delete-success'));
+              successModal.show();
+
+              $('#delete-success .btn-success').off('click').on("click", function () {
+                location.reload();
+              });
+            }, 500);
+          } else {
+              const failModal = new bootstrap.Modal($('#delete-fail'));
+              failModal.show();
+          }
+        },
+        error: function (xhr, status, error) {
+          console.log(xhr.responseText);
+        }
+      })
+    });
+  });
+
 });

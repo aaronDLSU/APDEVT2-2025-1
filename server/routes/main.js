@@ -174,16 +174,16 @@ router.get('/reservation-list', async (req, res) => {
         const {building, lab, date} = req.query; //get filter query
 
         let filter = {};
-        console.log(building,lab, date);
+        //console.log(building,lab, date);
         const labId = await getLabId(building, lab); //call getlabId function to get the ObjectId of the lab
 
         if(labId || date){ //only apply filters if there are actual queries in the filter.
             filter = {lab: labId, date: new Date(date)};
         }
-        console.log(filter);
+        //console.log(filter);
         //select data based on filter (returns everything if there are no filters)
         const reservations = await Reservation.find(filter).populate('user lab').sort({date: 1}).lean();
-        console.log(reservations)
+        //console.log(reservations)
 
     res.render('reservation-list', {
         title: "Reservation List",
@@ -197,6 +197,27 @@ router.get('/reservation-list', async (req, res) => {
         res.status(500).send("Server Error");
     }
 });
+
+router.post('/delete-reservation', async (req, res) => {
+    try{
+        const {id} = req.body;
+        if (!id) {
+            return res.status(400).send("Reservation not found");
+        }
+        const selectedReserve = await Reservation.findById(id);
+        const ObjID = selectedReserve._id;
+        const deletedRes = await Reservation.findByIdAndDelete(ObjID);
+        console.log(deletedRes);
+
+        if(!deletedRes) {
+            return res.status(404).send("Reservation not found");
+        }
+        res.status(200).json({ success: true, message: "Reservation deleted successfully" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+})
 
 //signout
 router.post('/signout', (req, res) => {
