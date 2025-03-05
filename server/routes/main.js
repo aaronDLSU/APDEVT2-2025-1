@@ -233,8 +233,14 @@ router.post('/edit-reservation', async (req, res) => {
             return res.status(400).send("Reservation ID is required");
         }
         const reservation = await Reservation.findOne({ _id: id }).populate('user lab').lean();
+        console.log(reservation);
+
         if (!reservation) {
             return res.status(404).send("Reservation not found");
+        }
+        //if student tried to edit another user's reservation. have yet to test.
+        if(user.type === "student" && reservation.user.name !== user.name) {
+            return res.redirect('/profile')
         }
         console.log(id, reservation, user)
         res.render('edit-reservation', {
@@ -267,6 +273,9 @@ async function getLabId(buildName, labName) {
 router.get('/reservation-list', async (req, res) => {
     if (!user) {
         return res.redirect('/signup-login');
+    }
+    if(user.type === 'student'){
+        return res.redirect('/')
     }
 
     try {
