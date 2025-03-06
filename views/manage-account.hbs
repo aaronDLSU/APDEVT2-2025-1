@@ -82,6 +82,22 @@
                   </div>
                 </div>
               </div>
+
+            <div class="modal fade" id="wrong-pass" tabindex="-1" aria-labelledby="wrong-pass-label" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="wrong-pass-label">Wrong Password!</h5>
+                        </div>
+                        <div class="modal-body text-center">
+                            Please enter your old password correctly.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             </div>
 
           </form>
@@ -221,10 +237,12 @@
 <script>
     $(document).ready(function () {
         const pass_form = $('#pass-info');
+        const oldPass = $('#curr-password');
         const newPass = $('#new-password');
         const confirmPass = $('#confirm-password');
         const submitBtn = $('#submit-pass');
         const confirmModalSubmit = $('#confirm-btn');
+        const user = {{{json user}}};
 
         const deleteForm = $('#delete-acc-details');
         const submit = $('#submit-delete');
@@ -233,7 +251,7 @@
         const deleteYes = $('#delete-yes');
         const checkboxes = $(".reserve-checkbox");
 
-        function loadSettings() {
+        function loadSettings(){
             if (settings.accVisibility === "public") {
                 $('#public').prop('checked', true);
             } else {
@@ -332,18 +350,25 @@
 
         //change password modal from confirmation to success
         confirmModalSubmit.on("click", function () {
-            var confirmModal = bootstrap.Modal.getInstance($('#confirm-change')[0]);
+            const confirmModal = bootstrap.Modal.getInstance($('#confirm-change')[0]);
             confirmModal.hide();
+            console.log(user)
 
             setTimeout(() => {
-                var successModal = new bootstrap.Modal($('#change-success')[0]);
-                successModal.show();
+                if(oldPass.val() === user.password) {
+                    const successModal = new bootstrap.Modal($('#change-success')[0]);
+                    successModal.show();
 
-                pass_form[0].reset();
+                    pass_form[0].reset();
 
-                newPass.removeClass("is-valid is-invalid");
-                confirmPass.removeClass("is-valid is-invalid");
-                submitBtn.prop("disabled", true);
+                    newPass.removeClass("is-valid is-invalid");
+                    confirmPass.removeClass("is-valid is-invalid");
+                    submitBtn.prop("disabled", true);
+                }
+                else {
+                    const failedModal = new bootstrap.Modal($('#wrong-pass')[0]);
+                    failedModal.show();
+                }
             }, 500);
         });
 

@@ -8,7 +8,7 @@ const Lab = require("../../db/models/DB_labs");
 const Settings = require('../../db/models/DB_settings');
 
 // Sample user roles
-const student = { _id: "67c6e500b0ce105ba934bcf7", name: "Charlie Chaplin", type: "student", description: "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology. Passionate about coding and problem-solving, I am eager to explore new technologies and develop innovative solutions. Currently honing my skills in programming, web development, and algorithms, I aspire to contribute to impactful projects in the tech industry." };
+const student = { _id: "67c6e500b0ce105ba934bcf7", name: "Charlie Chaplin", password:"student", type: "student", description: "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology. Passionate about coding and problem-solving, I am eager to explore new technologies and develop innovative solutions. Currently honing my skills in programming, web development, and algorithms, I aspire to contribute to impactful projects in the tech industry." };
 const labtech = { name: "Sir", type: "labtech", description: "i am a lab technician" };
 let user = ''; // Stores the current logged-in user
 
@@ -263,7 +263,7 @@ router.post('/edit-reservation', async (req, res) => {
         if (!reservation) {
             return res.status(404).send("Reservation not found");
         }
-        //if student tried to edit another user's reservation. have yet to test.
+        //if student tries to edit another user's reservation. have yet to test.
         if(user.type === "student" && reservation.user.name !== user.name) {
             return res.redirect('/profile')
         }
@@ -332,7 +332,7 @@ router.get('/reservation-list', async (req, res) => {
         res.status(500).send("Server Error");
     }
 });
-
+//delete reservation function
 router.post('/delete-reservation', async (req, res) => {
     try {
         const { id } = req.body;
