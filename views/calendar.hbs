@@ -7,10 +7,12 @@
         <div class="container">
             <div class="left-selection-container">
                 <!-- Campus Section (Left Side) -->
-                <div class="role-dropdown">
+                <div class="campus-dropdown">
                     <label for="campus-bldg">Campus Bldg:</label>
-                    <select id="dropbtn" name="dropbtn" required class="dropbtn">
-
+                    <select id="dropbtn" name="campus-bldg" required class="dropbtn name">
+                        {{#each labs}}
+                            <option value="{{name}}">{{name}}</option>
+                        {{/each}}
                     </select>
                 </div>
 
