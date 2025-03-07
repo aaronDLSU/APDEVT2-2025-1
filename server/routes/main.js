@@ -8,7 +8,7 @@ const Lab = require("../../db/models/DB_labs");
 const Settings = require('../../db/models/DB_settings');
 
 // Sample user roles
-const student = { _id: "67c6e500b0ce105ba934bcf7", name: "Charlie Chaplin", password:"student", type: "student", description: "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology. Passionate about coding and problem-solving, I am eager to explore new technologies and develop innovative solutions. Currently honing my skills in programming, web development, and algorithms, I aspire to contribute to impactful projects in the tech industry." };
+const student = { _id: "67c6e500b0ce105ba934bcf7", name: "Charlie Chaplin", password: "student", type: "student", description: "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology. Passionate about coding and problem-solving, I am eager to explore new technologies and develop innovative solutions. Currently honing my skills in programming, web development, and algorithms, I aspire to contribute to impactful projects in the tech industry." };
 const labtech = { name: "Sir", type: "labtech", description: "i am a lab technician" };
 let user = ''; // Stores the current logged-in user
 
@@ -109,6 +109,33 @@ router.get('/profile', async (req, res) => {
 
         // Fetch user's reservations
         let reservations = [];
+        let weeklyReservationCount = 0;
+        let monthlyReservationCount = 0;
+        let totalApprovedCount = 0;
+        // Calculate current week and month for display
+        const today = new Date();
+
+        // Current week (Sunday-Saturday)
+        const startOfWeek = new Date(today);
+        startOfWeek.setDate(today.getDate() - today.getDay()); // Start of current week (Sunday)
+        startOfWeek.setHours(0, 0, 0, 0);
+
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6); // End of current week (Saturday)
+        endOfWeek.setHours(23, 59, 59, 999);
+
+        // Format week display
+        const currentWeekDisplay = `${startOfWeek.toLocaleDateString('en-US', { month: 'short' })} ${startOfWeek.getDate()}-${endOfWeek.getDate()}`;
+
+        // Current month
+        const currentMonthDisplay = today.toLocaleDateString('en-US', { month: 'long' });
+
+        // Start of current month
+        const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        // End of current month
+        const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        endOfMonth.setHours(23, 59, 59, 999);
+
         if (user._id || user.id) {
             try {
                 // Get user ID as string
@@ -134,6 +161,30 @@ router.get('/profile', async (req, res) => {
                 });
 
                 console.log(`Found ${userReservations.length} reservations for ${user.name}`);
+
+                const approvedReservations = userReservations.filter(
+                    reservation => reservation.status === "approved"
+                );
+
+                totalApprovedCount = approvedReservations.length;
+                console.log(`Total approved reservations: ${totalApprovedCount}`);
+
+                // Count approved reservations for current week and month
+                approvedReservations.forEach(reservation => {
+                    const reservationDate = new Date(reservation.date);
+                    const dayOfWeek = reservationDate.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+
+                    // Only count Monday-Saturday (exclude Sunday)
+                    if (dayOfWeek !== 0 && reservationDate >= startOfWeek && reservationDate <= endOfWeek) {
+                        weeklyReservationCount++;
+                    }
+
+                    if (reservationDate >= startOfMonth && reservationDate <= endOfMonth) {
+                        monthlyReservationCount++;
+                    }
+                });
+
+
 
                 // Assign sequential numbers based on original order
                 userReservations.forEach((reservation, index) => {
@@ -172,6 +223,12 @@ router.get('/profile', async (req, res) => {
             pageStyle: "profile",
             pageScripts: ["header-dropdowns"],
             user,
+            reservations,
+            weeklyReservationCount,
+            monthlyReservationCount,
+            totalApprovedCount,
+            currentWeekDisplay,
+            currentMonthDisplay,
             reservations,
             labtech: user.type === 'labtech',
             student: user.type === 'student',
@@ -212,7 +269,7 @@ router.get('/edit-profile', (req, res) => {
 
 // manage account Page
 router.get('/manage-account', async (req, res) => {
-    try{
+    try {
         if (!user) {
             return res.redirect('/signup-login');
         }
@@ -220,7 +277,7 @@ router.get('/manage-account', async (req, res) => {
 
         const objID = await User.findById(user._id);
         //console.log(objID)
-        const userSettings = await Settings.findOne({user: objID}).populate("user").lean();
+        const userSettings = await Settings.findOne({ user: objID }).populate("user").lean();
         console.log(userSettings)
         res.render('manage-account', {
             title: "Manage Account",
@@ -230,7 +287,7 @@ router.get('/manage-account', async (req, res) => {
             labtech: user.type === 'labtech',
             student: user.type === 'student'
         });
-    } catch(err) {
+    } catch (err) {
         console.error(err);
         res.status(500).send('Server Error');
     }
@@ -244,7 +301,7 @@ router.post('/change-privacy-settings', (req, res) => {
 
 })
 
-router.post('/delete-account', (req, res) => {})
+router.post('/delete-account', (req, res) => { })
 
 // Edit Reservation Page
 router.post('/edit-reservation', async (req, res) => {
@@ -264,7 +321,7 @@ router.post('/edit-reservation', async (req, res) => {
             return res.status(404).send("Reservation not found");
         }
         //if student tries to edit another user's reservation. have yet to test.
-        if(user.type === "student" && reservation.user.name !== user.name) {
+        if (user.type === "student" && reservation.user.name !== user.name) {
             return res.redirect('/profile')
         }
         console.log(id, reservation, user)
@@ -300,7 +357,7 @@ router.get('/reservation-list', async (req, res) => {
         if (!user) {
             return res.redirect('/signup-login');
         }
-        if(user.type === 'student'){
+        if (user.type === 'student') {
             return res.redirect('/')
         }
 
