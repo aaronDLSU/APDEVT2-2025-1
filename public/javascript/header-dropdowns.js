@@ -75,4 +75,25 @@ $(document).ready(function () {
     e.stopPropagation();
   });
 
+  async function searchUsers(query) {
+    try {
+        const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+        const data = await response.json();
+        
+        if (response.ok) {
+            console.log('Results:', data.data);
+            // Update your UI with results
+        } else {
+            console.error('API Error:', data.error);
+        }
+    } catch (error) {
+        console.error('Network error:', error);
+    }
+}
+
+async function handleSearch() {
+  const query = document.getElementById('searchInput').value;
+  await searchUsers(query);
+}
+
   });

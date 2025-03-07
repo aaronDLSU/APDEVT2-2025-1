@@ -12,12 +12,15 @@
         </div>
       </div>
 
-      <div class="middle-section">
-        <input class="search-bar" type="text" placeholder="Search" aria-label="Search">
-        <button class="search-button" aria-label="Search">
+
+      <form class="middle-section" action="/search_user">
+        <input class="search-bar" name="search-bar" type="text" placeholder="Search" aria-label="Search">
+        <button class="search-button" aria-label="Search" onclick="handleSearch()" type="submit">
           <i class="fa-solid fa-magnifying-glass"></i>
         </button>
-      </div>
+      </form>
+
+     
 
       {{#if student}}
          <div class="right-section">
@@ -174,5 +177,3 @@
     </div>
     <div class="overlay"></div>
   </div>
-
-

@@ -24,6 +24,65 @@ router.get('/', (req, res) => {
     });
 });
 
+router.get('/api/search', async (req, res) => {
+    try {
+        // Extract search term from query parameters
+        const searchUser = req.query["search-bar"];
+        console.log('Search User:', searchUser);
+
+        // Validate input
+        if (!searchUser || searchUser.trim() === '') {
+            return res.status(400).json({ 
+                error: "Invalid input",
+                message: "Search term cannot be empty"
+            });
+        }
+
+        // Search with case-insensitive partial matching
+        const results = await User.find({name: searchUser}).lean();
+
+        res.json({
+            success: true,
+            count: results.length,
+            data: results
+        });
+
+        console.log('Search results:', results);
+        
+
+    } catch (error) {
+        console.error('API Search error:', error);
+        res.status(500).json({
+            error: "Server error",
+            message: error.message
+        });
+
+    }
+
+});
+
+router.get('/search_user', async (req, res) => {
+    try {
+        // Extract search term from query parameters
+        const searchUser = req.query["search-bar"];
+        console.log('Search User:', searchUser);
+
+        // Validate input
+        if (!searchUser || searchUser.trim() === '') {
+            return res.status(400).send("Invalid Input");
+        }
+
+        // Search with case-insensitive partial matching
+        const users = await User.find({name: searchUser});
+
+        console.log('Search results:', users);
+        
+    } catch (error) {
+        console.error('Search error:', error);
+        res.status(500).send("Internal Server Error");
+    }
+
+});
 
 // Signup/Login Page
 router.get('/signup-login', (req, res) => {
