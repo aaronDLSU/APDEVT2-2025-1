@@ -25,6 +25,10 @@ $(document).ready(function() {
         clockContainer.innerHTML = now.toLocaleDateString() + " | " + now.toLocaleTimeString();
     }
 
+    function reserveRoom() {
+        console.log("Reserve Room button clicked!");
+    }
+    
     document.addEventListener("DOMContentLoaded", async function () {
     const dropdown = document.getElementById("dropbtn");
 
@@ -212,5 +216,6 @@ document.addEventListener("click", () => {
 
     generateCalendar();
     generateRoomList();
+    window.reserveRoom = reserveRoom;
     window.changeMonth = changeMonth;
 });
