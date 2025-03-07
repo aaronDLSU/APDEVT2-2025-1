@@ -12,10 +12,6 @@
            data-bs-toggle="pill" href="#priv-settings-tab" role="tab"
            aria-controls="priv-settings" aria-selected="false">Privacy Settings</a>
 
-        <a class="nav-link" id="notif-settings"
-           data-bs-toggle="pill" href="#notif-settings-tab" role="tab"
-           aria-controls="notif-settings" aria-selected="false">Notification Settings</a>
-
         <a class="nav-link" id="delete-acc"
            data-bs-toggle="pill" href="#delete-acc-tab" role="tab"
            aria-controls="delete-acc" aria-selected="false">Delete Account</a>
@@ -86,6 +82,22 @@
                   </div>
                 </div>
               </div>
+
+            <div class="modal fade" id="wrong-pass" tabindex="-1" aria-labelledby="wrong-pass-label" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="wrong-pass-label">Wrong Password!</h5>
+                        </div>
+                        <div class="modal-body text-center">
+                            Please enter your old password correctly.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             </div>
 
           </form>
@@ -169,56 +181,6 @@
         </div>
       </div>
 
-      <!-- notification settings tab -->
-      <div class="tab-pane fade" id="notif-settings-tab" role="tabpanel" aria-labelledby="notif-settings">
-        <div class="content">
-          <h5 class="mb-5 mt-4"><strong>Notification Settings</strong></h5>
-          <form id="notif-settings-form">
-            <!-- enable/disable notifs -->
-            <div class="form-check form-switch pb4" style="border-bottom: 2px solid #f3f3f3;">
-              <input class="form-check-input" type="checkbox" id="enable-notif" checked>
-              <label class="form-check-label mb-4" for="enable-notif">Enable Notifications</label>
-            </div>
-
-            <!-- notif preferences -->
-            <div class="pt-4 pb-4" style="border-bottom: 2px solid #f3f3f3;">
-              <label class="form-label mb-4"><b>Notification Preferences</b></label>
-              <div class="form-check form-switch">
-                <input class="form-check-input notif-checkbox" type="checkbox" id="notif-reminders">
-                <label class="form-check-label" for="email-notif">Get reminders for my upcoming reservations</label>
-              </div>
-
-              <div class="form-check form-switch">
-                <input class="form-check-input notif-checkbox" type="checkbox" id="notif-updates">
-                <label class="form-check-label" for="sms-notif">Receive lab updates and announcements</label>
-              </div>
-
-            </div>
-
-            <!-- notif methods -->
-            <div class="pt-4 pb-4" style="border-bottom: 2px solid #f3f3f3;">
-              <label class="form-label mb-4"><b>Notification Methods</b></label>
-
-              <div class="form-check form-switch">
-                <input class="form-check-input notif-checkbox" type="checkbox" id="email-notif">
-                <label class="form-check-label" for="email-notif">Receive notifications via Email</label>
-              </div>
-
-              <div class="form-check form-switch">
-                <input class="form-check-input notif-checkbox" type="checkbox" id="sms-notif">
-                <label class="form-check-label" for="sms-notif">Receive notifications via SMS</label>
-              </div>
-            </div>
-
-            <div class="d-flex justify-content-center mt-4">
-              <button type="button" class="btn btn-primary" id="change-notif"
-                      data-bs-toggle="modal" data-bs-target="#change-setting-success">Save Changes</button>
-            </div>
-          </form>
-
-        </div>
-      </div>
-
       <!-- delete account tab -->
       <div class="tab-pane fade" id="delete-acc-tab" role="tabpanel" aria-labelledby="delete-acc">
         <div class="content">
@@ -269,6 +231,173 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
+
+<script>
+    $(document).ready(function () {
+        const pass_form = $('#pass-info');
+        const oldPass = $('#curr-password');
+        const newPass = $('#new-password');
+        const confirmPass = $('#confirm-password');
+        const submitBtn = $('#submit-pass');
+        const confirmModalSubmit = $('#confirm-btn');
+        const user = {{{json user}}};
+
+        const deleteForm = $('#delete-acc-details');
+        const submit = $('#submit-delete');
+        const checkbox = $('#delete-acc-check');
+        const settings = {{{json userSettings}}};
+        const deleteYes = $('#delete-yes');
+        const checkboxes = $(".reserve-checkbox");
+
+        function loadSettings(){
+            if (settings.accVisibility === "public") {
+                $('#public').prop('checked', true);
+            } else {
+                $('#private').prop('checked', true);
+            }
+
+            if (settings.showStats) {
+                $('#show-stats').prop('checked', true);
+            } else {
+                $('#show-stats').prop('checked', false);
+            }
+
+            if (settings.showReserves) {
+                $('#show-reserves').prop('checked', true);
+
+                checkboxes.each(function () {
+                    $(this).prop('disabled', false);
+                });
+
+                if (settings.showBooked) {
+                    $('#show-booked').prop('checked', true);
+                } else $('#show-booked').prop('checked', false);
+                if (settings.showOngoing) {
+                    $('#show-ongoing').prop('checked', true);
+                } else $('#show-ongoing').prop('checked', false);
+                if (settings.showPrevious) {
+                    $('#show-previous').prop('checked', true);
+                } else $('#show-previous').prop('checked', false);
+            } else {
+                $('#show-reserves').prop('checked', false);
+                $('#show-booked').prop('checked', false);
+                $('#show-ongoing').prop('checked', false);
+                $('#show-previous').prop('checked', false);
+            }
+        }
+
+        $('#v-pills-tab a').on('click', function (e) {
+            e.preventDefault();
+
+            let thisID = $(this).attr('id');
+            console.log("Switching to tab:", thisID);
+            //switches tabs by deactivating & activating tabs
+            $('#v-pills-tab .nav-link').removeClass('active');
+            $(this).addClass('active');
+            new bootstrap.Tab(this).show();
+
+            //to reset the forms when switching tabs
+            $('#v-pills-tabContent form').each(function () {
+                if(thisID !== "priv-settings"){
+                    this.reset();
+                }
+                else{
+                    loadSettings();
+                }
+                $(this).removeClass('was-validated');
+            });
+            $('#v-pills-tabContent form .form-control').removeClass('is-invalid is-valid');
+        });
+
+        //button availability for Delete Account
+        function checkForm() {
+            let isFilled = true;
+            deleteForm.find('[required]').each(function () {
+                if ($(this).val().trim() === "") {
+                    isFilled = false;
+                }
+            });
+
+            submit.prop('disabled', !(isFilled && checkbox.prop('checked')));
+        }
+        checkForm();
+
+        deleteForm.on('input change', checkForm);
+
+        //validate password input
+        function validatePasswords() {
+            //new password must be at least 8 chars
+            if (newPass.val().length >= 8) {
+                newPass.removeClass("is-invalid").addClass("is-valid");
+            } else {
+                newPass.removeClass("is-valid").addClass("is-invalid");
+            }
+
+            //new pass and confirm pass must be the same
+            if (confirmPass.val() === newPass.val() && confirmPass.val().length >= 6) {
+                confirmPass.removeClass("is-invalid").addClass("is-valid");
+                submitBtn.prop("disabled", false);
+            } else {
+                confirmPass.removeClass("is-valid").addClass("is-invalid");
+                submitBtn.prop("disabled", true);
+            }
+        }
+
+        newPass.on("input", validatePasswords);
+        confirmPass.on("input", validatePasswords);
+
+        //change password modal from confirmation to success
+        confirmModalSubmit.on("click", function () {
+            const confirmModal = bootstrap.Modal.getInstance($('#confirm-change')[0]);
+            confirmModal.hide();
+            console.log(user)
+
+            setTimeout(() => {
+                if(oldPass.val() === user.password) {
+                    const successModal = new bootstrap.Modal($('#change-success')[0]);
+                    successModal.show();
+
+                    pass_form[0].reset();
+
+                    newPass.removeClass("is-valid is-invalid");
+                    confirmPass.removeClass("is-valid is-invalid");
+                    submitBtn.prop("disabled", true);
+                }
+                else {
+                    const failedModal = new bootstrap.Modal($('#wrong-pass')[0]);
+                    failedModal.show();
+                }
+            }, 500);
+        });
+
+        //this is to show "password changed successfully" modal
+        pass_form.on("submit", function (event) {
+            event.preventDefault();
+            return false;
+        });
+
+        //to not refresh page when submitting "yes" in account deletion
+        deleteForm.on("submit", function (event) {
+            event.preventDefault();
+            return false;
+        });
+
+        //redirects to home page upon deleting account
+        deleteYes.on("click", function () {
+            alert("Account deleted successfully.");
+            window.location.href = "signup-homepage.html";
+        });
+
+        //enable/disable checkboxes in privacy settings based on "show reservations" option
+        $("#show-reserves").on("change", function () {
+            checkboxes.each(function () {
+                if (!$('#show-reserves').prop("checked")) {
+                    $(this).prop("checked", false);
+                }
+                $(this).prop("disabled", !$('#show-reserves').prop("checked"));
+            });
+        });
+    });
+</script>

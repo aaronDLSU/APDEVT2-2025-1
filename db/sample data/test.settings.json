@@ -1,0 +1,70 @@
+[{
+  "_id": {
+    "$oid": "67c844b5670347785d585286"
+  },
+  "user": {
+    "$oid": "67c66192b0ce105ba934bc95"
+  },
+  "accountVisibility": "public",
+  "showStats": false,
+  "showReserves": false,
+  "showBooked": false,
+  "showOngoing": false,
+  "showPrevious": false
+},
+{
+  "_id": {
+    "$oid": "67c844fc670347785d585287"
+  },
+  "user": {
+    "$oid": "67c661b1b0ce105ba934bc96"
+  },
+  "accountVisibility": "public",
+  "showStats": false,
+  "showReserves": false,
+  "showBooked": false,
+  "showOngoing": false,
+  "showPrevious": false
+},
+{
+  "_id": {
+    "$oid": "67c84549670347785d585288"
+  },
+  "user": {
+    "$oid": "67c661c6b0ce105ba934bc97"
+  },
+  "accountVisibility": "public",
+  "showStats": false,
+  "showReserves": false,
+  "showBooked": false,
+  "showOngoing": false,
+  "showPrevious": false
+},
+{
+  "_id": {
+    "$oid": "67c84574670347785d585289"
+  },
+  "user": {
+    "$oid": "67c661feb0ce105ba934bc99"
+  },
+  "accountVisibility": "public",
+  "showStats": false,
+  "showReserves": false,
+  "showBooked": false,
+  "showOngoing": false,
+  "showPrevious": false
+},
+{
+  "_id": {
+    "$oid": "67c845a5670347785d58528a"
+  },
+  "user": {
+    "$oid": "67c6e500b0ce105ba934bcf7"
+  },
+  "accountVisibility": "private",
+  "showStats": true,
+  "showReserves": true,
+  "showBooked": true,
+  "showOngoing": false,
+  "showPrevious": false
+}]
