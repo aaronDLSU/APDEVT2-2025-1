@@ -74,8 +74,8 @@ $(document).ready(function() {
         }
 
         calendarGrid.appendChild(dateBox);
+        }
     }
-}
 
     function changeMonth(offset) {
         selectedMonth += offset;
@@ -121,6 +121,7 @@ $(document).ready(function() {
         }
     }
     
+    // Resets room selection when changing building
     document.getElementById("dropbtn").addEventListener("change", generateRoomList);
 
 
@@ -130,88 +131,91 @@ $(document).ready(function() {
         });
     });
 
+    
+
+    // Checks time and marks out passed time and reserved seats0
     function updateSeatAvailability() {
-    let now = new Date();
-    let currentHour = now.getHours();
-    let currentMinutes = now.getMinutes();
-    let currentDay = now.getDate();
-    let currentMonth = now.getMonth();
-    let currentYear = now.getFullYear();
+        let now = new Date();
+        let currentHour = now.getHours();
+        let currentMinutes = now.getMinutes();
+        let currentDay = now.getDate();
+        let currentMonth = now.getMonth();
+        let currentYear = now.getFullYear();
 
-    document.querySelectorAll(".available-table tbody tr").forEach((row) => {
-        document.querySelectorAll('.available-table td').forEach(cell => {
-            cell.addEventListener('click', () => {
-                cell.classList.toggle('highlight');
+        document.querySelectorAll(".available-table tbody tr").forEach((row) => {
+            document.querySelectorAll('.available-table td').forEach(cell => {
+                cell.addEventListener('click', () => {
+                    cell.classList.toggle('highlight');
+                });
             });
-        });
-        
-        row.querySelectorAll("td").forEach((cell, index) => {
-            let slotHour = 7 + Math.floor(index / 2); // Convert index to 24-hour format
-            let isFirstHalf = index % 2 === 0; // True if it's the first 30-min slot, False if second
+            
+            row.querySelectorAll("td").forEach((cell, index) => {
+                let slotHour = 7 + Math.floor(index / 2); // Convert index to 24-hour format
+                let isFirstHalf = index % 2 === 0; // True if it's the first 30-min slot, False if second
 
-            // Get selected date from the highlighted calendar date
-            let selectedDateElement = document.querySelector(".selected-date");
-            if (!selectedDateElement) return;
+                // Get selected date from the highlighted calendar date
+                let selectedDateElement = document.querySelector(".selected-date");
+                if (!selectedDateElement) return;
 
-            let selectedDate = parseInt(selectedDateElement.innerText);
-            let selectedMonthCheck = selectedMonth;
-            let selectedYearCheck = selectedYear;
+                let selectedDate = parseInt(selectedDateElement.innerText);
+                let selectedMonthCheck = selectedMonth;
+                let selectedYearCheck = selectedYear;
 
-            // Disable past hours for today only
-            if (
-                selectedDate === currentDay &&
-                selectedMonthCheck === currentMonth &&
-                selectedYearCheck === currentYear
-            ) {
-                if (slotHour < currentHour) {
-                    // If the full hour has passed, disable both slots
-                    cell.classList.add("past-hour");
-                    cell.style.pointerEvents = "none";
-                    cell.innerHTML = "X";
-                } else if (slotHour === currentHour) {
-                    // If it's the current hour, disable only the first half
-                    if (isFirstHalf && currentMinutes >= 30) {
+                // Disable past hours for today only
+                if (
+                    selectedDate === currentDay &&
+                    selectedMonthCheck === currentMonth &&
+                    selectedYearCheck === currentYear
+                ) {
+                    if (slotHour < currentHour) {
+                        // If the full hour has passed, disable both slots
                         cell.classList.add("past-hour");
                         cell.style.pointerEvents = "none";
                         cell.innerHTML = "X";
+                    } else if (slotHour === currentHour) {
+                        // If it's the current hour, disable only the first half
+                        if (isFirstHalf && currentMinutes >= 30) {
+                            cell.classList.add("past-hour");
+                            cell.style.pointerEvents = "none";
+                            cell.innerHTML = "X";
+                        }
                     }
+                } else {
+                    // Future time slots remain selectable
+                    cell.classList.remove("past-hour");
+                    cell.style.pointerEvents = "auto";
+                    if (!cell.classList.contains("highlight")) {
+                        cell.innerHTML = "";
+                    }                
                 }
-            } else {
-                // Future time slots remain selectable
-                cell.classList.remove("past-hour");
-                cell.style.pointerEvents = "auto";
-                if (!cell.classList.contains("highlight")) {
-                    cell.innerHTML = "";
-                }                
-            }
+            });
         });
-    });
-
-    // Temporary reserve room function
-    function reserveRoom() {
-        const roomList = document.getElementById('room-list').children;
-        if (roomList.length === 0) {
-            alert("No rooms available to reserve.");
-            return;
-        }
-
-        const roomNames = [...roomList].map(room => room.textContent);
-        const selectedRoom = prompt(`Select a room to reserve:\n${roomNames.join("\n")}`);
-
-        if (selectedRoom && roomNames.includes(selectedRoom)) {
-            alert(`Room "${selectedRoom}" has been reserved successfully!`);
-            // implement actual reservation logic here (updating a database or UI)
-        } else {
-            alert("Invalid room selection.");
-        }
     }
-}
+    
+        // Temporary reserve room function
+        function reserveRoom() {
+            const roomList = document.getElementById('room-list').children;
+            if (roomList.length === 0) {
+                alert("No rooms available to reserve.");
+                return;
+            }
+    
+            const roomNames = [...roomList].map(room => room.textContent);
+            const selectedRoom = prompt(`Select a room to reserve:\n${roomNames.join("\n")}`);
+    
+            if (selectedRoom && roomNames.includes(selectedRoom)) {
+                alert(`Room "${selectedRoom}" has been reserved successfully!`);
+                // implement actual reservation logic here (updating a database or UI)
+            } else {
+                alert("Invalid room selection.");
+            }
+        }
 
-// Call the function when a date is selected
-document.addEventListener("click", () => {
-    setTimeout(updateSeatAvailability, 100); // Delay to ensure the selected date is detected
-    window.scrollTo(window.scrollX, window.scrollY);
-});
+    // Call the function when a date is selected
+    document.addEventListener("click", () => {
+        setTimeout(updateSeatAvailability, 100); // Delay to ensure the selected date is detected
+        window.scrollTo(window.scrollX, window.scrollY);
+    });
 
     generateCalendar();
     generateRoomList();
