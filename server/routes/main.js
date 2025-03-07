@@ -8,8 +8,8 @@ const Lab = require("../../db/models/DB_labs");
 const Settings = require('../../db/models/DB_settings');
 
 // Sample user roles
-const student = { _id: "67c6e500b0ce105ba934bcf7", name: "Charlie Chaplin", password: "student", type: "student", description: "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology. Passionate about coding and problem-solving, I am eager to explore new technologies and develop innovative solutions. Currently honing my skills in programming, web development, and algorithms, I aspire to contribute to impactful projects in the tech industry." };
-const labtech = { name: "Sir", type: "labtech", description: "i am a lab technician" };
+const student = { _id: "67c6e500b0ce105ba934bcf7", name: "Charlie Chaplin", password: "student", type: "student", description: "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology. Passionate about coding and problem-solving, I am eager to explore new technologies and develop innovative solutions. Currently honing my skills in programming, web development, and algorithms, I aspire to contribute to impactful projects in the tech industry.", profilePic: "student" };
+const labtech = { name: "Sir", type: "labtech", description: "i am a lab technician", profilePic: "default_profilepic"};
 let user = ''; // Stores the current logged-in user
 
 // Homepage Route
@@ -401,6 +401,7 @@ router.get('/reservation-list', async (req, res) => {
             pageStyle: "labtech-reservation-list",
             pageScripts: ["header-dropdowns", "reservation-list"],
             reservations,
+            user,
             labtech: user.type === 'labtech',
             student: user.type === 'student'
         });

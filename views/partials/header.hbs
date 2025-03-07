@@ -21,14 +21,12 @@
 
       {{#if student}}
          <div class="right-section">
-            <i class="fa-solid fa-circle-user logged-in-i"></i>
+           <img class="logged-in-prof" src="images/{{user.profilePic}}.jpg">
         </div>
 
         <div id="check-profile">
           <div class="profile-pic-name-container">
-            <i class="fa-solid fa-circle-user" 
-              style=" font-size: 50px; 
-              margin-left: 20px;"></i>
+            <img class="profile-picture" src="images/{{user.profilePic}}.jpg">
             <p>{{user.name}}</p>
           </div>    
           
@@ -68,14 +66,12 @@
 
         {{else if labtech}}
           <div class="right-section">
-            <i class="fa-solid fa-circle-user logged-in-i"></i>
+             <img class="logged-in-prof" src="images/{{user.profilePic}}.jpg">
         </div>
 
         <div id="check-profile">
           <div class="profile-pic-name-container">
-            <i class="fa-solid fa-circle-user" 
-              style=" font-size: 50px; 
-              margin-left: 20px;"></i>
+            <img class="profile-picture" src="images/{{user.profilePic}}.jpg">
             <p>{{user.name}}</p>
           </div>    
           

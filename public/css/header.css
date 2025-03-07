@@ -123,10 +123,14 @@ body {
   margin-right: 10px;
 }
 
-.right-section .logged-in-i{
-  font-size: 34px;
+.logged-in-prof{
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
   cursor: pointer;
   margin-right: 10px;
+  object-fit: cover;
+  border: 2px solid black;
 }
 
 .right-section p{
@@ -376,4 +380,15 @@ body {
   position: fixed;
   overflow: hidden;
   width: 100%;
+}
+
+
+.profile-picture{
+  height: 50px;
+  width: 50px;
+  border-radius: 25px;
+  margin-left: 20px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid black
 }
