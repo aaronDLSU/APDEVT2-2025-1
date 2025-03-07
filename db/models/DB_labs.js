@@ -5,11 +5,6 @@ const LabSchema = new mongoose.Schema({
     building: { type: String, required: true, unique: true },
     capacity: { type: Number, required: true }, 
     availability: { type: Boolean, default: true }, 
-    status: { 
-        type: String, 
-        enum: ['available', 'booked', 'under_maintenance', 'closed'], 
-        default: 'available' 
-    },
     createdAt: { type: Date, default: Date.now }
 });
 

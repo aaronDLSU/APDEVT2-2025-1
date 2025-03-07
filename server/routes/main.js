@@ -73,29 +73,34 @@ router.post('/login', express.urlencoded({ extended: true }), (req, res) => {
     }
 });
 
-// Calendar Page (Lab Reservations)
+// Calendar Dropdown for Bldg names in calendar.js
 router.get('/calendar', async (req, res) => {
     try {
         const { name } = req.query; // Extracting 'name' from query parameters
-
         let query = {};
+
         if (name) {
-            query.name = name; // Filtering only if 'name' is provided
+            query.name = name; // Filter if name is provided
         }
-       const labs = await Lab.find(query).lean();;
-       console.log("Fetched labs:", labs);
 
+        const labs = await Lab.find(query).lean(); // Fetch labs
 
-    res.render('calendar', {
-        title: "Reserve your lab room!",
-        pageStyle: "calendar",
-        pageScripts: ["header-dropdowns", "calendar"], // Include scripts for calendar functionality
-        user,
-        labtech: user.type === 'labtech',
-        student: user.type === 'student',
-        labs
-    });
-    }catch (error) {
+        // Create a Map to ensure uniqueness based on building names
+        const uniqueLabs = Array.from(new Map(labs.map(lab => [lab.building, lab])).values());
+
+        console.log("Unique labs:", uniqueLabs);
+
+        res.render('calendar', {
+            title: "Reserve your lab room!",
+            pageStyle: "calendar",
+            pageScripts: ["header-dropdowns", "calendar"], // Include scripts for calendar functionality
+            user,
+            labtech: user.type === 'labtech',
+            student: user.type === 'student',
+            labs: uniqueLabs // Pass the unique lab objects
+        });
+
+    } catch (error) {
         console.error('Error fetching labs:', error);
         res.status(500).send("Internal Server Error");
     }
@@ -442,6 +447,16 @@ router.post('/signout', (req, res) => {
 // API Health Check (For debugging purposes)
 router.get('/health', (req, res) => {
     res.status(200).json({ status: 'Server is running!' });
+});
+
+// API route to fetch available labs rooms for calendar.js
+router.get("/api/labs", async (req, res) => {
+    try {
+        const labs = await Lab.find({ availability: true }); // Fetch only available labs
+        res.json(labs);
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching labs", error });
+    }
 });
 
 module.exports = router;

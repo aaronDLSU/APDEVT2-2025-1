@@ -82,25 +82,47 @@ $(document).ready(function() {
         generateCalendar();
     }
 
-    function generateRoomList() {
-    roomListContainer.innerHTML = "";
-    const roomAvailabilityHeader = document.getElementById("room-availability");
+    // Show available lab room from DB_labs
+    async function generateRoomList() {
+        try {
+            // Fetch lab rooms from MongoDB
+            const response = await fetch("/api/labs");
+            const labs = await response.json();
+    
+            // Get selected building from dropdown
+            const buildingDropdown = document.getElementById("dropbtn");
+            const selectedBuilding = buildingDropdown.value;
+    
+            // Clear previous room list
+            roomListContainer.innerHTML = "";
+            const roomAvailabilityHeader = document.getElementById("room-availability");
+    
+            // Filter labs based on selected building
+            const filteredLabs = labs.filter(lab => lab.building === selectedBuilding);
+    
+            // Populate UI with filtered rooms
+            filteredLabs.forEach(lab => {
+                let roomDiv = document.createElement("div");
+                roomDiv.className = "room-item";
+                roomDiv.innerText = lab.name;
+    
+                // Click event to highlight room and update availability text
+                roomDiv.addEventListener("click", function () {
+                    document.querySelectorAll(".room-item").forEach(r => r.classList.remove("selected-room"));
+                    this.classList.add("selected-room");
+    
+                    roomAvailabilityHeader.innerText = `Seat availability at ${lab.name}`;
+                });
+    
+                roomListContainer.appendChild(roomDiv);
+            });
+        } catch (error) {
+            console.error("Error fetching lab rooms:", error);
+        }
+    }
+    
+    document.getElementById("dropbtn").addEventListener("change", generateRoomList);
 
-    availableRooms.forEach(room => {
-        let roomDiv = document.createElement("div");
-        roomDiv.className = "room-item";
-        roomDiv.innerText = room;
-
-        roomDiv.addEventListener("click", function () {
-            document.querySelectorAll(".room-item").forEach(r => r.classList.remove("selected-room"));
-            this.classList.add("selected-room");
-
-            roomAvailabilityHeader.innerText = `Seat availability at ${room}`;
-        });
-
-        roomListContainer.appendChild(roomDiv);
-    });
-}
 
     document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('td').forEach(cell => {
