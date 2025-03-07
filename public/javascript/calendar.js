@@ -24,25 +24,6 @@ $(document).ready(function() {
         const now = new Date();
         clockContainer.innerHTML = now.toLocaleDateString() + " | " + now.toLocaleTimeString();
     }
-
-    document.addEventListener("DOMContentLoaded", async function () {
-    const dropdown = document.getElementById("dropbtn");
-
-    try {
-        const response = await fetch("/api/labs"); // Call API endpoint
-        const labs = await response.json();
-
-        // Populate dropdown with lab names
-        labs.forEach(lab => {
-            const option = document.createElement("option");
-            option.value = lab.name;
-            option.textContent = lab.name;
-            dropdown.appendChild(option);
-        });
-    } catch (error) {
-        console.error("Error loading lab names:", error);
-    }
-});
     
     setInterval(updateClock, 1000);
     updateClock();

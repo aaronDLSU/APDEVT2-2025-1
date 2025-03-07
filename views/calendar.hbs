@@ -10,9 +10,11 @@
                 <div class="campus-dropdown">
                     <label for="campus-bldg">Campus Bldg:</label>
                     <select id="dropbtn" name="campus-bldg" required class="dropbtn name">
-                        {{#each labs}}
-                            <option value="{{name}}">{{name}}</option>
-                        {{/each}}
+                        {{#if labs.length}} <!-- Check if labs array is not empty -->
+                            {{#each labs}}
+                                <option value="{{this.building}}">{{this.building}}</option>
+                            {{/each}}
+                        {{/if}}
                     </select>
                 </div>
 

@@ -74,15 +74,31 @@ router.post('/login', express.urlencoded({ extended: true }), (req, res) => {
 });
 
 // Calendar Page (Lab Reservations)
-router.get('/calendar', (req, res) => {
+router.get('/calendar', async (req, res) => {
+    try {
+        const { name } = req.query; // Extracting 'name' from query parameters
+
+        let query = {};
+        if (name) {
+            query.name = name; // Filtering only if 'name' is provided
+        }
+       const labs = await Lab.find(query).lean();;
+       console.log("Fetched labs:", labs);
+
+
     res.render('calendar', {
         title: "Reserve your lab room!",
         pageStyle: "calendar",
         pageScripts: ["header-dropdowns", "calendar"], // Include scripts for calendar functionality
         user,
         labtech: user.type === 'labtech',
-        student: user.type === 'student'
+        student: user.type === 'student',
+        labs
     });
+    }catch (error) {
+        console.error('Error fetching labs:', error);
+        res.status(500).send("Internal Server Error");
+    }
 });
 
 // Help & Support Page
