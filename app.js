@@ -1,3 +1,4 @@
+// app.js file
 // Load environment variables from .env file
 // .env is local file only and not uploaded in git
 require('dotenv').config();
@@ -10,6 +11,9 @@ const exphbs = require('express-handlebars');
 const connectDB = require('./db/models/connection');             // Import MongoDB connection (connection file)
 const mainRoutes = require('./server/routes/main');        // Import all routes (routes file)
 
+//DB
+const labRoutes = require("./server/routes/lab_routes");
+
 const app = express();
 
 // Connect to MongoDB
@@ -20,6 +24,9 @@ app.use(express.json());                          // use json
 app.use(express.urlencoded({ extended: true })); // files consist of more than strings
 app.use(express.static(path.join(__dirname, 'public'))); // Serve static files (CSS, JS, images)
 app.use(cors());                                //
+
+// Routes
+app.use("/labs", labRoutes); // Mount the lab routes
 
 // Set up Handlebars as the view engine
 const hbs = require('hbs');

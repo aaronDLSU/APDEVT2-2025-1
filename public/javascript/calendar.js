@@ -25,20 +25,25 @@ $(document).ready(function() {
         clockContainer.innerHTML = now.toLocaleDateString() + " | " + now.toLocaleTimeString();
     }
 
-    // Drop down event listener
-    document.addEventListener("DOMContentLoaded", function() {
-    fetch('/api/buildings')  // Calls the API route from `server/routes/buildings.js`
-        .then(response => response.json())
-        .then(buildings => {
-            const dropdown = document.getElementById('dropbtn');
-            
-            // Populate the dropdown with only building names
-            dropdown.innerHTML = buildings.map(building => 
-                `<option value="${building.name}">${building.name}</option>`
-            ).join('');
-        })
-        .catch(error => console.error('Error fetching buildings:', error));
-});
+    document.addEventListener("DOMContentLoaded", async function () {
+        const dropdown = document.getElementById("dropbtn");
+        console.log("📢 Lab Names Fetched from DB:");
+        labs.forEach(lab => console.log(lab.name));
+        try {
+            const response = await fetch("/api/labs"); // Call API endpoint
+            const labs = await response.json();
+    
+            // Populate dropdown with lab names
+            labs.forEach(lab => {
+                const option = document.createElement("option");
+                option.value = lab.name;
+                option.textContent = lab.name;
+                dropdown.appendChild(option);
+            });
+        } catch (error) {
+            console.error("Error loading lab names:", error);
+        }
+    });
     
     setInterval(updateClock, 1000);
     updateClock();
