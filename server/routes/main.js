@@ -8,8 +8,8 @@ const Lab = require("../../db/models/DB_labs");
 const Settings = require('../../db/models/DB_settings');
 
 // Sample user roles
-const student = { _id: "67c6e500b0ce105ba934bcf7", name: "Charlie Chaplin", password: "student", role: "student", description: "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology. Passionate about coding and problem-solving, I am eager to explore new technologies and develop innovative solutions. Currently honing my skills in programming, web development, and algorithms, I aspire to contribute to impactful projects in the tech industry.", profilePic: "student" };
-const labtech = { name: "Sir", role: "labtech", description: "i am a lab technician", profilePic: "default_profilepic"};
+const student = { username: "CChaplin", _id: "67c6e500b0ce105ba934bcf7", name: "Charlie Chaplin", password: "student", role: "student", description: "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology. Passionate about coding and problem-solving, I am eager to explore new technologies and develop innovative solutions. Currently honing my skills in programming, web development, and algorithms, I aspire to contribute to impactful projects in the tech industry.", profilePic: "student" };
+const labtech = { name: "Sir", role: "labtech", description: "i am a lab technician", profilePic: "default_profilepic" };
 let user = ''; // Stores the current logged-in user
 
 // Homepage Route
@@ -47,7 +47,7 @@ router.get('/api/users', async (req, res) => {
 router.get('/search_user', async (req, res) => {
     try {
         const searchTerm = req.query["search-bar"];
-        
+
         if (!searchTerm?.trim()) {
             return res.status(400).send('Invalid search term');
         }
@@ -60,7 +60,7 @@ router.get('/search_user', async (req, res) => {
 
         if (!users.length) {
             res.status(400).send(' user not found');
-        }else{
+        } else {
             return res.redirect(`/profile/${users[0]._id}`);
         }
 
@@ -74,16 +74,16 @@ router.get('/search_user', async (req, res) => {
 // Individual profile route
 router.get('/profile/:_id', async (req, res) => {
     try {
-        console.log(req.params._id  +'1');
+        console.log(req.params._id + '1');
         const otheruser = await User.findById(req.params._id).lean();
-            console.log(req.params._id  +'1');
-            if (!otheruser) {
-                return res.status(404).send('User not found');
-            }
+        console.log(req.params._id + '1');
+        if (!otheruser) {
+            return res.status(404).send('User not found');
+        }
 
-            console.log(otheruser);
+        console.log(otheruser);
 
-               // Fetch user's reservations
+        // Fetch user's reservations
         let reservations = [];
         let weeklyReservationCount = 0;
         let monthlyReservationCount = 0;
@@ -485,16 +485,86 @@ router.get('/profile', async (req, res) => {
     }
 });
 
-// edit profile Page
+// Edit profile Page
 router.get('/edit-profile', (req, res) => {
+    // Check if user is logged in
+    if (!user) {
+        return res.redirect('/signup-login');
+    }
+
     res.render('edit-profile', {
         title: "Edit Profile",
         pageStyle: "edit-profile",
         pageScripts: ["header-dropdowns"],
         user,
         labtech: user.role === 'labtech',
-        student: user.role === 'student'
+        student: user.role === 'student',
+        successMessage: req.query.success,
+        errorMessage: req.query.error
     });
+});
+
+// Update username route
+router.post('/update-username', async (req, res) => {
+    try {
+        if (!user) {
+            return res.redirect('/signup-login');
+        }
+
+        const { newUsername } = req.body;
+
+        if (!newUsername || newUsername.trim() === '') {
+            return res.redirect('/edit-profile?error=Username cannot be empty');
+        }
+
+        // Update the user's name in the session
+        user.username = newUsername;
+
+        // Redirect with success message
+        res.redirect('/edit-profile?success=Username updated successfully');
+    } catch (error) {
+        console.error('Error updating username:', error);
+        res.redirect('/edit-profile?error=Failed to update username');
+    }
+});
+
+// Update description route
+router.post('/update-description', async (req, res) => {
+    try {
+        if (!user) {
+            return res.redirect('/signup-login');
+        }
+
+        const { newDescription } = req.body;
+
+        if (!newDescription || newDescription.trim() === '') {
+            return res.redirect('/edit-profile?error=Description cannot be empty');
+        }
+
+        // Update the user's description in the session
+        user.description = newDescription;
+
+        // Redirect with success message
+        res.redirect('/edit-profile?success=Description updated successfully');
+    } catch (error) {
+        console.error('Error updating description:', error);
+        res.redirect('/edit-profile?error=Failed to update description');
+    }
+});
+
+// Placeholder route for profile picture update (without actual implementation)
+router.post('/update-profile-picture', (req, res) => {
+    try {
+        if (!user) {
+            return res.redirect('/signup-login');
+        }
+
+
+        res.redirect('/edit-profile?success=Profile picture updated successfully');
+    } catch (error) {
+        console.error('Error in profile picture update:', error);
+        res.redirect('/edit-profile?error=An error occurred');
+    }
 });
 
 // manage account Page

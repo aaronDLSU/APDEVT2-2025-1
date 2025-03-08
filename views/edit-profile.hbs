@@ -1,122 +1,136 @@
 <div class="content-section">
-    
-        <div class="d-flex flex-column w-50 container">
+    <div class="d-flex flex-column w-50 container">
+        <h1 class="p-3 pb-4">Edit profile</h1>
 
-            <h1 class="p-3 pb-4">Edit profile</h1>
+        <!-- Profile Picture Modal Button -->
+        <button id="button" type="button" class="btn left-align-text" data-bs-toggle="modal"
+            data-bs-target="#pictureModal">
+            <div class="d-flex justify-content-between">
+                <h4 class="p-2">Profile picture</h4>
+                <div class="d-flex align-items-center">
+                    {{#if user.profilePicture}}
+                    <img src="{{user.profilePicture}}" alt="Current profile picture" class="me-2"
+                        style="width: 30px; height: 30px; border-radius: 50%;">
+                    {{else}}
 
-            <!-- Picture modal  -->
-            <button id="button" type="button" class="btn left-align-text" data-bs-toggle="modal"
-                data-bs-target="#pictureModal">
-                <div class="d-flex justify-content-between">
-                    <h4 class="p-2">Profile picture</h4>
-                    <div id="icon-container" class="mt-1">
-                        <i id="icon" class="fa-solid fa-chevron-right"></i>
-                    </div>
+                    {{/if}}
+                    <i id="icon" class="fa-solid fa-chevron-right"></i>
                 </div>
-            </button>
+            </div>
+        </button>
 
-            <div class="modal fade" id="pictureModal" tabindex="-1" aria-labelledby="pictureModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Update profile picture</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
+        <!-- Picture Modal -->
+        <div class="modal fade" id="pictureModal" tabindex="-1" aria-labelledby="pictureModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Update profile picture</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="/update-profile-picture" method="POST" enctype="multipart/form-data">
                         <div class="modal-body">
                             <div class="container text-center">
                                 <div class="row">
                                     <div class="col">
-                                        <button type="button" class="btn btn-secondary">Attach</button>
+                                        <input type="file" name="profilePicture" id="profilePicture"
+                                            class="form-control">
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Update</button>
+                            <button type="submit" class="btn btn-primary">Update</button>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
-
-            <!-- Username modal  -->
-            <button id="button" type="button" class="btn left-align-text" data-bs-toggle="modal"
-                data-bs-target="#usernameModal">
-                <div class="d-flex justify-content-between">
-                    <h4 class="p-2">Username</h4>
-                    <div id="icon-container" class="mt-1">
-                        <i id="icon" class="fa-solid fa-chevron-right"></i>
-                    </div>
-                </div>
-            </button>
-
-            <div class="modal fade" id="usernameModal" tabindex="-1" aria-labelledby="usernameModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Update username</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form>
-                                <div class="mb-3">
-                                    <label for="recipient-name" class="col-form-label">New username:</label>
-                                    <input id="input-box" type="text" class="form-control" id="new-description">
-                                </div>
-                            </form>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Update</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-
-
-            <!-- Description modal  -->
-            <button id="button" type="button" class="btn left-align-text" data-bs-toggle="modal"
-                data-bs-target="#descriptionModal">
-                <div class="d-flex justify-content-between">
-                    <h4 class="p-2">About description</h4>
-                    <div id="icon-container" class="mt-1">
-                        <i id="icon" class="fa-solid fa-chevron-right"></i>
-                    </div>
-                </div>
-            </button>
-
-            <div class="modal fade" id="descriptionModal" tabindex="-1" aria-labelledby="descriptionModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Update description</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form>
-                                <div class="mb-3">
-                                    <label for="recipient-name" class="col-form-label">New description:</label>
-                                    <input id="input-box" type="text" class="form-control" id="new-description">
-                                </div>
-                            </form>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Update</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
-     
+
+        <!-- Username Modal Button -->
+        <button id="button" type="button" class="btn left-align-text" data-bs-toggle="modal"
+            data-bs-target="#usernameModal">
+            <div class="d-flex justify-content-between">
+                <h4 class="p-2">Username</h4>
+                <div class="d-flex align-items-center">
+                    <i id="icon" class="fa-solid fa-chevron-right"></i>
+                </div>
+            </div>
+        </button>
+
+        <!-- Username Modal -->
+        <div class="modal fade" id="usernameModal" tabindex="-1" aria-labelledby="usernameModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Update username</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="/update-username" method="POST">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="new-username" class="col-form-label">New username:</label>
+                                <input type="text" class="form-control" id="new-username" name="newUsername"
+                                    value="{{user.username}}">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Description Modal Button -->
+        <button id="button" type="button" class="btn left-align-text" data-bs-toggle="modal"
+            data-bs-target="#descriptionModal">
+            <div class="d-flex justify-content-between">
+                <h4 class="p-2">About description</h4>
+                <div class="d-flex align-items-center">
+                    <i id="icon" class="fa-solid fa-chevron-right"></i>
+                </div>
+            </div>
+        </button>
+
+        <!-- Description Modal -->
+        <div class="modal fade" id="descriptionModal" tabindex="-1" aria-labelledby="descriptionModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Update description</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="/update-description" method="POST">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="new-description" class="col-form-label">New description:</label>
+                                <textarea class="form-control" id="new-description" name="newDescription"
+                                    rows="5">{{user.description}}</textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {{#if successMessage}}
+        <div class="alert alert-success mt-3" role="alert">
+            {{successMessage}}
+        </div>
+        {{/if}}
+
+        {{#if errorMessage}}
+        <div class="alert alert-danger mt-3" role="alert">
+            {{errorMessage}}
+        </div>
+        {{/if}}
     </div>
+</div>
