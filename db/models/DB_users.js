@@ -17,25 +17,5 @@ const UserSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-async function getNextUserId() {
-    const result = await db.users.findOneAndUpdate(
-      { _id: "userId" },
-      { $inc: { sequence_value: 1 } },
-      { returnDocument: "after", upsert: true }
-    );
-    return result.value.sequence_value;
-  }
-
-UserSchema.pre('save', async function(next) {
-    if (!this.isNew) return next();
-    
-    try {
-      this.userId = await getNextUserId();
-      next();
-    } catch (err) {
-      next(err);
-    }
-  });  
-
 const User = mongoose.model('User', UserSchema);
 module.exports = User;

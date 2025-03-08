@@ -245,18 +245,18 @@ router.get('/signup-login', (req, res) => {
 
 
 // Handle User Signup
-router.post('/signup', async (req, res) => {
+router.post('/signup', (req, res) => {
 
     try {
         // Extract form data from request
         const { 'signup-email': email, 'signup-password': password, 'signup-role': role } = req.body;
 
         // Create new user in MongoDB
-        await User.create({
+        User.create({
             email: email,
             password: password,
             role: role
-        }).save();
+        });
         res.redirect('/signup-login'); // Redirect back to login page
     } catch (err) {
         console.error('Signup error:', err);
