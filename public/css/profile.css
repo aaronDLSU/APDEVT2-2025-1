@@ -58,9 +58,14 @@
 
 .align-prof-desc {
   display: flex;
-  align-items: center;
+  align-items:center;
   justify-content: center;
-  vertical-align: middle;
+  
+}
+
+.align-prof-desc .info-container{
+  width: 500px;
+  margin-left: 20px;
 }
 
 
