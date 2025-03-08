@@ -1,4 +1,159 @@
 <!-- Content Section -->
+{{#if otheruser}}
+<div class="main-content-spacing">
+
+    <div class="d-flex justify-content-around" id="profile-section">
+        <div class="w-50" id="profile-info-section">
+            <div class="d-flex gap-3 align-prof-desc">
+                <div id="profile-image">
+                    <img src="/images/{{otheruser.profilePic}}.jpg" alt="image" class="profile-image">
+                </div>
+
+                <div>
+                    <div class="pt-3" id="profile-info">
+                        <div class="h3">
+                            {{otheruser.name}}
+                        </div>
+                        <div class="h5">
+                            {{otheruser.role}}
+                        </div>
+                    </div>
+
+                    <div id="profile-description" style="text-align: justify; text-justify: inter-word;">
+                        {{otheruser.description}}
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!--Dashboard-->
+        <div class="pr-5" id="dashboard-section">
+            <div class="card" style="width: 70%; margin-left:60px;">
+                <div class="card-header">
+                    Reservations Summary
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <i class="fa-solid fa-calendar-week text-primary me-2"></i>
+                            <span class="h6 mb-0">Current Week ({{currentWeekDisplay}})</span>
+                        </div>
+                        <div>
+                            <span class="h4 m-0 badge bg-primary rounded-pill">{{weeklyReservationCount}}</span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <i class="fa-solid fa-calendar-days text-primary me-2"></i>
+                            <span class="h6 mb-0">Current Month ({{currentMonthDisplay}})</span>
+                        </div>
+                        <div>
+                            <span class="h4 m-0 badge bg-primary rounded-pill">{{monthlyReservationCount}}</span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="fa-solid fa-list-check text-primary me-2"></i>
+                            <span class="h6 mb-0">Total Reservations</span>
+                        </div>
+                        <div>
+                            <span class="h4 m-0 badge bg-primary rounded-pill">{{totalApprovedCount}}</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- My Reservations-->
+<div class="row-sm-2" style="margin-left:100px;">
+    <div id="reservations-title">
+        <div class="flex-row pt-4">
+            <div class="h2">
+                My Reservations
+            </div>
+            {{#if reservations.length}}
+            <div class="text-muted small">
+                Showing {{reservations.length}} reservation(s)
+            </div>
+            {{/if}}
+        </div>
+    </div>
+</div>
+
+<div class="row-sm-5">
+    <div id="reservation-section">
+        <div class="row row-cols-3">
+            {{#if reservations.length}}
+            {{#each reservations}}
+            <div class="col mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="badges-settings-section">
+                            <div class="d-flex justify-content-between">
+                                <div class="">
+                                    {{#if (eq this.status "approved")}}
+                                    <span class="badge rounded-pill bg-success mb-2">Approved</span>
+                                    {{else if (eq this.status "pending")}}
+                                    <span class="badge rounded-pill bg-warning text-dark mb-2">Pending</span>
+                                    {{else if (eq this.status "rejected")}}
+                                    <span class="badge rounded-pill bg-danger mb-2">Rejected</span>
+                                    {{else if (eq this.status "cancelled")}}
+                                    <span class="badge rounded-pill bg-secondary mb-2">Cancelled</span>
+                                    {{else}}
+                                    <span class="badge rounded-pill bg-dark mb-2">Completed</span>
+                                    {{/if}}
+                                </div>
+                                <div class="dropdown">
+                                    <button class="align-button btn" type="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false"> <i class="fa-solid fa-ellipsis"></i></button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <input type="hidden" name="id" value="{{this._id}}">
+                                            <button type="submit" class="dropdown-item">Edit</button>
+                                        </li>
+                                        <li><button class="dropdown-item cancel-reservation"
+                                                data-id="{{this._id}}">Cancel</button></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <h5 class="card-title">Reservation {{this.originalNumber}}</h5>
+
+                        <p class="card-text">{{#if this.lab}}{{this.lab.name}}, {{this.lab.building}}
+                            Building{{else}}Lab information unavailable{{/if}}</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">{{formatDate this.date}}</li>
+                        <li class="list-group-item">{{this.startTime}} - {{this.endTime}}</li>
+                        <li class="list-group-item">Seat {{this.seat}}</li>
+                    </ul>
+                </div>
+            </div>
+            {{/each}}
+            {{else}}
+            <div class="col-12 text-center py-5">
+                <div class="text-muted">
+                    <i class="fa-solid fa-calendar-xmark fa-3x mb-3"></i>
+                    <h4>No reservations found</h4>
+                    <p>You haven't made any reservations yet.</p>
+                    <a href="/calendar" class="btn btn-primary mt-2">Book a Reservation</a>
+                </div>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+</div>
+</div>
+
+
+{{else if user}}
 <div class="main-content-spacing">
 
     <div class="d-flex justify-content-around" id="profile-section">
@@ -14,7 +169,7 @@
                             {{user.name}}
                         </div>
                         <div class="h5">
-                            {{user.type}}
+                            {{user.role}}
                         </div>
                     </div>
 
@@ -150,3 +305,5 @@
     </div>
 </div>
 </div>
+
+{{/if}}

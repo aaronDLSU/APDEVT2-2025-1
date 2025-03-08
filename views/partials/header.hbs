@@ -13,7 +13,7 @@
       </div>
 
 
-      <form class="middle-section" action="/search_user">
+      <form class="middle-section" action="/search_user" method="GET">
         <input class="search-bar" name="search-bar" type="text" placeholder="Search" aria-label="Search">
         <button class="search-button" aria-label="Search" onclick="handleSearch()" type="submit">
           <i class="fa-solid fa-magnifying-glass"></i>
@@ -24,12 +24,12 @@
 
       {{#if student}}
          <div class="right-section">
-           <img class="logged-in-prof" src="images/{{user.profilePic}}.jpg">
+           <img class="logged-in-prof" src="/images/{{user.profilePic}}.jpg">
         </div>
 
         <div id="check-profile">
           <div class="profile-pic-name-container">
-            <img class="profile-picture" src="images/{{user.profilePic}}.jpg">
+            <img class="profile-picture" src="/images/{{user.profilePic}}.jpg">
             <p>{{user.name}}</p>
           </div>    
           
@@ -69,12 +69,12 @@
 
         {{else if labtech}}
           <div class="right-section">
-             <img class="logged-in-prof" src="images/{{user.profilePic}}.jpg">
+             <img class="logged-in-prof" src="/images/{{user.profilePic}}.jpg">
         </div>
 
         <div id="check-profile">
           <div class="profile-pic-name-container">
-            <img class="profile-picture" src="images/{{user.profilePic}}.jpg">
+            <img class="profile-picture" src="/images/{{user.profilePic}}.jpg">
             <p>{{user.name}}</p>
           </div>    
           

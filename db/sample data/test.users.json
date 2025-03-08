@@ -7,7 +7,7 @@
   "email": "juan.delacruz@dlsu.edu.ph",
   "password": "12345",
   "role": "student",
-  "profilePic": "/images/default_profilepic.jpg"
+  "profilePic": "default_profilepic"
 },
 {
   "_id": {
@@ -18,7 +18,7 @@
   "email": "john.torres@dlsu.edu.ph",
   "password": "12345",
   "role": "student",
-  "profilePic": "/images/default_profilepic.jpg"
+  "profilePic": "default_profilepic"
 },
 {
   "_id": {
@@ -29,7 +29,7 @@
   "email": "maria.sanchez@dlsu.edu.ph",
   "password": "12345",
   "role": "student",
-  "profilePic": "/images/default_profilepic.jpg"
+  "profilePic": "default_profilepic"
 },
 {
   "_id": {
@@ -40,7 +40,7 @@
   "email": "anna.garcia@dlsu.edu.ph",
   "password": "12345",
   "role": "student",
-  "profilePic": "/images/default_profilepic.jpg"
+  "profilePic": "default_profilepic"
 },
 {
   "_id": {
@@ -51,7 +51,7 @@
   "email": "thomas.sy@dlsu.edu.ph",
   "password": "12345",
   "role": "student",
-  "profilePic": "/images/default_profilepic.jpg"
+  "profilePic": "default_profilepic"
 },
 
 {
@@ -63,7 +63,8 @@
   "email": "student@dlsu.edu.ph",
   "password": "student",
   "role": "student",
-  "profilePic": "/images/default_profilepic.jpg"
+  "profilePic": "student",
+  "description": "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology. Passionate about coding and problem-solving, I am eager to explore new technologies and develop innovative solutions. Currently honing my skills in programming, web development, and algorithms, I aspire to contribute to impactful projects in the tech industry."
 }
 
 ]
