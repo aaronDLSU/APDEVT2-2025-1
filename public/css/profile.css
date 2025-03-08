@@ -4,6 +4,8 @@
   border-radius: 50%;
   border: 5px solid #2E3A59;
   mix-blend-mode: darken;
+  object-fit: cover;
+  /* Ensures image maintains aspect ratio */
 }
 
 .button-setting {
@@ -44,33 +46,130 @@
   display: flex;
   justify-content: space-between;
   gap: 20px;
+  flex-wrap: wrap;
+  /* Allow wrapping on smaller screens */
 }
 
 #profile-info-section {
   flex: 1;
   max-width: 60%;
+  min-width: 300px;
+  /* Prevents section from becoming too narrow */
 }
 
 #dashboard-section {
   flex: 1;
   max-width: 35%;
+  min-width: 250px;
+  /* Prevents dashboard from becoming too narrow */
 }
 
 .align-prof-desc {
   display: flex;
-  align-items:center;
-  justify-content: center;
-  
+  align-items: flex-start;
+  /* Changed from center to align at the top */
+  justify-content: flex-start;
+  /* Changed from center to align at the start */
 }
 
-.align-prof-desc .info-container{
+.align-prof-desc .info-container {
   width: 500px;
   margin-left: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
+/* New rule for profile info */
+#profile-info {
+  margin-bottom: 10px;
+}
+
+/* New rule for description container */
+#profile-description {
+  max-height: 200px;
+  /* Match height of profile image */
+  overflow-y: auto;
+  /* Enable scrolling for long descriptions */
+  padding-right: 10px;
+  /* Space for scrollbar */
+  margin-bottom: 10px;
+  text-align: justify;
+  text-justify: inter-word;
+  /* For Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}
+
+
+#profile-description::-webkit-scrollbar {
+  width: 5px;
+}
+
+#profile-description::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+#profile-description::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+#profile-description::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 
 #reservation-section {
   margin-left: 100px;
   margin-right: 20px;
   margin-bottom: 100px;
+}
+
+
+@media (max-width: 992px) {
+  #profile-section {
+    flex-direction: column;
+  }
+
+  #profile-info-section,
+  #dashboard-section {
+    max-width: 100%;
+  }
+
+  #dashboard-section .card {
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
+
+  .main-content-spacing {
+    margin-left: 40px;
+    margin-right: 20px;
+  }
+
+  #reservation-section {
+    margin-left: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .align-prof-desc {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .align-prof-desc .info-container {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 20px;
+  }
+
+  .profile-image {
+    width: 150px;
+    height: 150px;
+  }
+
+  #profile-description {
+    max-height: none;
+
+  }
 }
