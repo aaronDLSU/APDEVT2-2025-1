@@ -75,25 +75,58 @@ $(document).ready(function () {
     e.stopPropagation();
   });
 
-  async function searchUsers(query) {
-    try {
-        const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
-        const data = await response.json();
-        
-        if (response.ok) {
-            console.log('Results:', data.data);
-            // Update your UI with results
-        } else {
-            console.error('API Error:', data.error);
-        }
-    } catch (error) {
-        console.error('Network error:', error);
-    }
-}
+  const similarResultTemplate = document.getElementById("similar-result-template");
+  const similarResultContainer = document.getElementById("similar-result-container");
+  const searchUser = document.querySelector("[user-search]");
 
-async function handleSearch() {
-  const query = document.getElementById('searchInput').value;
-  await searchUsers(query);
-}
+  
+  let users = [];
 
+  searchUser.addEventListener("input", e => {
+    const value = e.target.value.toLowerCase();
+    const hasValue = value.length > 0;
+    
+    similarResultContainer.classList.toggle("show", hasValue)
+
+    users.forEach(user => {
+      const isVisible = user.name.toLowerCase().includes(value) || 
+                       user.email.toLowerCase().includes(value);
+      user.element.classList.toggle("hide", !isVisible);
+    });
+  });
+  console.log(users);
+
+
+  fetch("/api/users")
+    .then(res => res.json())
+    .then (data => {
+      users = data.data.map(user => {
+        const templateContent = similarResultTemplate.content;
+        const card = document.importNode(templateContent, true).firstElementChild;
+
+        const profilePic = card.querySelector("[data-prof-pic]");
+        const name = card.querySelector("[data-prof-name]");
+        const email = card.querySelector("[data-prof-email]");
+
+        const img = document.createElement("img");
+        img.src = `/images/${user.profilePic}.jpg`; 
+        img.alt = "Profile picture";
+        img.classList.add("profile-image");
+        img.onerror = () => {  // Handle broken images
+        img.src = '/images/default_profile.jpg';
+      };
+
+      card.addEventListener("click", () => {
+        // Navigate to the user's profile page using their user ID
+        window.location.href = `/profile/${user._id}`; // Assuming the profile URL is structured like this
+      });
+
+        profilePic.appendChild(img);
+
+        name.textContent = user.name;
+        email.textContent = user.email;
+        similarResultContainer.appendChild(card);
+        return {name: user.name , email: user.email, profilePic: profilePic, element: card}
+      });
+    });
   });

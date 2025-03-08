@@ -13,13 +13,28 @@
       </div>
 
 
-      <form class="middle-section" action="/search_user" method="GET">
-        <input class="search-bar" name="search-bar" type="text" placeholder="Search" aria-label="Search">
+ <form class="middle-section" action="/search_user" method="GET">
+        <input class="search-bar" name="search-bar" type="text" placeholder="Search" aria-label="Search" user-search>
         <button class="search-button" aria-label="Search" onclick="handleSearch()" type="submit">
           <i class="fa-solid fa-magnifying-glass"></i>
         </button>
       </form>
 
+ <div id="similar-result-container"></div>
+
+     
+
+    <template id="similar-result-template" >
+        <div class="similar-result">
+          <div class="profpic" data-prof-pic></div>
+          <div class="name-email">
+            <div class="name" data-prof-name></div>
+            <div class="email" data-prof-email></div>
+          </div>
+        </div>
+
+    </template>
+      
      
 
       {{#if student}}
