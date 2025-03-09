@@ -480,34 +480,95 @@ router.post("/api/reserveroom", async (req, res) => {
     try {
         const { lab, seat, date, startTime, endTime } = req.body;
 
-        // Hardcode user to 'default' (Replace with real user authentication later)
-        const userId = "67c6e500b0ce105ba934bcf7"; // Example user ID for testing
+        // Hardcoded user ID, To change after sessions implementation
+        const userId = "67c6e500b0ce105ba934bcf7";
 
+        // Validate required fields
         if (!lab || !seat || !date || !startTime || !endTime) {
             return res.status(400).json({ message: "All fields are required!" });
+        }
+
+        // Ensure seat is a valid number
+        const seatNumber = parseInt(seat, 10);
+        if (isNaN(seatNumber) || seatNumber <= 0) {
+            return res.status(400).json({ message: "Invalid seat number!" });
+        }
+
+        // Validate date format
+        const reservationDate = new Date(date);
+        if (isNaN(reservationDate.getTime())) {
+            return res.status(400).json({ message: "Invalid date format!" });
+        }
+
+        // Get current date & time
+        const now = new Date();
+        now.setSeconds(0, 0); // Ignore seconds/milliseconds for accuracy
+
+        // Convert start and end times to Date objects
+        const start = startTime.split(":").map(Number);
+        const end = endTime.split(":").map(Number);
+
+        const startTimeObj = new Date(reservationDate);
+        startTimeObj.setHours(start[0], start[1], 0, 0);
+
+        const endTimeObj = new Date(reservationDate);
+        endTimeObj.setHours(end[0], end[1], 0, 0);
+
+        // Prevent booking in the past
+        if (startTimeObj < now) {
+            return res.status(400).json({ message: "Cannot book past time slots!" });
+        }
+
+        // Ensure startTime is before endTime
+        if (startTimeObj >= endTimeObj) {
+            return res.status(400).json({ message: "End time must be after start time!" });
+        }
+
+        // Prevent Overlapping Reservations (Check if seat is already booked)
+        const existingReservation = await Reservation.findOne({
+            lab,
+            seat: seatNumber,
+            date: reservationDate,
+            $or: [
+                { 
+                    startTime: { $lt: endTime }, 
+                    endTime: { $gt: startTime } 
+                }
+            ]
+        });
+
+        if (existingReservation) {
+            return res.status(409).json({ 
+                message: `Seat ${seatNumber} is already reserved from ${existingReservation.startTime} to ${existingReservation.endTime}!` 
+            });
         }
 
         // Generate a unique reservation name
         const reservationName = `Reservation ${Date.now()}`;
 
+        // Create new reservation
         const newReservation = new Reservation({
             name: reservationName,
             user: userId,
             lab,
-            seat,
-            date,
+            seat: seatNumber,
+            date: reservationDate,
             startTime,
             endTime,
-            status: "approved" // Default status
+            status: "approved" // Default
         });
 
         await newReservation.save();
-        res.status(201).json({ message: "Reservation successful", reservation: newReservation });
+
+        res.status(201).json({ 
+            message: "Reservation successful", 
+            reservation: newReservation 
+        });
+
     } catch (error) {
         console.error("Error creating reservation:", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
-
 
 module.exports = router;

@@ -300,24 +300,95 @@ $(document).ready(function() {
     });
     
     
-        // Temporary reserve room function
-        function reserveRoom() {
-            const roomList = document.getElementById('room-list').children;
-            if (roomList.length === 0) {
-                alert("No rooms available to reserve.");
-                return;
-            }
+    // Temporary reserve room function
+    async function reserveRoom() {
+        // Hardcoded user ID for now, Replace after actual user session
+        const hardcodedUserId = "65f3b2c0e69bfc0012345678";  
     
-            const roomNames = [...roomList].map(room => room.textContent);
-            const selectedRoom = prompt(`Select a room to reserve:\n${roomNames.join("\n")}`);
-    
-            if (selectedRoom && roomNames.includes(selectedRoom)) {
-                alert(`Room "${selectedRoom}" has been reserved successfully!`);
-                // implement actual reservation logic here (updating a database or UI)
-            } else {
-                alert("Invalid room selection.");
-            }
+        // Get the selected lab room
+        const selectedRoom = document.querySelector(".selected-room");
+        if (!selectedRoom) {
+            alert("Please select a lab room first.");
+            return;
         }
+        
+        const labId = selectedRoom.dataset.roomId; // Lab room ID
+        const selectedLabName = selectedRoom.innerText;
+    
+        // Get the selected date
+        const selectedDateElement = document.querySelector(".selected-date");
+        if (!selectedDateElement) {
+            alert("Please select a date first.");
+            return;
+        }
+        
+        const selectedDate = selectedDateElement.innerText;
+        const reservationDate = `${selectedYear}-${(selectedMonth + 1).toString().padStart(2, "0")}-${selectedDate.padStart(2, "0")}`;
+    
+        // Get the selected seat number
+        const seatDropdown = document.getElementById("seat-selection");
+        const selectedSeat = seatDropdown.value;
+        if (!selectedSeat) {
+            alert("Please select a seat.");
+            return;
+        }
+    
+        // Get the selected start time
+        const startTimeDropdown = document.getElementById("start-time");
+        const selectedStartTime = startTimeDropdown.value;
+        if (!selectedStartTime) {
+            alert("Please select a start time.");
+            return;
+        }
+    
+        // Get the selected end time
+        const endTimeDropdown = document.getElementById("end-time");
+        const selectedEndTime = endTimeDropdown.value;
+        if (!selectedEndTime) {
+            alert("Please select an end time.");
+            return;
+        }
+    
+        // Construct the reservation object
+        const reservationData = {
+            name: `Reservation for ${selectedLabName}`,
+            user: hardcodedUserId,  // Temporarily hardcoded user
+            lab: labId,
+            seat: parseInt(selectedSeat, 10),
+            date: reservationDate,
+            startTime: selectedStartTime,
+            endTime: selectedEndTime,
+            status: "pending"  // Default status
+        };
+    
+        try {
+            // Send reservation to backend
+            const response = await fetch("/api/reserveroom", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(reservationData)
+            });
+    
+            if (!response.ok) {
+                throw new Error(`Reservation failed. Status: ${response.status}`);
+            }
+    
+            const result = await response.json();
+            alert(`Reservation successful! \n\nLab: ${selectedLabName}\nSeat: ${selectedSeat}\nDate: ${reservationDate}\nTime: ${selectedStartTime} - ${selectedEndTime}`);
+    
+            // Refresh seat availability after booking
+            updateSeatAvailability();
+        } catch (error) {
+            console.error("Error making reservation:", error);
+            alert("Error making reservation. Please try again.");
+        }
+    }
+    
+    // Assign function globally so it works with the button
+    window.reserveRoom = reserveRoom;
+    
 
     // Call the function when a date is selected
     document.addEventListener("click", () => {
