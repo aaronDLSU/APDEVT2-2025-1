@@ -74,20 +74,49 @@ router.get('/search_user', async (req, res) => {
 // Individual profile route
 router.get('/profile/:_id', async (req, res) => {
     try {
-        console.log(req.params._id + '1');
-        const otheruser = await User.findById(req.params._id).lean();
-        console.log(req.params._id + '1');
+        console.log("Looking up profile for ID:", req.params._id);
+
+        // Find the user by ID
+        let otheruser = await User.findById(req.params._id).lean();
+
         if (!otheruser) {
             return res.status(404).send('User not found');
         }
 
-        console.log(otheruser);
+        // Log the raw user data from database
+        console.log("Raw user data from database:", {
+            _id: otheruser._id,
+            name: otheruser.name,
+            username: otheruser.username,
+            role: otheruser.role,
+            profilePic: otheruser.profilePic,
+            description: otheruser.description
+        });
+
+        // Make a copy to avoid modifying the original
+        otheruser = { ...otheruser };
+
+
+        // Ensure description exists
+        if (!otheruser.description) {
+            otheruser.description = "No description available.";
+        }
+
+        // Log the processed user data
+        console.log("Processed user data:", {
+            id: otheruser._id,
+            name: otheruser.name,
+            role: otheruser.role,
+            profilePic: otheruser.profilePic,
+            description: otheruser.description
+        });
 
         // Fetch user's reservations
         let reservations = [];
         let weeklyReservationCount = 0;
         let monthlyReservationCount = 0;
         let totalApprovedCount = 0;
+
         // Calculate current week and month for display
         const today = new Date();
 
@@ -112,10 +141,10 @@ router.get('/profile/:_id', async (req, res) => {
         const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
         endOfMonth.setHours(23, 59, 59, 999);
 
-        if (otheruser._id || otheruser.id) {
+        if (otheruser._id) {
             try {
                 // Get user ID as string
-                const userIdString = otheruser._id || otheruser.id;
+                const userIdString = otheruser._id.toString();
                 console.log("Looking for reservations with user ID:", userIdString);
 
                 // Get all reservations
@@ -160,8 +189,6 @@ router.get('/profile/:_id', async (req, res) => {
                     }
                 });
 
-
-
                 // Assign sequential numbers based on original order
                 userReservations.forEach((reservation, index) => {
                     reservation.originalNumber = index + 1; // Start from 1
@@ -185,7 +212,7 @@ router.get('/profile/:_id', async (req, res) => {
                         return priorityA - priorityB;
                     }
 
-                    // If same status, sort by date (earliest first)
+                    // If same status, sort by date (newest first)
                     return new Date(b.date) - new Date(a.date);
                 });
 
@@ -195,19 +222,19 @@ router.get('/profile/:_id', async (req, res) => {
         }
 
         res.render('profile', {
-            title: "Profile Page",
+            title: `${otheruser.name}'s Profile`,
             pageStyle: "profile",
             pageScripts: ["header-dropdowns"],
-            user,
-            otheruser,
+            user, // Current logged in user
+            otheruser, // The user being viewed (with processed data)
             reservations,
             weeklyReservationCount,
             monthlyReservationCount,
             totalApprovedCount,
             currentWeekDisplay,
             currentMonthDisplay,
-            labtech: user.role === 'labtech',
-            student: user.role === 'student',
+            labtech: user && user.role === 'labtech',
+            student: user && user.role === 'student',
             helpers: {
                 formatDate: function (date) {
                     return new Date(date).toLocaleDateString('en-US', {
@@ -222,6 +249,10 @@ router.get('/profile/:_id', async (req, res) => {
                 },
                 add: function (a, b) {
                     return parseInt(a) + parseInt(b);
+                },
+                includes: function (str, substr) {
+                    if (typeof str !== 'string') return false;
+                    return str.includes(substr);
                 }
             }
         });
@@ -231,7 +262,6 @@ router.get('/profile/:_id', async (req, res) => {
         res.status(500).send('Internal server error');
     }
 });
-
 
 // Signup/Login Page
 router.get('/signup-login', (req, res) => {
