@@ -5,6 +5,7 @@
   border: 5px solid #2E3A59;
   mix-blend-mode: darken;
   object-fit: cover;
+  margin-right: 20px;
   /* Ensures image maintains aspect ratio */
 }
 
@@ -45,7 +46,6 @@
 #profile-section {
   display: flex;
   justify-content: space-between;
-  gap: 20px;
   flex-wrap: wrap;
   /* Allow wrapping on smaller screens */
 }
@@ -58,10 +58,12 @@
 }
 
 #dashboard-section {
-  flex: 1;
-  max-width: 35%;
-  min-width: 250px;
-  /* Prevents dashboard from becoming too narrow */
+  flex:1;
+}
+
+#dashboard-section .card {
+  position: relative;
+  right: 0; /* Move 20px left relative to its normal position */
 }
 
 .align-prof-desc {
@@ -77,6 +79,7 @@
   margin-left: 20px;
   display: flex;
   flex-direction: column;
+  min-height: 0;
 }
 
 /* New rule for profile info */
@@ -98,6 +101,7 @@
   /* For Firefox */
   scrollbar-width: thin;
   scrollbar-color: #888 #f1f1f1;
+  min-height: 0;
 }
 
 
@@ -125,8 +129,15 @@
   margin-bottom: 100px;
 }
 
+#profile-info-section{
+  margin-right: -150px;
+}
 
 @media (max-width: 992px) {
+  body{
+    margin-left: 70px;
+  }
+
   #profile-section {
     flex-direction: column;
   }
@@ -139,6 +150,7 @@
   #dashboard-section .card {
     width: 100% !important;
     margin-left: 0 !important;
+    margin-top: 30px;
   }
 
   .main-content-spacing {
@@ -149,27 +161,45 @@
   #reservation-section {
     margin-left: 40px;
   }
+
+  #profile-description {
+    width: 420px;
+  }
 }
 
 @media (max-width: 768px) {
+
+  #profile-info-section {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center;    /* Horizontally center the elements */
+    justify-content: center;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   .align-prof-desc {
     flex-direction: column;
     align-items: center;
+    justify-content: center;
   }
 
   .align-prof-desc .info-container {
     width: 100%;
     margin-left: 0;
     margin-top: 20px;
+    text-align: center;
   }
 
   .profile-image {
     width: 150px;
     height: 150px;
+    margin: 0;
   }
 
   #profile-description {
     max-height: none;
-
   }
+
 }
