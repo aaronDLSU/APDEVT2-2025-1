@@ -67,7 +67,7 @@
 }
 
 .instructions-number{
-  margin-bottom: 22px;
+  margin-bottom: 20px;
   position: relative;
   z-index: 100;
   color: white;
@@ -77,6 +77,10 @@
 @media (min-width: 768px) {
   .feature-item {
     padding: 60px; /* Larger padding for bigger screens */
+  }
+
+  .instructions-number{
+    margin-bottom: 18px;
   }
 }
 
@@ -118,6 +122,10 @@
   .feature-item {
     padding: 20px; 
   }
+
+  .instructions-number{
+    margin-bottom: 18px;
+  }
 }
 
 @media (max-width: 666px) {
@@ -149,5 +157,9 @@
   .welcome {
     font-size: 36px; 
     padding: 6px;
+  }
+
+  .instructions-number{
+    margin-bottom: 16px;
   }
 }

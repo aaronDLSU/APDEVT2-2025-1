@@ -106,8 +106,6 @@ $(document).ready(function () {
     }
   });
 
-
-
   fetch("/api/users")
     .then(res => res.json())
     .then (data => {
