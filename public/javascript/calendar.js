@@ -315,6 +315,95 @@ $(document).ready(function() {
         window.scrollTo(window.scrollX, window.scrollY);
     });
 
+    function populateReservationDropdowns() {
+        const seatDropdown = document.getElementById("seat-selection");
+        const startTimeDropdown = document.getElementById("start-time");
+        const endTimeDropdown = document.getElementById("end-time");
+    
+        if (!seatDropdown || !startTimeDropdown || !endTimeDropdown) return;
+    
+        // Save the currently selected values
+        const previousSeat = seatDropdown.value;
+        const previousStartTime = startTimeDropdown.value;
+        const previousEndTime = endTimeDropdown.value;
+    
+        // Clear existing dropdown options
+        seatDropdown.innerHTML = "";
+        startTimeDropdown.innerHTML = "";
+        endTimeDropdown.innerHTML = "";
+    
+        // Get selected room
+        const selectedRoom = document.querySelector(".selected-room");
+        if (!selectedRoom) return;
+    
+        let seatCapacity = parseInt(selectedRoom.dataset.capacity, 10);
+    
+        // Populate seat dropdown
+        for (let i = 1; i <= seatCapacity; i++) {
+            let option = document.createElement("option");
+            option.value = i;
+            option.textContent = `Seat ${i}`;
+            seatDropdown.appendChild(option);
+        }
+    
+        // Restore previous seat selection if still valid
+        if (seatDropdown.querySelector(`option[value="${previousSeat}"]`)) {
+            seatDropdown.value = previousSeat;
+        }
+    
+        // Generate time slots (7:00 AM - 6:00 PM)
+        const startHour = 7;
+        const endHour = 18;
+        const timeSlots = [];
+    
+        for (let hour = startHour; hour < endHour; hour++) {
+            timeSlots.push(`${hour}:00`, `${hour}:30`);
+        }
+    
+        // Populate start time dropdown
+        timeSlots.forEach(time => {
+            let option = document.createElement("option");
+            option.value = time;
+            option.textContent = time;
+            startTimeDropdown.appendChild(option);
+        });
+    
+        // Restore previous start time selection if still valid
+        if (startTimeDropdown.querySelector(`option[value="${previousStartTime}"]`)) {
+            startTimeDropdown.value = previousStartTime;
+        }
+    
+        // Function to populate end time dropdown dynamically
+        function updateEndTimeOptions() {
+            endTimeDropdown.innerHTML = "";
+            let selectedIndex = startTimeDropdown.selectedIndex;
+    
+            for (let i = selectedIndex + 1; i < timeSlots.length; i++) {
+                let option = document.createElement("option");
+                option.value = timeSlots[i];
+                option.textContent = timeSlots[i];
+                endTimeDropdown.appendChild(option);
+            }
+    
+            // Restore previous end time selection if still valid
+            if (endTimeDropdown.querySelector(`option[value="${previousEndTime}"]`)) {
+                endTimeDropdown.value = previousEndTime;
+            }
+        }
+    
+        // Update end time dropdown when start time changes
+        startTimeDropdown.addEventListener("change", updateEndTimeOptions);
+    
+        // Initialize end time options
+        updateEndTimeOptions();
+    }
+    
+    
+    // Call function when a room is selected
+    document.addEventListener("click", () => {
+        setTimeout(populateReservationDropdowns, 100);
+    });
+    
     
     generateCalendar();
     generateRoomList();
