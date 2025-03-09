@@ -78,23 +78,34 @@ $(document).ready(function () {
   const similarResultTemplate = document.getElementById("similar-result-template");
   const similarResultContainer = document.getElementById("similar-result-container");
   const searchUser = document.querySelector("[user-search]");
-
+  const noSimilarResult = document.getElementById("no-similar-result");
   
   let users = [];
 
   searchUser.addEventListener("input", e => {
     const value = e.target.value.toLowerCase();
     const hasValue = value.length > 0;
-    
-    similarResultContainer.classList.toggle("show", hasValue)
+    similarResultContainer.classList.toggle("show", hasValue);
+
+    let visibleUsers = 0;
 
     users.forEach(user => {
       const isVisible = user.name.toLowerCase().includes(value) || 
                        user.email.toLowerCase().includes(value);
+      console.log(`User: ${user.name}, Match: ${isVisible}`);
       user.element.classList.toggle("hide", !isVisible);
+
+      if (isVisible) {
+        visibleUsers++;
+      }
     });
+    if (visibleUsers === 0 && hasValue) {
+      noSimilarResult.classList.add("show");
+    } else {
+      noSimilarResult.classList.remove("show");
+    }
   });
-  console.log(users);
+
 
 
   fetch("/api/users")

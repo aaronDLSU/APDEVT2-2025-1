@@ -443,3 +443,23 @@ body {
   border: 1px solid black;
   margin: 10px 20px;
 }
+
+.noshow{
+  display: none;
+  opacity:0; 
+  visibility: hidden;
+  justify-content: center;
+  align-items: center;
+  position: absolute;        /* Position it relative to the nearest positioned ancestor */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+}
+
+.show{
+  display: flex;
+  opacity:1; 
+  visibility: visible;
+}
