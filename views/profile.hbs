@@ -6,7 +6,7 @@
         <div class="w-50" id="profile-info-section">
             <div class="d-flex gap-3 align-prof-desc">
                 <div id="profile-image">
-                    <img src="{{otheruser.profilePic}}" alt="image" class="profile-image">
+                    <img src="/images/{{otheruser.profilePic}}.jpg" alt="image" class="profile-image">
                 </div>
 
                 <div class="info-container" style="margin-left:0;">
@@ -74,7 +74,7 @@
     <div id="reservations-title">
         <div class="flex-row pt-4">
             <div class="h2">
-                My Reservations
+                Reservations
             </div>
             {{#if reservations.length}}
             <div class="text-muted small">
@@ -108,18 +108,6 @@
                                     <span class="badge rounded-pill bg-dark mb-2">Completed</span>
                                     {{/if}}
                                 </div>
-                                <div class="dropdown">
-                                    <button class="align-button btn" type="button" data-bs-toggle="dropdown"
-                                        aria-expanded="false"> <i class="fa-solid fa-ellipsis"></i></button>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <input type="hidden" name="id" value="{{this._id}}">
-                                            <button type="submit" class="dropdown-item">Edit</button>
-                                        </li>
-                                        <li><button class="dropdown-item cancel-reservation"
-                                                data-id="{{this._id}}">Cancel</button></li>
-                                    </ul>
-                                </div>
                             </div>
                         </div>
 
@@ -142,8 +130,6 @@
                 <div class="text-muted">
                     <i class="fa-solid fa-calendar-xmark fa-3x mb-3"></i>
                     <h4>No reservations found</h4>
-                    <p>You haven't made any reservations yet.</p>
-
                 </div>
             </div>
             {{/if}}
