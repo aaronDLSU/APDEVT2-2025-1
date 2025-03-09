@@ -475,4 +475,39 @@ router.get("/api/reservations", async (req, res) => {
     }
 });
 
+// Handles Reservations for calendar.js
+router.post("/api/reserveroom", async (req, res) => {
+    try {
+        const { lab, seat, date, startTime, endTime } = req.body;
+
+        // Hardcode user to 'default' (Replace with real user authentication later)
+        const userId = "67c6e500b0ce105ba934bcf7"; // Example user ID for testing
+
+        if (!lab || !seat || !date || !startTime || !endTime) {
+            return res.status(400).json({ message: "All fields are required!" });
+        }
+
+        // Generate a unique reservation name
+        const reservationName = `Reservation ${Date.now()}`;
+
+        const newReservation = new Reservation({
+            name: reservationName,
+            user: userId,
+            lab,
+            seat,
+            date,
+            startTime,
+            endTime,
+            status: "approved" // Default status
+        });
+
+        await newReservation.save();
+        res.status(201).json({ message: "Reservation successful", reservation: newReservation });
+    } catch (error) {
+        console.error("Error creating reservation:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+
 module.exports = router;

@@ -66,11 +66,21 @@ $(document).ready(function() {
         }
     }
 
-    function changeMonth(offset) {
-        selectedMonth += offset;
-        generateCalendar();
+    window.changeMonth = function(offset) {
+    selectedMonth += offset;
+
+    if (selectedMonth < 0) {
+        selectedMonth = 11;
+        selectedYear--;
+    } else if (selectedMonth > 11) {
+        selectedMonth = 0;
+        selectedYear++;
     }
 
+    generateCalendar();
+};
+
+    
     function generateSeatGrid(capacity) {
         const seatTableBody = document.querySelector(".seats-table tbody");
         seatTableBody.innerHTML = ""; // Clear previous seats
