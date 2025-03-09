@@ -56,4 +56,4 @@ app.use('/', mainRoutes); // routes moved to `routes/main.js`
 // Start Server
 const PORT = process.env.PORT || 3000;
                                     // Just for colored text in console log
-app.listen(PORT, () => console.log(`\x1b[34mapp.js\x1b[0m : Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`\x1b[34mapp.js\x1b[0m : Server running on port localhost:${PORT}`));
