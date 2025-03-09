@@ -23,6 +23,7 @@
 /* Main Container , Top Middle Box enclosing calendar*/
 .container {
     display: flex;
+    flex-wrap: wrap;
     gap: 25px;
     background: white;
     padding: 30px 0px;
@@ -260,7 +261,7 @@
     overflow-x: auto;
 }
 
-/* Seat Selection */
+/* Seat Selection Starts here*/
 .seat {
     width: 80px;
     height: 80px;
@@ -288,13 +289,13 @@
     transform: scale(1.05);
 }
 
-.seat.reserved {
+.reserved-hour {
     background: #ff6b6b;
     color: white;
     cursor: not-allowed;
     text-decoration: line-through;
 }
-
+/*Seat styling ends here*/
 
 
 /* Selected Date Style */
@@ -360,3 +361,57 @@
     background-color: green;
 }
 /*Reserve Button Styling End*/
+
+.seating-reservation-wrapper {
+    display: flex;
+    flex-wrap: wrap; /* Ensures it doesn’t push elements outside */
+    gap: 20px; /* Space between seating and time selection */
+    align-items: flex-start;
+    justify-content: center;
+    max-width: 100%; /* Prevents overflow */
+    margin-bottom: 20px; /* Adds spacing so it doesn’t interfere with the footer */
+}
+
+
+.reserve-time-container {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    min-width: 200px;
+    text-align: center;
+}
+
+.reserve-time-container h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.reserve-time-container label {
+    font-size: 16px;
+    font-weight: bold;
+    display: block;
+    margin: 10px 0 5px;
+}
+
+.time-dropdown {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background: #f7f7f7;
+    cursor: pointer;
+}
+
+/* Footer Fix */
+footer {
+    width: 100%;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    position: relative;
+    bottom: 0;
+    left: 0;
+}

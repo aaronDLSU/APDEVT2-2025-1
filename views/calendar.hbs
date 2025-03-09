@@ -51,7 +51,9 @@
         <div class="label">
             <h2 id="room-availability">Seat availability at Lab Room: </h2>
         </div>
-    
+
+        <div class="seating-reservation-wrapper">
+        <!-- Seating Section -->
         <div class="seating-container">
             <div class="seats">
                 <table class="seats-table">
@@ -65,7 +67,7 @@
                     </tbody>
                 </table>
             </div>
-    
+
             <div class="seat-availability-container">
                 <table class="available-table">
                     <thead>
@@ -82,6 +84,19 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+
+        <!-- Reserve Time Section (Now inside .seating-reservation-wrapper) -->
+        <div class="reserve-time-container">
+            <h3>Reservation Details</h3>
+            <label for="seat-selection">Seat Number: </label>
+            <select id="seat-selection" class="time-dropdown"></select>
+
+            <label for="start-time">Start Time:</label>
+            <select id="start-time" class="time-dropdown"></select>
+
+            <label for="end-time">End Time:</label>
+            <select id="end-time" class="time-dropdown"></select>
         </div>
     </div>
 

@@ -8,8 +8,8 @@ const Lab = require("../../db/models/DB_labs");
 const Settings = require('../../db/models/DB_settings');
 
 // Sample user roles
-const student = { username: "CChaplin", _id: "67c6e500b0ce105ba934bcf7", name: "Charlie Chaplin", password: "student", role: "student", description: "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology. Passionate about coding and problem-solving, I am eager to explore new technologies and develop innovative solutions. Currently honing my skills in programming, web development, and algorithms, I aspire to contribute to impactful projects in the tech industry.", profilePic: "student" };
-const labtech = { name: "Sir", role: "labtech", description: "i am a lab technician", profilePic: "default_profilepic" };
+const student = { _id: "67c6e500b0ce105ba934bcf7", name: "Charlie Chaplin", password: "student", type: "student", description: "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology. Passionate about coding and problem-solving, I am eager to explore new technologies and develop innovative solutions. Currently honing my skills in programming, web development, and algorithms, I aspire to contribute to impactful projects in the tech industry." };
+const labtech = { name: "Sir", type: "labtech", description: "i am a lab technician" };
 let user = ''; // Stores the current logged-in user
 
 // Homepage Route
@@ -19,249 +19,11 @@ router.get('/', (req, res) => {
         pageStyle: "homepage",
         pageScripts: ["header-dropdowns"], // Scripts needed for this page
         user,
-        labtech: user.role === 'labtech',
-        student: user.role === 'student'
+        labtech: user.type === 'labtech',
+        student: user.type === 'student'
     });
 });
 
-router.get('/api/users', async (req, res) => {
-    try {
-        const usersList = await User.find({}).lean();
-        console.log(usersList);
-
-        res.json({
-            success: true,
-            count: usersList.length,
-            data: usersList
-        });
-        console.log('Search results:', usersList);
-    } catch (error) {
-        console.error('API Search error:', error);
-        res.status(500).json({
-            error: "Server error",
-            message: error.message
-        });
-    }
-});
-
-router.get('/search_user', async (req, res) => {
-    try {
-        const searchTerm = req.query["search-bar"];
-
-        if (!searchTerm?.trim()) {
-            return res.status(400).send('Invalid search term');
-        }
-
-        // Case-insensitive search with partial matching
-        const users = await User.find({
-            name: { $regex: new RegExp(searchTerm, 'i') }
-        });
-        console.log(users);
-
-        if (!users.length) {
-            res.status(400).send(' user not found');
-        } else {
-            return res.redirect(`/profile/${users[0]._id}`);
-        }
-
-    } catch (error) {
-        console.error('Search error:', error);
-        res.status(500).send(' error');
-    }
-});
-
-
-// Individual profile route
-router.get('/profile/:_id', async (req, res) => {
-    try {
-        console.log("Looking up profile for ID:", req.params._id);
-
-        // Find the user by ID
-        let otheruser = await User.findById(req.params._id).lean();
-
-        if (!otheruser) {
-            return res.status(404).send('User not found');
-        }
-
-        // Log the raw user data from database
-        console.log("Raw user data from database:", {
-            _id: otheruser._id,
-            name: otheruser.name,
-            username: otheruser.username,
-            role: otheruser.role,
-            profilePic: otheruser.profilePic,
-            description: otheruser.description
-        });
-
-        // Make a copy to avoid modifying the original
-        otheruser = { ...otheruser };
-
-
-        // Ensure description exists
-        if (!otheruser.description) {
-            otheruser.description = "No description available.";
-        }
-
-        // Log the processed user data
-        console.log("Processed user data:", {
-            id: otheruser._id,
-            name: otheruser.name,
-            role: otheruser.role,
-            profilePic: otheruser.profilePic,
-            description: otheruser.description
-        });
-
-        // Fetch user's reservations
-        let reservations = [];
-        let weeklyReservationCount = 0;
-        let monthlyReservationCount = 0;
-        let totalApprovedCount = 0;
-
-        // Calculate current week and month for display
-        const today = new Date();
-
-        // Current week (Sunday-Saturday)
-        const startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() - today.getDay()); // Start of current week (Sunday)
-        startOfWeek.setHours(0, 0, 0, 0);
-
-        const endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6); // End of current week (Saturday)
-        endOfWeek.setHours(23, 59, 59, 999);
-
-        // Format week display
-        const currentWeekDisplay = `${startOfWeek.toLocaleDateString('en-US', { month: 'short' })} ${startOfWeek.getDate()}-${endOfWeek.getDate()}`;
-
-        // Current month
-        const currentMonthDisplay = today.toLocaleDateString('en-US', { month: 'long' });
-
-        // Start of current month
-        const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-        // End of current month
-        const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-        endOfMonth.setHours(23, 59, 59, 999);
-
-        if (otheruser._id) {
-            try {
-                // Get user ID as string
-                const userIdString = otheruser._id.toString();
-                console.log("Looking for reservations with user ID:", userIdString);
-
-                // Get all reservations
-                const allReservations = await Reservation.find()
-                    .populate('lab')
-                    .sort({ date: 1 }) // Sort by date to get original order
-                    .lean();
-
-                console.log(`Total reservations in database: ${allReservations.length}`);
-
-                // Filter reservations for this user by comparing string IDs
-                const userReservations = allReservations.filter(reservation => {
-                    // Handle both ObjectId and string comparisons
-                    const resUserId = reservation.user ?
-                        (reservation.user.toString ? reservation.user.toString() : reservation.user)
-                        : null;
-
-                    return resUserId === userIdString;
-                });
-
-                console.log(`Found ${userReservations.length} reservations for ${otheruser.name}`);
-
-                const approvedReservations = userReservations.filter(
-                    reservation => reservation.status === "approved"
-                );
-
-                totalApprovedCount = approvedReservations.length;
-                console.log(`Total approved reservations: ${totalApprovedCount}`);
-
-                // Count approved reservations for current week and month
-                approvedReservations.forEach(reservation => {
-                    const reservationDate = new Date(reservation.date);
-                    const dayOfWeek = reservationDate.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-
-                    // Only count Monday-Saturday (exclude Sunday)
-                    if (dayOfWeek !== 0 && reservationDate >= startOfWeek && reservationDate <= endOfWeek) {
-                        weeklyReservationCount++;
-                    }
-
-                    if (reservationDate >= startOfMonth && reservationDate <= endOfMonth) {
-                        monthlyReservationCount++;
-                    }
-                });
-
-                // Assign sequential numbers based on original order
-                userReservations.forEach((reservation, index) => {
-                    reservation.originalNumber = index + 1; // Start from 1
-                });
-
-                // Define status priority
-                const statusPriority = {
-                    'approved': 1,
-                    'pending': 2,
-                    'rejected': 3,
-                    'cancelled': 4
-                };
-
-                // Sort reservations by status priority, then by date
-                reservations = userReservations.sort((a, b) => {
-                    // First sort by status priority
-                    const priorityA = statusPriority[a.status] || 99;
-                    const priorityB = statusPriority[b.status] || 99;
-
-                    if (priorityA !== priorityB) {
-                        return priorityA - priorityB;
-                    }
-
-                    // If same status, sort by date (newest first)
-                    return new Date(b.date) - new Date(a.date);
-                });
-
-            } catch (error) {
-                console.error("Error fetching reservations:", error);
-            }
-        }
-
-        res.render('profile', {
-            title: `${otheruser.name}'s Profile`,
-            pageStyle: "profile",
-            pageScripts: ["header-dropdowns"],
-            user, // Current logged in user
-            otheruser, // The user being viewed (with processed data)
-            reservations,
-            weeklyReservationCount,
-            monthlyReservationCount,
-            totalApprovedCount,
-            currentWeekDisplay,
-            currentMonthDisplay,
-            labtech: user && user.role === 'labtech',
-            student: user && user.role === 'student',
-            helpers: {
-                formatDate: function (date) {
-                    return new Date(date).toLocaleDateString('en-US', {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    });
-                },
-                eq: function (a, b) {
-                    return a === b;
-                },
-                add: function (a, b) {
-                    return parseInt(a) + parseInt(b);
-                },
-                includes: function (str, substr) {
-                    if (typeof str !== 'string') return false;
-                    return str.includes(substr);
-                }
-            }
-        });
-
-    } catch (error) {
-        console.error('Profile error:', error);
-        res.status(500).send('Internal server error');
-    }
-});
 
 // Signup/Login Page
 router.get('/signup-login', (req, res) => {
@@ -273,16 +35,14 @@ router.get('/signup-login', (req, res) => {
     });
 });
 
-
 // Handle User Signup
-router.post('/signup', (req, res) => {
-
+router.post('/signup', async (req, res) => {
     try {
         // Extract form data from request
         const { 'signup-email': email, 'signup-password': password, 'signup-role': role } = req.body;
 
         // Create new user in MongoDB
-        User.create({
+        await User.create({
             email: email,
             password: password,
             role: role
@@ -335,8 +95,8 @@ router.get('/calendar', async (req, res) => {
             pageStyle: "calendar",
             pageScripts: ["header-dropdowns", "calendar"], // Include scripts for calendar functionality
             user,
-            labtech: user.role === 'labtech',
-            student: user.role === 'student',
+            labtech: user.type === 'labtech',
+            student: user.type === 'student',
             labs: uniqueLabs // Pass the unique lab objects
         });
 
@@ -353,8 +113,8 @@ router.get('/help-support', (req, res) => {
         pageStyle: "help-support",
         pageScripts: ["header-dropdowns"],
         user,
-        labtech: user.role === 'labtech',
-        student: user.role === 'student'
+        labtech: user.type === 'labtech',
+        student: user.type === 'student'
     });
 });
 
@@ -490,8 +250,9 @@ router.get('/profile', async (req, res) => {
             totalApprovedCount,
             currentWeekDisplay,
             currentMonthDisplay,
-            labtech: user.role === 'labtech',
-            student: user.role === 'student',
+            reservations,
+            labtech: user.type === 'labtech',
+            student: user.type === 'student',
             helpers: {
                 formatDate: function (date) {
                     return new Date(date).toLocaleDateString('en-US', {
@@ -515,86 +276,16 @@ router.get('/profile', async (req, res) => {
     }
 });
 
-// Edit profile Page
+// edit profile Page
 router.get('/edit-profile', (req, res) => {
-    // Check if user is logged in
-    if (!user) {
-        return res.redirect('/signup-login');
-    }
-
     res.render('edit-profile', {
         title: "Edit Profile",
         pageStyle: "edit-profile",
         pageScripts: ["header-dropdowns"],
         user,
-        labtech: user.role === 'labtech',
-        student: user.role === 'student',
-        successMessage: req.query.success,
-        errorMessage: req.query.error
+        labtech: user.type === 'labtech',
+        student: user.type === 'student'
     });
-});
-
-// Update username route
-router.post('/update-username', async (req, res) => {
-    try {
-        if (!user) {
-            return res.redirect('/signup-login');
-        }
-
-        const { newUsername } = req.body;
-
-        if (!newUsername || newUsername.trim() === '') {
-            return res.redirect('/edit-profile?error=Username cannot be empty');
-        }
-
-        // Update the user's name in the session
-        user.username = newUsername;
-
-        // Redirect with success message
-        res.redirect('/edit-profile?success=Username updated successfully');
-    } catch (error) {
-        console.error('Error updating username:', error);
-        res.redirect('/edit-profile?error=Failed to update username');
-    }
-});
-
-// Update description route
-router.post('/update-description', async (req, res) => {
-    try {
-        if (!user) {
-            return res.redirect('/signup-login');
-        }
-
-        const { newDescription } = req.body;
-
-        if (!newDescription || newDescription.trim() === '') {
-            return res.redirect('/edit-profile?error=Description cannot be empty');
-        }
-
-        // Update the user's description in the session
-        user.description = newDescription;
-
-        // Redirect with success message
-        res.redirect('/edit-profile?success=Description updated successfully');
-    } catch (error) {
-        console.error('Error updating description:', error);
-        res.redirect('/edit-profile?error=Failed to update description');
-    }
-});
-
-// Placeholder route for profile picture update (without actual implementation)
-router.post('/update-profile-picture', (req, res) => {
-    try {
-        if (!user) {
-            return res.redirect('/signup-login');
-        }
-
-
-        res.redirect('/edit-profile?success=Profile picture updated successfully');
-    } catch (error) {
-        console.error('Error in profile picture update:', error);
-        res.redirect('/edit-profile?error=An error occurred');
-    }
 });
 
 // manage account Page
@@ -614,8 +305,8 @@ router.get('/manage-account', async (req, res) => {
             pageStyle: "manage-account",
             pageScripts: ["header-dropdowns"],
             user, userSettings,
-            labtech: user.role === 'labtech',
-            student: user.role === 'student'
+            labtech: user.type === 'labtech',
+            student: user.type === 'student'
         });
     } catch (err) {
         console.error(err);
@@ -651,7 +342,7 @@ router.post('/edit-reservation', async (req, res) => {
             return res.status(404).send("Reservation not found");
         }
         //if student tries to edit another user's reservation. have yet to test.
-        if (user.role === "student" && reservation.user.name !== user.name) {
+        if (user.type === "student" && reservation.user.name !== user.name) {
             return res.redirect('/profile')
         }
         console.log(id, reservation, user)
@@ -661,8 +352,8 @@ router.post('/edit-reservation', async (req, res) => {
             pageScripts: ["header-dropdowns", "edit-reservation"], // Include edit-reservation scripts
             user,
             reservation,
-            labtech: user.role === 'labtech',
-            student: user.role === 'student'
+            labtech: user.type === 'labtech',
+            student: user.type === 'student'
         });
     } catch (err) {
         console.error(err);
@@ -687,7 +378,7 @@ router.get('/reservation-list', async (req, res) => {
         if (!user) {
             return res.redirect('/signup-login');
         }
-        if (user.role === 'student') {
+        if (user.type === 'student') {
             return res.redirect('/')
         }
 
@@ -710,9 +401,8 @@ router.get('/reservation-list', async (req, res) => {
             pageStyle: "labtech-reservation-list",
             pageScripts: ["header-dropdowns", "reservation-list"],
             reservations,
-            user,
-            labtech: user.role === 'labtech',
-            student: user.role === 'student'
+            labtech: user.type === 'labtech',
+            student: user.type === 'student'
         });
     }
     catch (err) {
@@ -762,10 +452,26 @@ router.get('/health', (req, res) => {
 // API route to fetch available labs rooms for calendar.js
 router.get("/api/labs", async (req, res) => {
     try {
-        const labs = await Lab.find({ availability: true }); // Fetch only available labs
+        const labs = await Lab.find({ availability: true }).select("name building capacity"); // Fetch only available labs
         res.json(labs);
     } catch (error) {
         res.status(500).json({ message: "Error fetching labs", error });
+    }
+});
+
+// Checks reservation list for calendar.js
+router.get("/api/reservations", async (req, res) => {
+    try {
+        // Fetch all reservations, populating related user and lab details
+        const reservations = await Reservation.find()
+            .populate("user", "name email")  // Fetch user details (only name and email)
+            .populate("lab", "name location") // Fetch lab details (only name and location)
+            .lean(); // Convert to plain JS object for performance boost
+
+        res.json(reservations);
+    } catch (error) {
+        console.error("Error fetching reservations:", error);
+        res.status(500).json({ message: "Internal server error" });
     }
 });
 
