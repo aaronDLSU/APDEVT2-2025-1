@@ -18,68 +18,67 @@ $(document).ready(function() {
     updateClock();
 
     function generateCalendar() {
-    calendarGrid.innerHTML = "";
-    let firstDay = new Date(selectedYear, selectedMonth, 1).getDay();
-    let daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
-    let today = new Date();
-    today.setHours(0, 0, 0, 0); // Normalize date for accurate comparison
+        calendarGrid.innerHTML = "";
+        let firstDay = new Date(selectedYear, selectedMonth, 1).getDay();
+        let daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
+        let today = new Date();
+        today.setHours(0, 0, 0, 0); // Normalize date for accurate comparison
 
-    currentMonthLabel.innerText = new Date(selectedYear, selectedMonth).toLocaleString('default', {
-        month: 'long',
-        year: 'numeric'
-    });
+        currentMonthLabel.innerText = new Date(selectedYear, selectedMonth).toLocaleString('default', {
+            month: 'long',
+            year: 'numeric'
+        });
 
-    let selectedDateElement = null;
+        let selectedDateElement = null;
 
-    // Fill empty slots before the first day
-    for (let i = 0; i < firstDay; i++) {
-        let emptyCell = document.createElement("div");
-        emptyCell.classList.add("date");
-        emptyCell.style.visibility = "hidden";
-        calendarGrid.appendChild(emptyCell);
-    }
-
-    // Create calendar dates
-    for (let i = 1; i <= daysInMonth; i++) {
-        let dateBox = document.createElement("div");
-        dateBox.classList.add("date");
-        dateBox.innerText = i;
-
-        let currentDateCheck = new Date(selectedYear, selectedMonth, i);
-        currentDateCheck.setHours(0, 0, 0, 0);
-
-        if (currentDateCheck < today) {
-            dateBox.classList.add("past-date");
-        } else {
-            dateBox.addEventListener("click", function () {
-                // Remove selection from previously selected date
-                if (selectedDateElement) {
-                    selectedDateElement.classList.remove("selected-date");
-                }
-                // Select the new date
-                this.classList.add("selected-date");
-                selectedDateElement = this;
-            });
+        // Fill empty slots before the first day
+        for (let i = 0; i < firstDay; i++) {
+            let emptyCell = document.createElement("div");
+            emptyCell.classList.add("date");
+            emptyCell.style.visibility = "hidden";
+            calendarGrid.appendChild(emptyCell);
         }
 
-        calendarGrid.appendChild(dateBox);
+        // Create calendar dates
+        for (let i = 1; i <= daysInMonth; i++) {
+            let dateBox = document.createElement("div");
+            dateBox.classList.add("date");
+            dateBox.innerText = i;
+
+            let currentDateCheck = new Date(selectedYear, selectedMonth, i);
+            currentDateCheck.setHours(0, 0, 0, 0);
+
+            if (currentDateCheck < today) {
+                dateBox.classList.add("past-date");
+            } else {
+                dateBox.addEventListener("click", function () {
+                    // Remove selection from previously selected date
+                    if (selectedDateElement) {
+                        selectedDateElement.classList.remove("selected-date");
+                    }
+                    // Select the new date
+                    this.classList.add("selected-date");
+                    selectedDateElement = this;
+                });
+            }
+
+            calendarGrid.appendChild(dateBox);
+            }
         }
-    }
 
-    window.changeMonth = function(offset) {
-    selectedMonth += offset;
+        window.changeMonth = function(offset) {
+        selectedMonth += offset;
 
-    if (selectedMonth < 0) {
-        selectedMonth = 11;
-        selectedYear--;
-    } else if (selectedMonth > 11) {
-        selectedMonth = 0;
-        selectedYear++;
-    }
+        if (selectedMonth < 0) {
+            selectedMonth = 11;
+            selectedYear--;
+        } else if (selectedMonth > 11) {
+            selectedMonth = 0;
+            selectedYear++;
+        }
 
-    generateCalendar();
-};
-
+        generateCalendar();
+    };
     
     function generateSeatGrid(capacity) {
         const seatTableBody = document.querySelector(".seats-table tbody");
@@ -165,8 +164,6 @@ $(document).ready(function() {
         }
     }
     
-    
-    
     // Resets room selection when changing building
     document.getElementById("dropbtn").addEventListener("change", generateRoomList);
 
@@ -217,15 +214,32 @@ $(document).ready(function() {
         generateSeatGrid(selectedCapacity);
     
         try {
+            // Fetch all seats for the selected lab
+            const seatResponse = await fetch(`/api/seats?lab=${selectedRoomId}`);
+            if (!seatResponse.ok) {
+                throw new Error("Seat API request failed.");
+            }
+            const seatData = await seatResponse.json();
+            console.log("Seat Data:", seatData);
+    
+            // Create a seat mapping `{ seatObjectId -> seatNumber }`
+            let seatMap = {};
+            seatData.forEach(seat => {
+                seatMap[seat._id] = seat.seatNumber;
+            });
+    
             // Fetch reservations for the selected room and date
-            const response = await fetch(`/api/reservations?lab=${selectedRoomId}&date=${selectedYearCheck}-${selectedMonthCheck}-${selectedDate}`);
-            if (!response.ok) {
-                throw new Error(`API request failed with status ${response.status}`);
+            const reservationResponse = await fetch(
+                `/api/reservations?lab=${selectedRoomId}&date=${selectedYearCheck}-${selectedMonthCheck}-${selectedDate}`
+            );
+            if (!reservationResponse.ok) {
+                throw new Error(`API request failed with status ${reservationResponse.status}`);
             }
     
-            const reservations = await response.json();
+            const reservations = await reservationResponse.json();
+            console.log("Reservations Data:", reservations);
     
-            // Loop through the seat availability grid
+            // *Update the UI based on reservations
             document.querySelectorAll(".available-table tbody tr").forEach((row, rowIndex) => {
                 if (rowIndex >= selectedCapacity) {
                     row.style.display = "none"; // Hide extra rows
@@ -237,12 +251,12 @@ $(document).ready(function() {
                         let isFirstHalf = index % 2 === 0;
                         let timeSlot = `${slotHour}:${isFirstHalf ? "00" : "30"}`;
     
-                        // Clear previous reservations and past-hour classes
+                        // Reset cell styling
                         cell.classList.remove("reserved-hour", "past-hour");
-                        cell.style.backgroundColor = ""; 
-                        cell.style.color = ""; 
-                        cell.style.pointerEvents = "auto"; 
-                        cell.innerHTML = ""; 
+                        cell.style.backgroundColor = "";
+                        cell.style.color = "";
+                        cell.style.pointerEvents = "auto";
+                        cell.innerHTML = "";
     
                         // Mark past time slots as unavailable
                         if (
@@ -259,7 +273,9 @@ $(document).ready(function() {
     
                         // Check reservations and update UI
                         reservations.forEach(reservation => {
-                            let resSeat = reservation.seat;
+                            let resSeatId = reservation.seat; // This is ObjectId
+                            let resSeatNumber = seatMap[resSeatId]; // Convert to seat number
+    
                             let resDate = new Date(reservation.date).toISOString().split("T")[0];
                             let selectedDateStr = `${selectedYearCheck}-${selectedMonthCheck.toString().padStart(2, "0")}-${selectedDate.toString().padStart(2, "0")}`;
     
@@ -268,13 +284,13 @@ $(document).ready(function() {
                                 let resEndTime = convertToDateTimeObject(reservation.date, reservation.endTime);
                                 let slotTime = convertToDateTimeObject(`${selectedYearCheck}-${selectedMonthCheck}-${selectedDate}`, timeSlot);
     
-                                if (resSeat === rowIndex + 1) { // Match seat number
+                                if (resSeatNumber === rowIndex + 1) { // **Match seat number correctly**
                                     if (slotTime >= resStartTime && slotTime < resEndTime) {
                                         cell.classList.add("reserved-hour");
-                                        cell.style.backgroundColor = "red";  
-                                        cell.style.color = "white";  
+                                        cell.style.backgroundColor = "red";
+                                        cell.style.color = "white";
                                         cell.style.pointerEvents = "none";
-                                        cell.innerHTML = `R`; 
+                                        cell.innerHTML = `R`;
                                     }
                                 }
                             }
@@ -284,9 +300,10 @@ $(document).ready(function() {
             });
     
         } catch (error) {
-            console.error("Error fetching reservations:", error);
+            console.error(" Error fetching reservations:", error);
         }
     }
+    
     
     // Call `updateSeatAvailability()` when switching rooms
     document.addEventListener("click", () => {
@@ -300,19 +317,18 @@ $(document).ready(function() {
     });
     
     
-    // Temporary reserve room function
+    // Reserve room function
     async function reserveRoom() {
-        // Hardcoded user ID for now, replace this after user authentication is implemented
-        const hardcodedUserId = "65f3b2c0e69bfc0012345678";  
+        const hardcodedUserId = "65f3b2c0e69bfc0012345678";  // Replace after implementing authentication
     
-        // Get the selected lab room
+        // Get selected lab room
         const selectedRoom = document.querySelector(".selected-room");
         if (!selectedRoom) {
             alert("Please select a lab room first.");
             return;
         }
-        
-        const labId = selectedRoom.dataset.roomId; // Lab room ID
+    
+        const labId = selectedRoom.dataset.roomId; // Get the selected Lab ID
         const selectedLabName = selectedRoom.innerText;
     
         // Get the selected date
@@ -321,52 +337,62 @@ $(document).ready(function() {
             alert("Please select a date first.");
             return;
         }
-        
+    
         const selectedDate = selectedDateElement.innerText;
         const reservationDate = `${selectedYear}-${(selectedMonth + 1).toString().padStart(2, "0")}-${selectedDate.padStart(2, "0")}`;
     
-        // Get the selected seat ID instead of seat number
+        // Get the selected seat number
         const seatDropdown = document.getElementById("seat-selection");
-        const selectedSeatId = seatDropdown.value;
-        if (!selectedSeatId) {
+        const selectedSeatNumber = seatDropdown.value;
+        if (!selectedSeatNumber) {
             alert("Please select a seat.");
             return;
         }
     
-        // Get the selected start time
+        // Get the selected start and end times
         const startTimeDropdown = document.getElementById("start-time");
-        const selectedStartTime = startTimeDropdown.value;
-        if (!selectedStartTime) {
-            alert("Please select a start time.");
-            return;
-        }
-    
-        // Get the selected end time
         const endTimeDropdown = document.getElementById("end-time");
+    
+        const selectedStartTime = startTimeDropdown.value;
         const selectedEndTime = endTimeDropdown.value;
-        if (!selectedEndTime) {
-            alert("Please select an end time.");
+    
+        if (!selectedStartTime || !selectedEndTime) {
+            alert("Please select both start and end times.");
             return;
         }
-        
-        // Check if the "Reserve Anonymously" checkbox is checked
-        const anonymousCheckbox = document.getElementById("anonymous-checkbox");
-        const isAnonymous = anonymousCheckbox.checked; // Boolean value
     
-        // Construct the reservation object
-        const reservationData = {
-            name: `Reservation for ${selectedLabName}`,
-            user: hardcodedUserId,  // Temporarily hardcoded user
-            isAnonymous: isAnonymous,
-            lab: labId,
-            seat: selectedSeatId, // Store Seat ObjectId
-            date: reservationDate,
-            startTime: selectedStartTime,
-            endTime: selectedEndTime,
-            status: "pending"  // Default status
-        };
+        // Check if "Reserve Anonymously" checkbox is checked
+        const anonymousCheckbox = document.getElementById("anonymous-checkbox");
+        const isAnonymous = anonymousCheckbox.checked;
     
         try {
+            // Fetch the seat ObjectId from DB using seat number and lab ID
+            const seatResponse = await fetch(`/api/seats?lab=${labId}&seatNumber=${selectedSeatNumber}`);
+            if (!seatResponse.ok) {
+                throw new Error("Failed to fetch seat data.");
+            }
+    
+            const seatData = await seatResponse.json();
+            if (!seatData || !seatData._id) {
+                alert("Error: Selected seat not found in the database.");
+                return;
+            }
+    
+            const selectedSeatId = seatData._id; // Extract seat ObjectId
+    
+            // Construct the reservation object
+            const reservationData = {
+                name: `Reservation for ${selectedLabName}`,
+                user: hardcodedUserId,  // Temporarily hardcoded user
+                isAnonymous: isAnonymous,
+                lab: labId,
+                seat: selectedSeatId, // Store Seat ObjectId
+                date: reservationDate,
+                startTime: selectedStartTime,
+                endTime: selectedEndTime,
+                status: "pending"  // Default status
+            };
+    
             // Send reservation to backend
             const response = await fetch("/api/reserveroom", {
                 method: "POST",
@@ -381,7 +407,11 @@ $(document).ready(function() {
             }
     
             const result = await response.json();
-            alert(`Reservation successful! \n\nLab: ${selectedLabName}\nSeat: ${selectedSeatId}\nDate: ${reservationDate}\nTime: ${selectedStartTime} - ${selectedEndTime}`);
+            alert(`Reservation successful! 
+            \nLab: ${selectedLabName}
+            \nSeat: ${selectedSeatNumber}
+            \nDate: ${reservationDate}
+            \nTime: ${selectedStartTime} - ${selectedEndTime}`);
     
             // Refresh seat availability after booking
             updateSeatAvailability();
@@ -392,7 +422,7 @@ $(document).ready(function() {
     }
     
     // Assign function globally so it works with the button
-    window.reserveRoom = reserveRoom;
+    window.reserveRoom = reserveRoom;    
     
 
     // Call the function when a date is selected
@@ -483,7 +513,6 @@ $(document).ready(function() {
         // Initialize end time options
         updateEndTimeOptions();
     }
-    
     
     // Call function when a room is selected
     document.addEventListener("click", () => {

@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const express = require('express');
 const router = express.Router();
 
@@ -6,6 +7,7 @@ const User = require("../../db/models/DB_users");
 const Reservation = require("../../db/models/DB_reservation");
 const Lab = require("../../db/models/DB_labs");
 const Settings = require('../../db/models/DB_settings');
+const Seat = require("../../db/models/DB_seats");
 
 // Sample user roles
 const student = { _id: "67c6e500b0ce105ba934bcf7", name: "Charlie Chaplin", password: "student", type: "student", description: "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology. Passionate about coding and problem-solving, I am eager to explore new technologies and develop innovative solutions. Currently honing my skills in programming, web development, and algorithms, I aspire to contribute to impactful projects in the tech industry.", profilePic: "student" };
@@ -347,6 +349,53 @@ router.get('/calendar', async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
+
+// To fetch seat object id for calendar.js
+router.get("/api/seats", async (req, res) => {
+    try {
+        const { lab, seatNumber } = req.query;
+
+        console.log("Incoming Seat Request:", { lab, seatNumber });
+
+        // Validate Lab ID
+        if (!lab) {
+            console.error("Missing Lab ID");
+            return res.status(400).json({ message: "Lab ID is required!" });
+        }
+        if (!mongoose.Types.ObjectId.isValid(lab)) {
+            console.error("Invalid Lab ObjectId:", lab);
+            return res.status(400).json({ message: "Invalid Lab ID!" });
+        }
+
+        let query = { lab: new mongoose.Types.ObjectId(lab) }; // Base query for lab
+
+        // If seatNumber is provided, validate it and add to query
+        if (seatNumber) {
+            const seatNum = parseInt(seatNumber, 10);
+            if (isNaN(seatNum) || seatNum <= 0) {
+                console.error("Invalid Seat Number:", seatNumber);
+                return res.status(400).json({ message: "Invalid Seat Number!" });
+            }
+            query.seatNumber = seatNum;
+        }
+
+        // Fetch seats (single seat if seatNumber is provided, otherwise all seats for lab)
+        const seats = await Seat.find(query);
+
+        if (!seats.length) {
+            console.warn(`No seats found for Lab ${lab}${seatNumber ? `, Seat ${seatNumber}` : ""}`);
+            return res.status(404).json({ message: `No seats found for the specified criteria.` });
+        }
+
+        console.log("Seats Found:", seats);
+        res.status(200).json(seatNumber ? seats[0] : seats); // Return single seat if filtering by seatNumber
+
+    } catch (error) {
+        console.error("Error fetching seat:", error);
+        res.status(500).json({ message: "Internal server error", error: error.message });
+    }
+});
+
 
 // Help & Support Page
 router.get('/help-support', (req, res) => {
@@ -721,98 +770,85 @@ router.get("/api/reservations", async (req, res) => {
 // Handles Reservations for calendar.js
 router.post("/api/reserveroom", async (req, res) => {
     try {
-        const { lab, seat, date, startTime, endTime, isAnonymous  } = req.body;
+        const { lab, seat, date, startTime, endTime, isAnonymous } = req.body;
 
-        // Hardcoded user ID, To change after sessions implementation
+        // Hardcoded user ID 
         const userId = "67c6e500b0ce105ba934bcf7";
 
-        // Validate required fields
         if (!lab || !seat || !date || !startTime || !endTime) {
             return res.status(400).json({ message: "All fields are required!" });
         }
 
-        // Ensure seat is a valid number
-        const seatNumber = parseInt(seat, 10);
-        if (isNaN(seatNumber) || seatNumber <= 0) {
-            return res.status(400).json({ message: "Invalid seat number!" });
+        // Fetch the seat ObjectId
+        const seatObj = await Seat.findOne({ _id: seat, lab });
+
+        if (!seatObj) {
+            return res.status(400).json({ message: "Invalid seat selection!" });
         }
 
-        // Validate date format
+        // Convert date and time strings into Date objects
         const reservationDate = new Date(date);
         if (isNaN(reservationDate.getTime())) {
             return res.status(400).json({ message: "Invalid date format!" });
         }
 
-        // Get current date & time
         const now = new Date();
-        now.setSeconds(0, 0); // Ignore seconds/milliseconds for accuracy
-
-        // Convert start and end times to Date objects
-        const start = startTime.split(":").map(Number);
-        const end = endTime.split(":").map(Number);
+        now.setSeconds(0, 0); // Ignore seconds/milliseconds
 
         const startTimeObj = new Date(reservationDate);
-        startTimeObj.setHours(start[0], start[1], 0, 0);
+        const [startHour, startMinute] = startTime.split(":").map(Number);
+        startTimeObj.setHours(startHour, startMinute, 0, 0);
 
         const endTimeObj = new Date(reservationDate);
-        endTimeObj.setHours(end[0], end[1], 0, 0);
+        const [endHour, endMinute] = endTime.split(":").map(Number);
+        endTimeObj.setHours(endHour, endMinute, 0, 0);
 
-        // Prevent booking in the past
         if (startTimeObj < now) {
             return res.status(400).json({ message: "Cannot book past time slots!" });
         }
 
-        // Ensure startTime is before endTime
         if (startTimeObj >= endTimeObj) {
             return res.status(400).json({ message: "End time must be after start time!" });
         }
 
-        // Prevent Overlapping Reservations (Check if seat is already booked)
+        // Prevent overlapping reservations
         const existingReservation = await Reservation.findOne({
             lab,
-            seat: seatNumber,
+            seat: seatObj._id, // Compare ObjectId, not seat number
             date: reservationDate,
             $or: [
-                { 
-                    startTime: { $lt: endTime }, 
-                    endTime: { $gt: startTime } 
-                }
+                { startTime: { $lt: endTime }, endTime: { $gt: startTime } }
             ]
         });
 
         if (existingReservation) {
             return res.status(409).json({ 
-                message: `Seat ${seatNumber} is already reserved from ${existingReservation.startTime} to ${existingReservation.endTime}!` 
+                message: `Seat is already reserved from ${existingReservation.startTime} to ${existingReservation.endTime}!`
             });
         }
 
-        // Generate a unique reservation name
-        const reservationName = `Reservation ${Date.now()}`;
-
-        // Create new reservation
+        // Create reservation
         const newReservation = new Reservation({
-            name: reservationName,
+            name: `Reservation ${Date.now()}`,
             user: userId,
             lab,
             isAnonymous: !!isAnonymous,
-            seat: seatNumber,
+            seat: seatObj._id, // Store seat as ObjectId
             date: reservationDate,
             startTime,
             endTime,
-            status: "approved" // Default
+            status: "approved"
         });
 
         await newReservation.save();
 
-        res.status(201).json({ 
-            message: "Reservation successful", 
-            reservation: newReservation 
-        });
+        res.status(201).json({ message: "Reservation successful", reservation: newReservation });
 
     } catch (error) {
         console.error("Error creating reservation:", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
 
 module.exports = router;

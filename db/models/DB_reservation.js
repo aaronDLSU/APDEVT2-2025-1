@@ -4,7 +4,7 @@ const ReservationSchema = new mongoose.Schema({
     name: { type: String, required: true }, //default name: "Reservation {number}"
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },    // User who booked
     lab: { type: mongoose.Schema.Types.ObjectId, ref: 'Lab', required: true },      // Lab room
-    seat: { type : Number, required: true },
+    seat: { type: mongoose.Schema.Types.ObjectId, ref: 'Seat', required: true },
     date: { type: Date, required: true },                                           // Booking date
     startTime: { type: String, required: true }, 
     endTime: { type: String, required: true }, 
