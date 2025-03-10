@@ -262,6 +262,7 @@
 }
 
 /* Seat Selection Starts here*/
+/* Seat Grids */
 .seat {
     width: 70px;
     height: 80px;
@@ -270,7 +271,6 @@
     justify-content: center;
     font-size: 16px;
     font-weight: bold;
-    border-radius: 8px;
     background: #e3e3e3;
     cursor: pointer;
     transition: 0.3s;
