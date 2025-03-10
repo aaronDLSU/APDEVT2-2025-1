@@ -113,10 +113,10 @@ $(document).ready(function() {
     
             for (let j = 0; j < 24; j++) {
                 let cell = document.createElement("td");
-                cell.dataset.timeSlot = j;
-                cell.addEventListener("click", function () {
-                    this.classList.toggle("highlight");
-                });
+                //cell.dataset.timeSlot = j;
+                //cell.addEventListener("click", function () {
+                //    this.classList.toggle("highlight");
+                //});
                 row.appendChild(cell);
             }
     
@@ -166,13 +166,6 @@ $(document).ready(function() {
     
     // Resets room selection when changing building
     document.getElementById("dropbtn").addEventListener("change", generateRoomList);
-
-
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('td').forEach(cell => {
-            cell.addEventListener('click', () => cell.classList.toggle('highlight'));
-        });
-    });
 
     function convertToDateTimeObject(dateStr, timeStr) {
         let [hours, minutes] = timeStr.split(":").map(Number);
@@ -289,7 +282,7 @@ $(document).ready(function() {
                                         cell.classList.add("reserved-hour");
                                         cell.style.backgroundColor = "red";
                                         cell.style.color = "white";
-                                        cell.style.pointerEvents = "none";
+                                        cell.style.pointerEvents = "none"; // Comment out to enable selectable
                                         cell.innerHTML = `R`;
                                     }
                                 }
@@ -306,16 +299,30 @@ $(document).ready(function() {
     
     
     // Call `updateSeatAvailability()` when switching rooms
+    //document.addEventListener("click", () => {
+    //    setTimeout(updateSeatAvailability, 200);
+    //});
+    
+    
+    //document.addEventListener("click", () => {
+    //    setTimeout(updateSeatAvailability, 100);
+    //    window.scrollTo(window.scrollX, window.scrollY);
+    //});
+    
+    // Call the function when a date is selected
     document.addEventListener("click", () => {
-        setTimeout(updateSeatAvailability, 200);
+        if (event.target.closest(".date") || event.target.closest(".room-item")) {
+        setTimeout(updateSeatAvailability, 100); // Delay to ensure the selected date is detected
+        //window.scrollTo(window.scrollX, window.scrollY);
+        }
     });
-    
-    
-    document.addEventListener("click", () => {
-        setTimeout(updateSeatAvailability, 100);
-        window.scrollTo(window.scrollX, window.scrollY);
-    });
-    
+
+    // Make Green Cells
+    //document.addEventListener('DOMContentLoaded', () => {
+    //    document.querySelectorAll('td').forEach(cell => {
+    //       cell.addEventListener('click', () => cell.classList.toggle('highlight'));
+    //    });
+    //});
     
     // Reserve room function
     async function reserveRoom() {
@@ -424,13 +431,6 @@ $(document).ready(function() {
     // Assign function globally so it works with the button
     window.reserveRoom = reserveRoom;    
     
-
-    // Call the function when a date is selected
-    document.addEventListener("click", () => {
-        setTimeout(updateSeatAvailability, 100); // Delay to ensure the selected date is detected
-        window.scrollTo(window.scrollX, window.scrollY);
-    });
-
     function populateReservationDropdowns() {
         const seatDropdown = document.getElementById("seat-selection");
         const startTimeDropdown = document.getElementById("start-time");
