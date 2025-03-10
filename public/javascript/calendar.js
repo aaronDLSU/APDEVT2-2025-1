@@ -302,7 +302,7 @@ $(document).ready(function() {
     
     // Temporary reserve room function
     async function reserveRoom() {
-        // Hardcoded user ID for now, Replace after actual user session
+        // Hardcoded user ID for now, replace this after user authentication is implemented
         const hardcodedUserId = "65f3b2c0e69bfc0012345678";  
     
         // Get the selected lab room
@@ -325,10 +325,10 @@ $(document).ready(function() {
         const selectedDate = selectedDateElement.innerText;
         const reservationDate = `${selectedYear}-${(selectedMonth + 1).toString().padStart(2, "0")}-${selectedDate.padStart(2, "0")}`;
     
-        // Get the selected seat number
+        // Get the selected seat ID instead of seat number
         const seatDropdown = document.getElementById("seat-selection");
-        const selectedSeat = seatDropdown.value;
-        if (!selectedSeat) {
+        const selectedSeatId = seatDropdown.value;
+        if (!selectedSeatId) {
             alert("Please select a seat.");
             return;
         }
@@ -348,13 +348,18 @@ $(document).ready(function() {
             alert("Please select an end time.");
             return;
         }
+        
+        // Check if the "Reserve Anonymously" checkbox is checked
+        const anonymousCheckbox = document.getElementById("anonymous-checkbox");
+        const isAnonymous = anonymousCheckbox.checked; // Boolean value
     
         // Construct the reservation object
         const reservationData = {
             name: `Reservation for ${selectedLabName}`,
             user: hardcodedUserId,  // Temporarily hardcoded user
+            isAnonymous: isAnonymous,
             lab: labId,
-            seat: parseInt(selectedSeat, 10),
+            seat: selectedSeatId, // Store Seat ObjectId
             date: reservationDate,
             startTime: selectedStartTime,
             endTime: selectedEndTime,
@@ -376,7 +381,7 @@ $(document).ready(function() {
             }
     
             const result = await response.json();
-            alert(`Reservation successful! \n\nLab: ${selectedLabName}\nSeat: ${selectedSeat}\nDate: ${reservationDate}\nTime: ${selectedStartTime} - ${selectedEndTime}`);
+            alert(`Reservation successful! \n\nLab: ${selectedLabName}\nSeat: ${selectedSeatId}\nDate: ${reservationDate}\nTime: ${selectedStartTime} - ${selectedEndTime}`);
     
             // Refresh seat availability after booking
             updateSeatAvailability();

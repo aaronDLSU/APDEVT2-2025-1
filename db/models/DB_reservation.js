@@ -8,6 +8,7 @@ const ReservationSchema = new mongoose.Schema({
     date: { type: Date, required: true },                                           // Booking date
     startTime: { type: String, required: true }, 
     endTime: { type: String, required: true }, 
+    isAnonymous: { type: Boolean, default: false },
     status: { 
             type: String, 
             enum: ['pending', 'approved', 'rejected', 'cancelled'], 

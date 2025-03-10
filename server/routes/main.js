@@ -721,7 +721,7 @@ router.get("/api/reservations", async (req, res) => {
 // Handles Reservations for calendar.js
 router.post("/api/reserveroom", async (req, res) => {
     try {
-        const { lab, seat, date, startTime, endTime } = req.body;
+        const { lab, seat, date, startTime, endTime, isAnonymous  } = req.body;
 
         // Hardcoded user ID, To change after sessions implementation
         const userId = "67c6e500b0ce105ba934bcf7";
@@ -794,6 +794,7 @@ router.post("/api/reserveroom", async (req, res) => {
             name: reservationName,
             user: userId,
             lab,
+            isAnonymous: !!isAnonymous,
             seat: seatNumber,
             date: reservationDate,
             startTime,
