@@ -323,11 +323,20 @@ $(document).ready(function() {
     //       cell.addEventListener('click', () => cell.classList.toggle('highlight'));
     //    });
     //});
-    
+
     // Reserve room function
     async function reserveRoom() {
-        const hardcodedUserId = "65f3b2c0e69bfc0012345678";  // Replace after implementing authentication
-    
+
+        //if (!window.currentUser || !window.currentUser._id) {
+        //    alert("You must be logged in to make a reservation.");
+        //    window.location.href = "/signup-login"; // Redirect to login page
+        //    return;
+        //}
+
+        //const hardcodedUserId = window.currentUser._id;  // Replace after implementing authentication
+        
+        const hardcodedUserId = '67c66192b0ce105ba934bc95';
+
         // Get selected lab room
         const selectedRoom = document.querySelector(".selected-room");
         if (!selectedRoom) {
