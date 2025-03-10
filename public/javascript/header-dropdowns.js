@@ -118,7 +118,7 @@ $(document).ready(function () {
         const email = card.querySelector("[data-prof-email]");
 
         const img = document.createElement("img");
-        img.src = `/images/${user.profilePic}.jpg`; 
+        img.src = `${user.profilePic}`; 
         img.alt = "Profile picture";
         img.classList.add("profile-image");
         img.onerror = () => {  // Handle broken images

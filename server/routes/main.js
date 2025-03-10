@@ -10,8 +10,8 @@ const Settings = require('../../db/models/DB_settings');
 const Seat = require("../../db/models/DB_seats");
 
 // Sample user roles
-const student = { _id: "67c6e500b0ce105ba934bcf7", name: "Charlie Chaplin", password: "student", type: "student", description: "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology. Passionate about coding and problem-solving, I am eager to explore new technologies and develop innovative solutions. Currently honing my skills in programming, web development, and algorithms, I aspire to contribute to impactful projects in the tech industry.", profilePic: "student" };
-const labtech = { name: "Sir", type: "labtech", description: "i am a lab technician", profilePic: "default_profilepic" };
+const student = { _id: "67c6e500b0ce105ba934bcf7", name: "Charlie Chaplin", password: "student", role: "student", description: "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology. Passionate about coding and problem-solving, I am eager to explore new technologies and develop innovative solutions. Currently honing my skills in programming, web development, and algorithms, I aspire to contribute to impactful projects in the tech industry.", profilePic: "/images/student.jpg" };
+const labtech = { name: "Sir", role: "labtech", description: "i am a lab technician", profilePic: "/images/default_profilepic.jpg" };
 let user = ''; // Stores the current logged-in user
 
 // Homepage Route
@@ -21,8 +21,8 @@ router.get('/', (req, res) => {
         pageStyle: "homepage",
         pageScripts: ["header-dropdowns"], // Scripts needed for this page
         user,
-        labtech: user.type === 'labtech',
-        student: user.type === 'student'
+        labtech: user.role === 'labtech',
+        student: user.role === 'student'
     });
 });
 
@@ -58,7 +58,7 @@ router.get('/search_user', async (req, res) => {
         const users = await User.find({
             name: { $regex: new RegExp(searchTerm, 'i') }
         });
-        console.log(users);
+
 
         if (!users.length) {
             res.status(400).send(' user not found');
@@ -227,7 +227,7 @@ router.get('/profile/:_id', async (req, res) => {
             title: `${otheruser.name}'s Profile`,
             pageStyle: "profile",
             pageScripts: ["header-dropdowns"],
-            user, // Current logged in user
+            user,
             otheruser, // The user being viewed (with processed data)
             reservations,
             weeklyReservationCount,
@@ -264,10 +264,6 @@ router.get('/profile/:_id', async (req, res) => {
         res.status(500).send('Internal server error');
     }
 });
-
-
-
-
 
 // Signup/Login Page
 router.get('/signup-login', (req, res) => {
@@ -339,8 +335,8 @@ router.get('/calendar', async (req, res) => {
             pageStyle: "calendar",
             pageScripts: ["header-dropdowns", "calendar"], // Include scripts for calendar functionality
             user,
-            labtech: user.type === 'labtech',
-            student: user.type === 'student',
+            labtech: user.role === 'labtech',
+            student: user.role === 'student',
             labs: uniqueLabs // Pass the unique lab objects
         });
 
@@ -404,8 +400,8 @@ router.get('/help-support', (req, res) => {
         pageStyle: "help-support",
         pageScripts: ["header-dropdowns"],
         user,
-        labtech: user.type === 'labtech',
-        student: user.type === 'student'
+        labtech: user.role === 'labtech',
+        student: user.role === 'student'
     });
 });
 
@@ -542,8 +538,8 @@ router.get('/profile', async (req, res) => {
             currentWeekDisplay,
             currentMonthDisplay,
             reservations,
-            labtech: user.type === 'labtech',
-            student: user.type === 'student',
+            labtech: user.role === 'labtech',
+            student: user.role === 'student',
             helpers: {
                 formatDate: function (date) {
                     return new Date(date).toLocaleDateString('en-US', {
@@ -574,8 +570,8 @@ router.get('/edit-profile', (req, res) => {
         pageStyle: "edit-profile",
         pageScripts: ["header-dropdowns"],
         user,
-        labtech: user.type === 'labtech',
-        student: user.type === 'student'
+        labtech: user.role === 'labtech',
+        student: user.role === 'student'
     });
 });
 
@@ -596,8 +592,8 @@ router.get('/manage-account', async (req, res) => {
             pageStyle: "manage-account",
             pageScripts: ["header-dropdowns"],
             user, userSettings,
-            labtech: user.type === 'labtech',
-            student: user.type === 'student'
+            labtech: user.role === 'labtech',
+            student: user.role === 'student'
         });
     } catch (err) {
         console.error(err);
@@ -643,8 +639,8 @@ router.post('/edit-reservation', async (req, res) => {
             pageScripts: ["header-dropdowns", "edit-reservation"], // Include edit-reservation scripts
             user,
             reservation,
-            labtech: user.type === 'labtech',
-            student: user.type === 'student'
+            labtech: user.role === 'labtech',
+            student: user.role === 'student'
         });
     } catch (err) {
         console.error(err);
@@ -693,8 +689,8 @@ router.get('/reservation-list', async (req, res) => {
             pageScripts: ["header-dropdowns", "reservation-list"],
             reservations,
             user,
-            labtech: user.type === 'labtech',
-            student: user.type === 'student'
+            labtech: user.role === 'labtech',
+            student: user.role === 'student'
         });
     }
     catch (err) {

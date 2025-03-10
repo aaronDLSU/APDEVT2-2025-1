@@ -6,7 +6,7 @@
         <div class="w-50" id="profile-info-section">
             <div class="d-flex gap-3 align-prof-desc">
                 <div id="profile-image">
-                    <img src="/images/{{otheruser.profilePic}}.jpg" alt="image" class="profile-image">
+                    <img src="{{otheruser.profilePic}}" alt="image" class="profile-image">
                 </div>
 
                 <div class="info-container" style="margin-left:0;">
@@ -146,10 +146,10 @@
         <div class="w-50" id="profile-info-section">
             <div class="d-flex gap-3 align-prof-desc">
                 <div id="profile-image">
-                    <img src="/images/{{user.profilePic}}.jpg" alt="image" class="profile-image">
+                    <img src="{{user.profilePic}}" alt="image" class="profile-image">
                 </div>
 
-                <div>
+                <div class="info-container" style="margin-left:0;">
                     <div class="pt-3" id="profile-info">
                         <div class="h3">
                             {{user.name}}
@@ -170,7 +170,7 @@
 
         <!--Dashboard-->
         <div class="pr-5" id="dashboard-section">
-            <div class="card" style="width: 70%; margin-left:60px;">
+             <div class="card" style="width: 70%; margin-left: auto;">
                 <div class="card-header">
                     Reservations Summary
                 </div>

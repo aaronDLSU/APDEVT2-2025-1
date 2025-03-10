@@ -64,6 +64,7 @@
 #dashboard-section .card {
   position: relative;
   right: 0; /* Move 20px left relative to its normal position */
+
 }
 
 .align-prof-desc {
@@ -91,7 +92,7 @@
 #profile-description {
   max-height: 200px;
   /* Match height of profile image */
-  overflow-y: auto;
+  overflow-y: scroll;
   /* Enable scrolling for long descriptions */
   padding-right: 10px;
   /* Space for scrollbar */
@@ -131,6 +132,7 @@
 
 #profile-info-section{
   margin-right: -150px;
+  overflow-y: auto;
 }
 
 @media (max-width: 992px) {
