@@ -536,6 +536,68 @@ $(document).ready(function() {
     document.addEventListener("click", () => {
         setTimeout(populateReservationDropdowns, 100);
     });
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const popupTemplate = document.getElementById('reservation-popup');
+        let activePopup = null;
+      
+        // Fetch reservations and populate schedule
+        fetch('/api/seats')
+          .then(res => res.json())
+          .then(reservations => {
+            reservations.forEach(reservation => {
+              const startHour = parseInt(reservation.startTime.split(':')[0]);
+              const endHour = parseInt(reservation.endTime.split(':')[0]);
+              const seatRow = document.querySelector(`tr[data-seat="${reservation.seat}"]`);
+              
+              for (let hour = startHour; hour < endHour; hour++) {
+                const cell = seatRow.querySelector(`td:nth-child(${hour - 6})`);
+                if (cell) {
+                  cell.dataset.available = "false";
+                  cell.classList.add('reserved');
+                  cell.dataset.reservation = JSON.stringify(reservation);
+                }
+              }
+              console.log(reservation);
+            });
+          });
+      
+        // Hover handlers
+        document.querySelectorAll('.time-slot').forEach(cell => {
+          cell.addEventListener('mouseenter', function(e) {
+            if (this.dataset.available === 'false') {
+              if (activePopup) activePopup.remove();
+              
+              const reservation = JSON.parse(this.dataset.reservation);
+              const popup = popupTemplate.content.cloneNode(true);
+              
+              popup.querySelector('.reserve-user').textContent = reservation.user;
+              popup.querySelector('.reserve-date').textContent = reservation.date;
+              popup.querySelector('.reserve-time').textContent = 
+                `${reservation.startTime} - ${reservation.endTime}`;
+              popup.querySelector('.reserve-lab').textContent = reservation.lab;
+              popup.querySelector('.reserve-seat').textContent = reservation.seat;
+      
+              const rect = this.getBoundingClientRect();
+              const popupElement = popup.querySelector('.reservation-details');
+              popupElement.style.top = `${rect.top + window.scrollY}px`;
+              popupElement.style.left = `${rect.right + window.scrollX + 10}px`;
+              
+              document.body.appendChild(popup);
+              activePopup = popupElement;
+            }
+          });
+      
+          cell.addEventListener('mouseleave', () => {
+            if (activePopup) {
+              activePopup.remove();
+              activePopup = null;
+            }
+          });
+        });
+      });
+      
     
     
     generateCalendar();

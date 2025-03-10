@@ -87,10 +87,24 @@
                     </thead>
                     <tbody>
                         <script>
-                            document.write([...Array(9)].map(() => `<tr>${[...Array(24)].map(() => '<td></td>').join('')}</tr>`).join(''));
+                            document.write([...Array(9)].map(() => `<tr>${[...Array(24)].map(() => '<td class="time-slot"></td>').join('')}</tr>`).join(''));
                         </script>
                     </tbody>
                 </table>
+
+
+              <template id="reservation-popup">
+                    <div class="reservation-details">
+                    <h4>Reservation Details</h4>
+                    <p><strong>User:</strong> <span class="reserve-user"></span></p>
+                    <p><strong>Date:</strong> <span class="reserve-date"></span></p>
+                    <p><strong>Time:</strong> <span class="reserve-time"></span></p>
+                    <p><strong>Lab:</strong> <span class="reserve-lab"></span></p>
+                    <p><strong>Seat:</strong> <span class="reserve-seat"></span></p>
+                    </div>
+                </template>
+
+
             </div>
         </div>
 
