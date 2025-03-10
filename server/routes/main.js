@@ -769,7 +769,7 @@ router.post("/api/reserveroom", async (req, res) => {
         const { lab, seat, date, startTime, endTime, isAnonymous } = req.body;
 
         // Hardcoded user ID 
-        const userId = "67c6e500b0ce105ba934bcf7";
+        const userId = "67c66192b0ce105ba934bc95";
 
         if (!lab || !seat || !date || !startTime || !endTime) {
             return res.status(400).json({ message: "All fields are required!" });
