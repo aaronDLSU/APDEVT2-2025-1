@@ -304,10 +304,10 @@ $(document).ready(function() {
     //});
     
     
-    //document.addEventListener("click", () => {
+    document.addEventListener("click", () => {
     //    setTimeout(updateSeatAvailability, 100);
-    //    window.scrollTo(window.scrollX, window.scrollY);
-    //});
+        window.scrollTo(window.scrollX, window.scrollY);
+    });
     
     // Call the function when a date is selected
     document.addEventListener("click", () => {
@@ -324,6 +324,15 @@ $(document).ready(function() {
     //    });
     //});
 
+    // Reserving without logging in
+    function promptLogin() {
+        alert("Please log in to your school email account.");
+        window.location.href = "/signup-login"; // Redirect to login page
+        return;
+    }
+
+    document.querySelector(".login-reserve-room-btn").addEventListener("click", promptLogin);
+    
     // Reserve room function
     async function reserveRoom() {
 

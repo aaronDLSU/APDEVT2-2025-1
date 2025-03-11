@@ -24,8 +24,16 @@
                     <div class="room-list" id="room-list"></div>
                 </div>
 
-                <!-- Reserve Room Button -->
-                <button class="button reserve-room-btn" onclick="reserveRoom()">Reserve Room</button>
+                {{#if student}}
+                    <!-- Reserve Room Button -->
+                    <button class="button reserve-room-btn" onclick="reserveRoom()">Reserve Room</button>
+                {{else if labtech}}
+                    <!-- Reserve Room Button -->
+                    <button class="button reserve-room-btn" onclick="reserveRoom()">Reserve Room</button>
+                {{else}}
+                    <!-- Log In to Reserve -->
+                    <button class="button login-reserve-room-btn" onclick="promptLogin()">Login to Reserve</button>
+                {{/if}}
             </div>
             
             <!-- Calendar Section -->
@@ -105,17 +113,5 @@
             </div>
         </div>
     </div>
-
-    {{#if student}}
-        <div class ="button-container">
-            <button class="button" onclick="window.location.href='labtech-reservation.html'">Reserve Slot</button>
-        </div>
-    {{else if labtech}}
-        <div class ="button-container">
-            <button class="button" onclick="window.location.href='labtech-reservation.html'">Reserve Slot</button>
-        </div>
-    {{else}}
-        <div></div>
-    {{/if}}
 
 <script src="/javascript/calendar.js"></script>
