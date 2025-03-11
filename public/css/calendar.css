@@ -292,7 +292,9 @@
 .reserved-hour {
     background: #ff6b6b;
     color: white;
+    /*
     cursor: not-allowed;
+    */
     text-decoration: line-through;
 }
 /*Seat styling ends here*/
@@ -392,6 +394,15 @@
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     min-width: 200px;
     text-align: center;
+}
+
+.reserve-details-container {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    min-width: 200px;
+    text-align: justify;
 }
 
 .reserve-time-container h3 {

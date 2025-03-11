@@ -277,12 +277,12 @@ $(document).ready(function() {
                                 let resEndTime = convertToDateTimeObject(reservation.date, reservation.endTime);
                                 let slotTime = convertToDateTimeObject(`${selectedYearCheck}-${selectedMonthCheck}-${selectedDate}`, timeSlot);
     
-                                if (resSeatNumber === rowIndex + 1) { // **Match seat number correctly**
+                                if (resSeatNumber === rowIndex + 1) { // Match seat number correctly
                                     if (slotTime >= resStartTime && slotTime < resEndTime) {
                                         cell.classList.add("reserved-hour");
                                         cell.style.backgroundColor = "red";
                                         cell.style.color = "white";
-                                        cell.style.pointerEvents = "none"; // Comment out to enable selectable
+                                        //cell.style.pointerEvents = "none"; // Comment out to enable selectable
                                         cell.innerHTML = `R`;
                                     }
                                 }
@@ -341,6 +341,7 @@ $(document).ready(function() {
         //    window.location.href = "/signup-login"; // Redirect to login page
         //    return;
         //}
+        console.log("Checking element:", document.getElementById("some-element"));
 
         //const hardcodedUserId = window.currentUser._id;  // Replace after implementing authentication
         
@@ -537,7 +538,149 @@ $(document).ready(function() {
         setTimeout(populateReservationDropdowns, 100);
     });
     
+    async function generateReservationInfo() {
+        try {
+            console.log("Fetching reservation data...");
     
+            // Get selected lab room
+            const selectedRoom = document.querySelector(".selected-room");
+            if (!selectedRoom) {
+                console.warn("No room selected.");
+                return;
+            }
+    
+            const selectedRoomId = selectedRoom.dataset.roomId;
+            if (!selectedRoomId) {
+                console.error("Error: Selected room does not have a valid ID.");
+                return;
+            }
+    
+            // Get the selected date
+            const selectedDateElement = document.querySelector(".selected-date");
+            if (!selectedDateElement) {
+                console.warn("No date selected.");
+                return;
+            }
+    
+            const selectedDate = parseInt(selectedDateElement.innerText);
+            const selectedMonthCheck = selectedMonth + 1;
+            const selectedYearCheck = selectedYear;
+            const formattedDate = `${selectedYearCheck}-${selectedMonthCheck.toString().padStart(2, "0")}-${selectedDate.toString().padStart(2, "0")}`;
+    
+            console.log(`Selected Date: ${formattedDate}`);
+    
+            // Fetch all seats for the selected lab
+            const seatResponse = await fetch(`/api/seats?lab=${selectedRoomId}`);
+            if (!seatResponse.ok) throw new Error("Seat API request failed.");
+            const seatData = await seatResponse.json();
+    
+            // Create seat mapping `{ seatObjectId -> seatNumber }`
+            let seatMap = {};
+            seatData.forEach(seat => {
+                seatMap[seat._id] = seat.seatNumber;
+            });
+    
+            // Fetch reservations for the selected room and date
+            const reservationResponse = await fetch(
+                `/api/reservations?lab=${selectedRoomId}&date=${formattedDate}`
+            );
+            if (!reservationResponse.ok) {
+                throw new Error(`API request failed with status ${reservationResponse.status}`);
+            }
+    
+            const reservations = await reservationResponse.json();
+            console.log("Reservations Data:", reservations);
+    
+            // Ensure previous event listeners are removed before adding new ones
+            const availabilityTable = document.querySelector(".available-table tbody");
+            const newTable = availabilityTable.cloneNode(true);
+            availabilityTable.parentNode.replaceChild(newTable, availabilityTable);
+    
+            // Attach event listener for clicking on reserved slots
+            newTable.addEventListener("click", function (event) {
+                let cell = event.target;
+    
+                //console.log("Cell clicked:", cell);
+    
+                // Ensure only reserved cells trigger this function
+                if (!cell.classList.contains("reserved-hour")) {
+                    console.warn("Clicked cell is not reserved.");
+                    return;
+                }
+                
+                // Seating table
+                // Get clicked column index
+                const columnIndex = Array.from(cell.parentNode.children).indexOf(cell);
+    
+                // Get time from column index
+                const slotHour = 7 + Math.floor(columnIndex / 2);
+                const isFirstHalf = columnIndex % 2 === 0;
+                const clickedTime = `${slotHour}:${isFirstHalf ? "00" : "30"}`;
+    
+                // Get clicked row index (seat number)
+                const rowIndex = Array.from(cell.parentNode.parentNode.children).indexOf(cell.parentNode);
+                const seatNumber = rowIndex + 1;
+    
+                //console.log(`Clicked Seat: ${seatNumber}, Time: ${clickedTime}, Date: ${formattedDate}`);
+    
+                // Find matching reservation
+                const matchingReservation = reservations.find(reservation => {
+                    let resSeatNumber = seatMap[reservation.seat]; // Convert seat ID to seat number
+                    let resStartTime = convertToDateTimeObject(reservation.date, reservation.startTime);
+                    let resEndTime = convertToDateTimeObject(reservation.date, reservation.endTime);
+                    let slotTime = convertToDateTimeObject(formattedDate, clickedTime);
+    
+                    return (
+                        resSeatNumber === seatNumber &&
+                        slotTime >= resStartTime &&
+                        slotTime < resEndTime
+                    );
+                });
+        
+                // Ensure the reservation info container exists
+                let infoContainer = document.getElementById("reserve-details-container");
+                if (!infoContainer) {      
+
+                    // Create the container dynamically
+                    infoContainer = document.createElement("div");
+                    infoContainer.id = "reservation-info-container";
+                    infoContainer.classList.add("reservation-info-container");
+    
+                    const parentContainer = document.getElementById("reservation-details-container") || document.body;
+                    parentContainer.appendChild(infoContainer);
+                }
+    
+                // Update reservation info UI
+                if (matchingReservation) {
+                    const isAnonymous = matchingReservation.isAnonymous === true;
+                    const userName = isAnonymous ? "Anonymous" : matchingReservation.user?.name || "Unknown User";
+                    infoContainer.innerHTML = `
+                        <h3>Reservation Details</h3>
+                        <p><strong>Reserved By:</strong> ${userName}</p>
+                        <p><strong>Lab:</strong> ${selectedRoom.innerText}</p>
+                        <p><strong>Seat:</strong> ${seatNumber}</p>
+                        <p><strong>Date:</strong> ${formattedDate}</p>
+                        <p><strong>Time:</strong> ${matchingReservation.startTime} - ${matchingReservation.endTime}</p>
+                    `;
+                } else {
+                    console.warn("No matching reservation found.");
+                    infoContainer.innerHTML = `<p>No reservation found for this time slot.</p>`;
+                }
+            });
+    
+        } catch (error) {
+            console.error("Error fetching reservation info:", error);
+        }
+    }
+    
+    // Call function when a date or room is selected
+    document.addEventListener("click", () => {
+        if (event.target.closest(".date") || event.target.closest(".room-item")) {
+            console.log("📢 Date or room changed. Updating reservations...");
+            setTimeout(generateReservationInfo, 100);
+        }
+    });
+
     generateCalendar();
     generateRoomList();
     generateSeatGrid(capacity);
