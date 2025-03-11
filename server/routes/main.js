@@ -29,14 +29,14 @@ router.get('/', (req, res) => {
 router.get('/api/users', async (req, res) => {
     try {
         const usersList = await User.find({}).lean();
-        console.log(usersList);
+        //console.log(usersList);
 
         res.json({
             success: true,
             count: usersList.length,
             data: usersList
         });
-        console.log('Search results:', usersList);
+        //console.log('Search results:', usersList);
     } catch (error) {
         console.error('API Search error:', error);
         res.status(500).json({
@@ -383,7 +383,7 @@ router.get("/api/seats", async (req, res) => {
             return res.status(404).json({ message: `No seats found for the specified criteria.` });
         }
 
-        console.log("Seats Found:", seats);
+        //console.log("Seats Found:", seats);
         res.status(200).json(seatNumber ? seats[0] : seats); // Return single seat if filtering by seatNumber
 
     } catch (error) {
@@ -413,7 +413,7 @@ router.get('/profile', async (req, res) => {
             return res.redirect('/signup-login');
         }
 
-        console.log("Current user:", user);
+        //console.log("Current user:", user);
 
         // Fetch user's reservations
         let reservations = [];
@@ -448,7 +448,7 @@ router.get('/profile', async (req, res) => {
             try {
                 // Get user ID as string
                 const userIdString = user._id || user.id;
-                console.log("Looking for reservations with user ID:", userIdString);
+                //console.log("Looking for reservations with user ID:", userIdString);
 
                 // Get all reservations
                 const allReservations = await Reservation.find()
@@ -456,7 +456,7 @@ router.get('/profile', async (req, res) => {
                     .sort({ date: 1 }) // Sort by date to get original order
                     .lean();
 
-                console.log(`Total reservations in database: ${allReservations.length}`);
+                //console.log(`Total reservations in database: ${allReservations.length}`);
 
                 // Filter reservations for this user by comparing string IDs
                 const userReservations = allReservations.filter(reservation => {
@@ -468,14 +468,14 @@ router.get('/profile', async (req, res) => {
                     return resUserId === userIdString;
                 });
 
-                console.log(`Found ${userReservations.length} reservations for ${user.name}`);
+                //console.log(`Found ${userReservations.length} reservations for ${user.name}`);
 
                 const approvedReservations = userReservations.filter(
                     reservation => reservation.status === "approved"
                 );
 
                 totalApprovedCount = approvedReservations.length;
-                console.log(`Total approved reservations: ${totalApprovedCount}`);
+                //console.log(`Total approved reservations: ${totalApprovedCount}`);
 
                 // Count approved reservations for current week and month
                 approvedReservations.forEach(reservation => {
@@ -586,7 +586,7 @@ router.get('/manage-account', async (req, res) => {
         const objID = await User.findById(user._id);
         //console.log(objID)
         const userSettings = await Settings.findOne({ user: objID }).populate("user").lean();
-        console.log(userSettings)
+        //(userSettings)
         res.render('manage-account', {
             title: "Manage Account",
             pageStyle: "manage-account",
@@ -623,7 +623,7 @@ router.post('/edit-reservation', async (req, res) => {
             return res.status(400).send("Reservation ID is required");
         }
         const reservation = await Reservation.findOne({ _id: id }).populate('user lab').lean();
-        console.log(reservation);
+        //console.log(reservation);
 
         if (!reservation) {
             return res.status(404).send("Reservation not found");
@@ -632,7 +632,7 @@ router.post('/edit-reservation', async (req, res) => {
         if (user.type === "student" && reservation.user.name !== user.name) {
             return res.redirect('/profile')
         }
-        console.log(id, reservation, user)
+        //console.log(id, reservation, user)
         res.render('edit-reservation', {
             title: "Edit Reservation",
             pageStyle: "edit-reservation",
@@ -713,7 +713,7 @@ router.post('/delete-reservation', async (req, res) => {
 
         const ObjID = selectedReserve._id;
         const deletedRes = await Reservation.findByIdAndDelete(ObjID);
-        console.log(deletedRes);
+        //console.log(deletedRes);
 
         if (!deletedRes) {
             return res.status(404).send("Reservation not found");
@@ -728,7 +728,7 @@ router.post('/delete-reservation', async (req, res) => {
 //signout
 router.post('/signout', (req, res) => {
     user = '';
-    console.log('User signed out:' + user);
+    //console.log('User signed out:' + user);
     res.redirect('/');
 });
 

@@ -62,51 +62,38 @@
 
         <div class="seating-reservation-wrapper">
         <!-- Seating Section -->
-        <div class="seating-container">
-            <div class="seats">
-                <table class="seats-table">
-                    <thead>
-                        <tr><th>Seat</th></tr>
-                    </thead>
-                    <tbody>
-                        <script>
-                            document.write([...Array(9)].map((_, i) => `<tr><td>Seat ${i + 1}</td></tr>`).join(''));
-                        </script>
-                    </tbody>
-                </table>
-            </div>
+      <div class="seating-container">
+    <div class="seats">
+        <table class="seats-table">
+            <thead>
+                <tr><th>Seat</th></tr>
+            </thead>
+            <tbody id="seats-tbody">
+               <script>
+                    document.write([...Array(9)].map((_, i) => `<tr><td>Seat ${i + 1}</td></tr>`).join(''));
+                </script>
+            </tbody>
+        </table>
+    </div>
 
-            <div class="seat-availability-container">
-                <table class="available-table">
-                    <thead>
-                        <tr>
-                            <script>
-                                document.write([...Array(12)].map((_, i) => `<th colspan="2">${7 + i}:00${i < 5 ? 'am' : 'pm'}</th>`).join(''));
-                            </script>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <script>
-                            document.write([...Array(9)].map(() => `<tr>${[...Array(24)].map(() => '<td class="time-slot"></td>').join('')}</tr>`).join(''));
-                        </script>
-                    </tbody>
-                </table>
+    <div class="seat-availability-container">
+        <table class="available-table">
+            <thead>
+                <tr id="availability-headers">
+                   <script>
+                        document.write([...Array(12)].map((_, i) => `<th colspan="2">${7 + i}:00${i < 5 ? 'am' : 'pm'}</th>`).join(''));
+                    </script>
+                </tr>
+            </thead>
+            <tbody id="availability-tbody">
+               <script>
+                    document.write([...Array(9)].map(() => `<tr>${[...Array(24)].map(() => '<td><div class="tooltip"></div></td>').join('')}</tr>`).join(''));
+                </script>
+            </tbody>
+        </table>
+    </div>
+</div>
 
-
-              <template id="reservation-popup">
-                    <div class="reservation-details">
-                    <h4>Reservation Details</h4>
-                    <p><strong>User:</strong> <span class="reserve-user"></span></p>
-                    <p><strong>Date:</strong> <span class="reserve-date"></span></p>
-                    <p><strong>Time:</strong> <span class="reserve-time"></span></p>
-                    <p><strong>Lab:</strong> <span class="reserve-lab"></span></p>
-                    <p><strong>Seat:</strong> <span class="reserve-seat"></span></p>
-                    </div>
-                </template>
-
-
-            </div>
-        </div>
 
         <!-- Reserve Time Section (Now inside .seating-reservation-wrapper) -->
         <div class="reserve-time-container">
@@ -128,4 +115,5 @@
         </div>
     </div>
 
-<script src="/javascript/calendar.js"></script>
+
+  

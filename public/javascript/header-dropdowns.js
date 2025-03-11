@@ -92,7 +92,6 @@ $(document).ready(function () {
     users.forEach(user => {
       const isVisible = user.name.toLowerCase().includes(value) || 
                        user.email.toLowerCase().includes(value);
-      console.log(`User: ${user.name}, Match: ${isVisible}`);
       user.element.classList.toggle("hide", !isVisible);
 
       if (isVisible) {

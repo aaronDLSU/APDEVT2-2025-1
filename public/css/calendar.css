@@ -428,24 +428,36 @@ footer {
     left: 0;
 }
 
-.time-slot {
-    position: relative;
-    width: 30px;
-    height: 25px;
-    border: 1px solid #ddd;
-    cursor: pointer;
-  }
+.available-table td {
+    position: relative; /* Required for tooltip positioning */
+}
 
-  .time-slot.reserved {
-    background-color: #ffcccc;
-  }
-
-  .reservation-details {
-    position: absolute;
+.available-table .tooltip {
+    position: absolute; 
+    top: auto; 
+    bottom: 0; 
+    left: 50%;
+    transform: translateX(-50%);
     background: white;
     border: 1px solid #ccc;
-    padding: 1rem;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    width: 200px;
+    height: 100px; /* Prevent overflow */
+    overflow: auto; 
+    padding: 8px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     z-index: 1000;
-    min-width: 250px;
-  }
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+    white-space: normal; /* Ensure long text wraps */
+}
+
+
+
+.available-table td:hover .tooltip {
+    opacity: 1;
+}
+
+
+  
