@@ -35,7 +35,7 @@ router.get('/api/users', async (req, res) => {
             count: usersList.length,
             data: usersList
         });
-        
+        console.log('Search results:', usersList);
     } catch (error) {
         console.error('API Search error:', error);
         res.status(500).json({
@@ -274,19 +274,27 @@ router.get('/signup-login', (req, res) => {
     });
 });
 
+async function getName(email){
+    username = email.split('@')[0];
+    console.log('username:' + username);
+    return username;
+}
+
 // Handle User Signup
 router.post('/signup', async (req, res) => {
     try {
         // Extract form data from request
         const { 'signup-email': email, 'signup-password': password, 'signup-role': role } = req.body;
-
+        let name = await getName(email);
+        console.log(name);
         // Create new user in MongoDB
         await User.create({
+            name: name,
             email: email,
             password: password,
             role: role
         });
-        res.redirect('/signup-login'); // Redirect back to login page
+        res.redirect('/signup-login?success=true'); // Redirect back to login page
     } catch (err) {
         console.error('Signup error:', err);
         res.status(500).send('Error creating user');
