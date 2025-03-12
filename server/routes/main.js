@@ -297,7 +297,7 @@ router.post('/signup', async (req, res) => {
         res.redirect('/signup-login?success=true'); // Redirect back to login page
     } catch (err) {
         console.error('Signup error:', err);
-        res.status(500).send('Error creating user');
+        res.redirect('/signup-login?success=false');
     }
 });
 
