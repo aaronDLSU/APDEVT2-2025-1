@@ -29,14 +29,13 @@ router.get('/', (req, res) => {
 router.get('/api/users', async (req, res) => {
     try {
         const usersList = await User.find({}).lean();
-        console.log(usersList);
 
         res.json({
             success: true,
             count: usersList.length,
             data: usersList
         });
-        console.log('Search results:', usersList);
+        
     } catch (error) {
         console.error('API Search error:', error);
         res.status(500).json({

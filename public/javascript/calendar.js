@@ -1,5 +1,6 @@
 // Real-time Clock
 $(document).ready(function() {
+    console.log('works ');
     const clockContainer = document.getElementById("real-time-clock");
     const calendarGrid = document.getElementById("calendar");
     const currentMonthLabel = document.getElementById("current-month");
@@ -331,7 +332,10 @@ $(document).ready(function() {
         return;
     }
 
-    document.querySelector(".login-reserve-room-btn").addEventListener("click", promptLogin);
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("login-reserve-room-btn").addEventListener("click", promptLogin);
+    });
+    
     
     // Reserve room function
     async function reserveRoom() {
@@ -683,7 +687,6 @@ $(document).ready(function() {
 
     generateCalendar();
     generateRoomList();
-    generateSeatGrid(capacity);
     window.reserveRoom = reserveRoom;
     window.changeMonth = changeMonth;
 });

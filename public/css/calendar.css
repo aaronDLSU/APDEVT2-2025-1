@@ -363,7 +363,7 @@
     background-color: green;
 }
 
-.login-reserve-room-btn {
+#login-reserve-room-btn {
     display: block;
     margin-top: 10%;
     padding: 4px 8px;
