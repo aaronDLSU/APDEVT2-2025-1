@@ -67,9 +67,13 @@ function validateSignup() {
     $(".signup-warning").addClass("show");
     return false; // Block form submission
   }
-  alert('Account Successfully Added!');
   return true; // Allow form submission
 }
+
+const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('success') && urlParams.get('success') === 'true') {
+        alert('Account Successfully Added!');
+    }
 
 
 function clearSignUp(){
