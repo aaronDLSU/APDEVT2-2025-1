@@ -44,14 +44,14 @@ function remembered() {
 function validateSignup() {
   const email = document.getElementById('signup-email').value.trim();
   const password = document.getElementById('signup-password').value.trim();
-  
-
+  const confirmPassword = document.getElementById('confirm-password').value.trim();
   console.log('Validation running');
   // Clear previous errors
   
-  if (!email || !password) {
+  if (!email || !password || !confirmPassword) {
     $("#signup-email").css("border-color","red");
     $("#signup-password").css("border-color","red");
+    $("#confirm-password").css("border-color","red");
     $(".invalid-message").html("Invalid Email or Password Input!");
     $(".invalid-message").css("opacity", "1");
     $(".signup-warning").addClass("show");
@@ -62,6 +62,7 @@ function validateSignup() {
   if (checkPasswordLength(password)) {
     $("#signup-email").css("border-color","red");
     $("#signup-password").css("border-color","red");
+    $("#confirm-password").css("border-color","red");
     $(".invalid-message").html("Password Minimum Length is 8 Characters");
     $(".invalid-message").css("opacity", "1");
     $(".signup-warning").addClass("show");
@@ -71,6 +72,7 @@ function validateSignup() {
   if(!email.includes("@")){
     $("#signup-email").css("border-color","red");
     $("#signup-password").css("border-color","red");
+    $("#confirm-password").css("border-color","red");
     $(".invalid-message").html("Invalid Email Input");
     $(".invalid-message").css("opacity", "1");
     $(".signup-warning").addClass("show");
@@ -80,13 +82,24 @@ function validateSignup() {
   if(email.split('@')[1] != "dlsu.edu.ph"){
     $("#signup-email").css("border-color","red");
     $("#signup-password").css("border-color","red");
+    $("#confirm-password").css("border-color","red");
     $(".invalid-message").html("Only DLSU Emails Allowed");
     $(".invalid-message").css("opacity", "1");
     $(".signup-warning").addClass("show");
     return false;
   }
-  return true; // Allow form submission
 
+  if (password != confirmPassword) {
+    $("#signup-email").css("border-color","red");
+    $("#signup-password").css("border-color","red");
+    $("#confirm-password").css("border-color","red");
+    $(".invalid-message").html("Passwords do not match");
+    $(".invalid-message").css("opacity", "1");
+    $(".signup-warning").addClass("show");
+    return false; // Block form submission
+  }
+
+  return true; // Allow form submission
 }
 
 const urlParams = new URLSearchParams(window.location.search);
