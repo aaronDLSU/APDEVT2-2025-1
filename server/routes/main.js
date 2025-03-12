@@ -692,7 +692,7 @@ router.get('/reservation-list', async (req, res) => {
 
         res.render('reservation-list', {
             title: "Reservation List",
-            pageStyle: "labtech-reservation-list",
+            pageStyle: "reservation-list",
             pageScripts: ["header-dropdowns", "reservation-list"],
             reservations,
             user,
