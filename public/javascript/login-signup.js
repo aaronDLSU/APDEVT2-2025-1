@@ -52,7 +52,7 @@ function validateSignup() {
   if (!email || !password) {
     $("#signup-email").css("border-color","red");
     $("#signup-password").css("border-color","red");
-    $(".invalid-message").html("Invalid email or password input!");
+    $(".invalid-message").html("Invalid Email or Password Input!");
     $(".invalid-message").css("opacity", "1");
     $(".signup-warning").addClass("show");
     console.log('invalid');
@@ -62,18 +62,40 @@ function validateSignup() {
   if (checkPasswordLength(password)) {
     $("#signup-email").css("border-color","red");
     $("#signup-password").css("border-color","red");
-    $(".invalid-message").html("password minimum length is 8 characters");
+    $(".invalid-message").html("Password Minimum Length is 8 Characters");
     $(".invalid-message").css("opacity", "1");
     $(".signup-warning").addClass("show");
     return false; // Block form submission
   }
+
+  if(!email.includes("@")){
+    $("#signup-email").css("border-color","red");
+    $("#signup-password").css("border-color","red");
+    $(".invalid-message").html("Invalid Email Input");
+    $(".invalid-message").css("opacity", "1");
+    $(".signup-warning").addClass("show");
+    return false;
+  }
+
+  if(email.split('@')[1] != "dlsu.edu.ph"){
+    $("#signup-email").css("border-color","red");
+    $("#signup-password").css("border-color","red");
+    $(".invalid-message").html("Only DLSU Emails Allowed");
+    $(".invalid-message").css("opacity", "1");
+    $(".signup-warning").addClass("show");
+    return false;
+  }
   return true; // Allow form submission
+
 }
 
 const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('success') && urlParams.get('success') === 'true') {
         alert('Account Successfully Added!');
     }
+    else if (urlParams.has('success') && urlParams.get('success') === 'false') {
+      alert('Email has been used to make an account already!');
+  }
 
 
 function clearSignUp(){
