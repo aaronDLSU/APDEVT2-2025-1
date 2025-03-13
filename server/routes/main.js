@@ -35,7 +35,7 @@ router.get('/api/users', async (req, res) => {
             count: usersList.length,
             data: usersList
         });
-        console.log('Search results:', usersList);
+        //console.log('Search results:', usersList);
     } catch (error) {
         console.error('API Search error:', error);
         res.status(500).json({
@@ -593,7 +593,7 @@ router.get('/manage-account', async (req, res) => {
         const objID = await User.findById(user._id);
         //console.log(objID)
         const userSettings = await Settings.findOne({ user: objID }).populate("user").lean();
-        console.log(userSettings)
+        //console.log(userSettings)
         res.render('manage-account', {
             title: "Manage Account",
             pageStyle: "manage-account",
@@ -629,8 +629,7 @@ router.post('/edit-reservation', async (req, res) => {
         if (!id) {
             return res.status(400).send("Reservation ID is required");
         }
-        const reservation = await Reservation.findOne({ _id: id }).populate('user lab').lean();
-        console.log(reservation);
+        const reservation = await Reservation.findOne({ _id: id }).populate("user lab seat").lean();
 
         if (!reservation) {
             return res.status(404).send("Reservation not found");

@@ -9,11 +9,11 @@
             <h2>Selected:</h2>
             <div class="chosen-reservation">
               <!-- Lab tech view -->
-            {{#if (eq user.type 'labtech')}}
+            {{#if (eq user.role 'labtech')}}
               <div class="card reserve-item" id="labtech-view">
                 <div class="row g-0" style="align-items: center;">
                   <div class="col-pfp">
-                    <img class="mr-3 list-img" src="images/default_profilepic.jpg" alt="{{reservation.user.name}}">
+                    <img class="mr-3 list-img" src="{{reservation.user.profilePic}}" alt="{{reservation.user.name}}">
                   </div>
                   <div class="col res-details-container">
                     <div class="card-body reserve-details">
@@ -23,7 +23,7 @@
                       <ul class="list-group list-group-flush">
                           <li class="list-group-item">{{formatDate reservation.date}}</li>
                           <li class="list-group-item">{{reservation.startTime}} - {{reservation.endTime}}</li>
-                          <li class="list-group-item">Seat {{reservation.seat}}</li>
+                          <li class="list-group-item">Seat {{reservation.seat.seatNumber}}</li>
                       </ul>
                   </div>
                 </div>
@@ -38,7 +38,7 @@
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item">{{formatDate reservation.date}}</li>
                   <li class="list-group-item">{{reservation.startTime}} - {{reservation.endTime}}</li>
-                  <li class="list-group-item">Seat {{reservation.seat}}</li>
+                  <li class="list-group-item">Seat {{reservation.seat.seatNumber}}</li>
                 </ul>
               </div>
             </div>
