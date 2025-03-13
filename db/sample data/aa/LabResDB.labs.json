@@ -1,0 +1,36 @@
+[{
+  "_id": {
+    "$oid": "67ce633e7bd8a5938cb8d5d2"
+  },
+  "name": "Lab A",
+  "building": "Building 1",
+  "capacity": 10,
+  "availability": true,
+  "createdAt": {
+    "$date": "2025-03-10T08:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67ce633e7bd8a5938cb8d5d3"
+  },
+  "name": "Lab B",
+  "building": "Building 2",
+  "capacity": 10,
+  "availability": true,
+  "createdAt": {
+    "$date": "2025-03-10T09:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67ce86477bd8a5938cb8d621"
+  },
+  "name": "Lab C",
+  "building": "Building 1",
+  "capacity": 10,
+  "availability": true,
+  "createdAt": {
+    "$date": "2025-03-10T08:00:00.000Z"
+  }
+}]
