@@ -2,6 +2,7 @@
   "_id": {
     "$oid": "67c66192b0ce105ba934bc95"
   },
+  "userId": 1,
   "username": "juan123",
   "name": "Juan De La Cruz",
   "email": "juan.delacruz@dlsu.edu.ph",
@@ -14,6 +15,7 @@
   "_id": {
     "$oid": "67c661b1b0ce105ba934bc96"
   },
+  "userId": 2,
   "username": "john_torres",
   "name": "John Torres",
   "email": "john.torres@dlsu.edu.ph",
@@ -26,6 +28,7 @@
   "_id": {
     "$oid": "67c661c6b0ce105ba934bc97"
   },
+  "userId": 3,
   "username": "maria_s",
   "name": "Maria Sanchez",
   "email": "maria.sanchez@dlsu.edu.ph",
@@ -37,6 +40,7 @@
   "_id": {
     "$oid": "67c661f0b0ce105ba934bc98"
   },
+  "userId": 4,
   "username": "anna_g",
   "name": "Anna Garcia",
   "email": "anna.garcia@dlsu.edu.ph",
@@ -49,6 +53,7 @@
   "_id": {
     "$oid": "67c661feb0ce105ba934bc99"
   },
+  "userId": 5,
   "username": "thomas_sy",
   "name": "Thomas Sy",
   "email": "thomas.sy@dlsu.edu.ph",
@@ -62,6 +67,7 @@
   "_id": {
     "$oid": "67c6e500b0ce105ba934bcf7"
   },
+  "userId": 6,
   "username": "charlie123",
   "name": "Charlie Chaplin",
   "email": "student@dlsu.edu.ph",
