@@ -687,7 +687,7 @@ router.get('/reservation-list', async (req, res) => {
         }
         //console.log(filter);
         //select data based on filter (returns everything if there are no filters)
-        const reservations = await Reservation.find(filter).populate('user lab').sort({ date: 1 }).lean();
+        const reservations = await Reservation.find(filter).populate('user lab seat').sort({ date: 1 }).lean();
         //console.log(reservations)
 
         res.render('reservation-list', {
