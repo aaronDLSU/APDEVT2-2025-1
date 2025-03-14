@@ -646,6 +646,54 @@ router.post('/update-profile-picture', (req, res) => {
     }
 });
 
+// Update username route
+router.post('/update-username', async (req, res) => {
+    try {
+        if (!user) {
+            return res.redirect('/signup-login');
+        }
+
+        const { newUsername } = req.body;
+
+        if (!newUsername || newUsername.trim() === '') {
+            return res.redirect('/edit-profile?error=Username cannot be empty');
+        }
+
+        // Update the user's name in the session
+        user.username = newUsername;
+
+        // Redirect with success message
+        res.redirect('/edit-profile?success=Username updated successfully');
+    } catch (error) {
+        console.error('Error updating username:', error);
+        res.redirect('/edit-profile?error=Failed to update username');
+    }
+});
+
+// Update description route
+router.post('/update-description', async (req, res) => {
+    try {
+        if (!user) {
+            return res.redirect('/signup-login');
+        }
+
+        const { newDescription } = req.body;
+
+        if (!newDescription || newDescription.trim() === '') {
+            return res.redirect('/edit-profile?error=Description cannot be empty');
+        }
+
+        // Update the user's description in the session
+        user.description = newDescription;
+
+        // Redirect with success message
+        res.redirect('/edit-profile?success=Description updated successfully');
+    } catch (error) {
+        console.error('Error updating description:', error);
+        res.redirect('/edit-profile?error=Failed to update description');
+    }
+});
+
 // manage account Page
 router.get('/manage-account', async (req, res) => {
     try {
@@ -751,7 +799,7 @@ router.get('/reservation-list', async (req, res) => {
         //console.log(filter);
         //select data based on filter (returns everything if there are no filters)
         const reservations = await Reservation.find(filter).populate('user lab seat').sort({ date: 1 }).lean()
-        const labs = await Lab.find().sort({name: 1}).lean()
+        const labs = await Lab.find().sort({ name: 1 }).lean()
         //console.log(reservations)
         console.log(labs)
 
