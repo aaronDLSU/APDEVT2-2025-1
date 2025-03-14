@@ -120,7 +120,8 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">{{formatDate this.date}}</li>
                         <li class="list-group-item">{{this.startTime}} - {{this.endTime}}</li>
-                        <li class="list-group-item">Seat {{this.seat.seatNumber}}</li> <!-- Change for Seat Number instead of ObjID -->
+                        <li class="list-group-item">Seat {{this.seat.seatNumber}}</li>
+                        <!-- Change for Seat Number instead of ObjID -->
                     </ul>
                 </div>
             </div>
@@ -170,7 +171,7 @@
 
         <!--Dashboard-->
         <div class="pr-5" id="dashboard-section">
-             <div class="card" style="width: 70%; margin-left: auto;">
+            <div class="card" style="width: 70%; margin-left: auto;">
                 <div class="card-header">
                     Reservations Summary
                 </div>
@@ -272,7 +273,8 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">{{formatDate this.date}}</li>
                         <li class="list-group-item">{{this.startTime}} - {{this.endTime}}</li>
-                        <li class="list-group-item">Seat {{this.seat.seatNumber}}</li> <!-- Change for Seat Number instead of ObjID -->
+                        <li class="list-group-item">Seat {{this.seat.seatNumber}}</li>
+                        <!-- Change for Seat Number instead of ObjID -->
                     </ul>
                 </div>
             </div>
@@ -283,7 +285,6 @@
                     <i class="fa-solid fa-calendar-xmark fa-3x mb-3"></i>
                     <h4>No reservations found</h4>
                     <p>You haven't made any reservations yet.</p>
-                    <a href="/calendar" class="btn btn-primary mt-2">Book a Reservation</a>
                 </div>
             </div>
             {{/if}}
