@@ -654,28 +654,20 @@ $(document).ready(function() {
                     parentContainer.appendChild(infoContainer);
                 }
     
-                const userId = matchingReservation.user?._id?.trim();
-                console.log("User:", matchingReservation.user);
-                console.log("Type of User:", typeof matchingReservation.user);
-
                 // Update reservation info UI
                 if (matchingReservation) {
                     const isAnonymous = matchingReservation.isAnonymous === true;
                     const userId = matchingReservation.user?._id;
                     const userName = isAnonymous ? "Anonymous" : matchingReservation.user?.name || "Unknown User";
-                    var link = '';
-
-                    if(isAnonymous){
-                        link = `<p><strong>Reserved By:</strong>${userName}</p>`
-                    }else{
-                        link = `<p><strong>Reserved By:</strong><a href="/profile/
-                        ${userId}">
-                        ${userName}</a><p>`
-                    }
-
+    
+                    // Create user profile link
+                    let userProfileLink = isAnonymous
+                        ? "Anonymous"
+                        : `<a href="/profile/${userId}" style="color: blue; text-decoration: underline;">${userName}</a>`;
+    
                     infoContainer.innerHTML = `
                         <h3>Reservation Details</h3>
-                        <p><strong>Reserved By:</strong> ${userName}</p>
+                        <p><strong>Reserved By:</strong> ${userProfileLink}</p>
                         <p><strong>Lab:</strong> ${selectedRoom.innerText}</p>
                         <p><strong>Seat:</strong> ${seatNumber}</p>
                         <p><strong>Date:</strong> ${formattedDate}</p>
