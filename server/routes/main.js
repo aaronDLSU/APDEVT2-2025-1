@@ -750,8 +750,10 @@ router.get('/reservation-list', async (req, res) => {
         }
         //console.log(filter);
         //select data based on filter (returns everything if there are no filters)
-        const reservations = await Reservation.find(filter).populate('user lab seat').sort({ date: 1 }).lean();
+        const reservations = await Reservation.find(filter).populate('user lab seat').sort({ date: 1 }).lean()
+        const labs = await Lab.find().sort({name: 1}).lean()
         //console.log(reservations)
+        console.log(labs)
 
         res.render('reservation-list', {
             title: "Reservation List",
@@ -759,6 +761,7 @@ router.get('/reservation-list', async (req, res) => {
             pageScripts: ["header-dropdowns", "reservation-list"],
             reservations,
             user,
+            labs,
             labtech: user.role === 'labtech',
             student: user.role === 'student'
         });
