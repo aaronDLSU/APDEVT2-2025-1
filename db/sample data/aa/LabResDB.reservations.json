@@ -13,11 +13,11 @@
     "$oid": "67ce79f37bd8a5938cb8d60b"
   },
   "date": {
-    "$date": "2025-03-12T00:00:00.000Z"
+    "$date": "2025-03-15T00:00:00.000Z"
   },
   "startTime": "11:30",
   "endTime": "12:00",
-  "isAnonymous": false,
+  "isAnonymous": true,
   "status": "approved",
   "createdAt": {
     "$date": "2025-03-10T06:25:37.994Z"
@@ -39,7 +39,7 @@
     "$oid": "67ce79f37bd8a5938cb8d609"
   },
   "date": {
-    "$date": "2025-03-12T00:00:00.000Z"
+    "$date": "2025-03-15T00:00:00.000Z"
   },
   "startTime": "12:30",
   "endTime": "14:00",
