@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const express = require('express');
 const router = express.Router();
+const path = require('path');
+const fs = require('fs');
 
 // Add model routes here
 const User = require("../../db/models/DB_users");
@@ -13,6 +15,12 @@ const Seat = require("../../db/models/DB_seats");
 const student = { _id: "67c6e500b0ce105ba934bcf7", name: "Charlie Chaplin", password: "student", role: "student", description: "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology. Passionate about coding and problem-solving, I am eager to explore new technologies and develop innovative solutions. Currently honing my skills in programming, web development, and algorithms, I aspire to contribute to impactful projects in the tech industry.", profilePic: "/images/student.jpg" };
 const labtech = { name: "Sir", role: "labtech", description: "i am a lab technician", profilePic: "/images/default_profilepic.jpg" };
 let user = ''; // Stores the current logged-in user
+
+const uploadDir = path.join(__dirname, '../../public/images/temp-uploads');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+    console.log('Created temp uploads directory:', uploadDir);
+}
 
 // Homepage Route
 router.get('/', (req, res) => {
@@ -275,7 +283,7 @@ router.get('/signup-login', (req, res) => {
     });
 });
 
-async function getName(email){
+async function getName(email) {
     username = email.split('@')[0];
     console.log('username:' + username);
     return username;
@@ -583,6 +591,61 @@ router.get('/edit-profile', (req, res) => {
     });
 });
 
+router.post('/update-profile-picture', (req, res) => {
+    try {
+        if (!user) {
+            return res.redirect('/signup-login');
+        }
+
+        // Check if a file was uploaded
+        if (!req.files || !req.files.profilePicture) {
+            return res.redirect('/edit-profile?error=Please select an image file');
+        }
+
+        const profilePicture = req.files.profilePicture;
+
+        // Check if it's an image
+        if (!profilePicture.mimetype.startsWith('image/')) {
+            return res.redirect('/edit-profile?error=Please upload only image files');
+        }
+
+        // Create a unique filename
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const fileExtension = path.extname(profilePicture.name);
+        const fileName = 'profile-' + uniqueSuffix + fileExtension;
+
+        // Ensure the upload directory exists
+        const uploadDir = path.join(__dirname, '../../public/images/temp-uploads');
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+
+        // The upload path
+        const uploadPath = path.join(uploadDir, fileName);
+
+        // The relative path for the browser
+        const relativePath = `/images/temp-uploads/${fileName}`;
+
+        // Move the file to the upload directory
+        profilePicture.mv(uploadPath, function (err) {
+            if (err) {
+                console.error('File upload error:', err);
+                return res.redirect('/edit-profile?error=Error uploading file');
+            }
+
+            // Update user session with new profile pic path (without saving to DB)
+            user.profilePic = relativePath;
+
+            console.log(`Updated profile picture in session to: ${relativePath}`);
+
+            return res.redirect('/edit-profile?success=Profile picture updated for this session');
+        });
+    } catch (error) {
+        console.error('Profile picture upload error:', error);
+        return res.redirect('/edit-profile?error=' + encodeURIComponent(error.message));
+    }
+});
+
 // manage account Page
 router.get('/manage-account', async (req, res) => {
     try {
@@ -825,7 +888,7 @@ router.post("/api/reserveroom", async (req, res) => {
         });
 
         if (existingReservation) {
-            return res.status(409).json({ 
+            return res.status(409).json({
                 message: `Seat is already reserved from ${existingReservation.startTime} to ${existingReservation.endTime}!`
             });
         }

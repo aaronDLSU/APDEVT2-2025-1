@@ -9,3 +9,7 @@ node_modules/
 
 #Webstorm IDE files
 .idea/
+
+# Temporary uploaded files
+public/images/temp-uploads/
+public/images/temp-uploads/*
