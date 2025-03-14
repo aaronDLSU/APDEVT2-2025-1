@@ -151,6 +151,7 @@ router.get('/profile/:_id', async (req, res) => {
                 // Get all reservations
                 const allReservations = await Reservation.find()
                     .populate('lab')
+                    .populate('seat', 'seatNumber')
                     .sort({ date: 1 }) // Sort by date to get original order
                     .lean();
 
