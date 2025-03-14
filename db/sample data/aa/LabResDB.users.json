@@ -1,0 +1,116 @@
+[{
+  "_id": {
+    "$oid": "67c66192b0ce105ba934bc95"
+  },
+  "username": "juan123",
+  "name": "Juan De La Cruz",
+  "email": "juan.delacruz@dlsu.edu.ph",
+  "password": "12345",
+  "role": "student",
+  "profilePic": "/images/default_profilepic.jpg",
+  "description": "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology."
+},
+{
+  "_id": {
+    "$oid": "67c661b1b0ce105ba934bc96"
+  },
+  "username": "john_torres",
+  "name": "John Torres",
+  "email": "john.torres@dlsu.edu.ph",
+  "password": "12345",
+  "role": "student",
+  "profilePic": "/images/default_profilepic.jpg",
+  "description": "I am a third-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology. Passionate about coding and problem-solving, I am eager to explore new technologies and develop innovative solutions. I aspire to contribute to impactful projects in the tech industry."
+},
+{
+  "_id": {
+    "$oid": "67c661c6b0ce105ba934bc97"
+  },
+  "username": "maria_s",
+  "name": "Maria Sanchez",
+  "email": "maria.sanchez@dlsu.edu.ph",
+  "password": "12345",
+  "role": "student",
+  "profilePic": "/images/default_profilepic.jpg"
+},
+{
+  "_id": {
+    "$oid": "67c661f0b0ce105ba934bc98"
+  },
+  "username": "anna_g",
+  "name": "Anna Garcia",
+  "email": "anna.garcia@dlsu.edu.ph",
+  "password": "12345",
+  "role": "student",
+  "profilePic": "/images/default_profilepic.jpg",
+  "description": "I am a second-year Computer Science major at De La Salle University (DLSU), specializing in Information Systems. Passionate about problem-solving, I am eager to explore new technologies and develop innovative solutions. I aspire to contribute to impactful projects in the tech industry."
+},
+{
+  "_id": {
+    "$oid": "67c661feb0ce105ba934bc99"
+  },
+  "username": "thomas_sy",
+  "name": "Thomas Sy",
+  "email": "thomas.sy@dlsu.edu.ph",
+  "password": "12345",
+  "role": "student",
+  "profilePic": "/images/default_profilepic.jpg",
+  "description": "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Information Technology. I am eager to explore new technologies and develop innovative solutions."
+},
+{
+  "_id": {
+    "$oid": "67c6e500b0ce105ba934bcf7"
+  },
+  "username": "charlie123",
+  "name": "Charlie Chaplin",
+  "email": "student@dlsu.edu.ph",
+  "password": "student",
+  "role": "student",
+  "profilePic": "/images/student.jpg",
+  "description": "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology. Passionate about coding and problem-solving, I am eager to explore new technologies and develop innovative solutions. Currently honing my skills in programming, web development, and algorithms, I aspire to contribute to impactful projects in the tech industry."
+},
+{
+  "_id": {
+    "$oid": "67d1059f622738627e451ef0"
+  },
+  "name": "adrian",
+  "email": "adrian@dlsu.edu.ph",
+  "password": "adrian1234",
+  "profilePic": "/images/default_profilepic.jpg",
+  "role": "student",
+  "isActivated": false,
+  "createdAt": {
+    "$date": "2025-03-12T03:55:11.922Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67d1515a9964ba6d1c43dd87"
+  },
+  "name": "labtech",
+  "email": "labtech@dlsu.edu.ph",
+  "password": "labtechs",
+  "profilePic": "/images/default_profilepic.jpg",
+  "role": "labtech",
+  "isActivated": false,
+  "createdAt": {
+    "$date": "2025-03-12T09:18:18.415Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67d44b546cc4bb037020387c"
+  },
+  "name": "labtech1",
+  "email": "labtech1@dlsu.edu.ph",
+  "password": "labtech1",
+  "profilePic": "/images/default_profilepic.jpg",
+  "role": "student",
+  "isActivated": false,
+  "createdAt": {
+    "$date": "2025-03-14T15:29:24.816Z"
+  },
+  "__v": 0
+}]
