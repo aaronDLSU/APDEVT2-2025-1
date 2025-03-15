@@ -746,6 +746,7 @@ router.post('/edit-reservation', async (req, res) => {
             return res.status(400).send("Reservation ID is required");
         }
         const reservation = await Reservation.findOne({ _id: id }).populate("user lab seat").lean();
+        const labs = await Lab.find().lean();
 
         if (!reservation) {
             return res.status(404).send("Reservation not found");
@@ -761,6 +762,7 @@ router.post('/edit-reservation', async (req, res) => {
             pageScripts: ["header-dropdowns", "edit-reservation"], // Include edit-reservation scripts
             user,
             reservation,
+            labs,
             labtech: user.role === 'labtech',
             student: user.role === 'student'
         });
