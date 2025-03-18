@@ -38,7 +38,7 @@
       
      
 
-      {{#if student}}
+      {{#if user}}
          <div class="right-section">
            <img class="logged-in-prof" src="{{user.profilePic}}">
         </div>
@@ -61,50 +61,6 @@
               </button>
           </form>
           
-        </div>
-
-        <div id="check-account-setting">
-          <button class="back-to-prof-dropdown" data-action="back-to-profile">
-            &lt; Back
-          </button>
-         
-          <button class="check-profile-buttons" onclick="location.href = '/profile'">
-            <i class="fa-regular fa-user" style="margin-right: 21px;" ></i>
-            View Profile
-          </button>
-          <button class="check-profile-buttons"
-          onclick="location.href = '/edit-profile'">
-            <i class="fa-solid fa-user-pen"></i>
-            Edit Profile
-          </button>
-          <button class="check-profile-buttons" onclick="location.href = '/manage-account'">
-            <i class="fa-solid fa-user-gear" style="margin-right: 17px;"></i>
-            Manage Account
-          </button>
-        </div>
-
-        {{else if labtech}}
-          <div class="right-section">
-             <img class="logged-in-prof" src="{{user.profilePic}}">
-        </div>
-
-        <div id="check-profile">
-          <div class="profile-pic-name-container">
-            <img class="profile-picture" src="{{user.profilePic}}">
-            <p>{{user.name}}</p>
-          </div>    
-          
-          <button class="check-profile-buttons js-account-settings"             
-            data-action="account-settings">
-            <i class="fa-solid fa-gear"></i>
-            Account Settings
-          </button>
-         <form id="signoutForm" action="/signout" method="POST">
-            <button class="check-profile-buttons" type="submit">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                Sign out
-              </button>
-          </form>
         </div>
 
         <div id="check-account-setting">

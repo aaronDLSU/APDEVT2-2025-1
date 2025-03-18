@@ -45,7 +45,7 @@ if (!fs.existsSync(uploadDir)) {
 
 // Homepage Route
 router.get('/', (req, res) => {
-    const userData = req.session.user || {};  
+    const userData = req.session.user || null;  
     console.log('User data:', userData); // Debugging: Log user data
     
     res.render('homepage', {
@@ -53,8 +53,8 @@ router.get('/', (req, res) => {
         pageStyle: "homepage",
         pageScripts: ["header-dropdowns"], // Scripts needed for this page
         user: userData,
-        labtech: userData.role === 'labtech',
-        student: userData.role === 'student'
+        labtech: userData?.role === 'labtech',
+        student: userData?.role === 'student'
     });
 });
 
@@ -106,7 +106,7 @@ router.get('/search_user', async (req, res) => {
 
 // Individual profile route
 router.get('/profile/:_id', async (req, res) => {
-    const userData = req.session.user || {};     
+    const userData = req.session.user || null;     
     try {
         console.log("Looking up profile for ID:", req.params._id);
 
@@ -268,8 +268,8 @@ router.get('/profile/:_id', async (req, res) => {
             totalApprovedCount,
             currentWeekDisplay,
             currentMonthDisplay,
-            labtech: userData && userData.role === 'labtech',
-            student: userData && userData.role === 'student',
+            labtech: userData?.role === 'labtech',
+            student: userData?.role === 'student',
             helpers: {
                 formatDate: function (date) {
                     return new Date(date).toLocaleDateString('en-US', {
@@ -352,7 +352,7 @@ router.post('/login', express.urlencoded({ extended: true }), async (req, res) =
 
 // Calendar Dropdown for Bldg names in calendar.js
 router.get('/calendar', async (req, res) => {
-    const userData = req.session.user || {};     
+    const userData = req.session.user || null;     
     try {
         const { name } = req.query; // Extracting 'name' from query parameters
         let query = {};
@@ -373,8 +373,8 @@ router.get('/calendar', async (req, res) => {
             pageStyle: "calendar",
             pageScripts: ["header-dropdowns", "calendar"], // Include scripts for calendar functionality
             user: userData,
-            labtech: userData.role === 'labtech',
-            student: userData.role === 'student',
+            labtech: userData?.role === 'labtech',
+            student: userData?.role === 'student',
             labs: uniqueLabs // Pass the unique lab objects
         });
 
@@ -433,19 +433,20 @@ router.get("/api/seats", async (req, res) => {
 
 // Help & Support Page
 router.get('/help-support', (req, res) => {
+    const userData = req.session.user || null;     
     res.render('help-support', {
         title: "Help & Support",
         pageStyle: "help-support",
         pageScripts: ["header-dropdowns"],
         user: userData,
-        labtech: user.role === 'labtech',
-        student: user.role === 'student'
+        labtech: userData?.role === 'labtech',
+        student: userData?.role === 'student'
     });
 });
 
 // User Profile Page
 router.get('/profile',isAuthenticated, async (req, res) => {
-    const userData = req.session.user || {};    
+    const userData = req.session.user || null;     
     try {
         // Check if user is logged in
         if (!userData) {
@@ -581,8 +582,8 @@ router.get('/profile',isAuthenticated, async (req, res) => {
             currentWeekDisplay,
             currentMonthDisplay,
             reservations,
-            labtech: userData.role === 'labtech',
-            student: userData.role === 'student',
+            labtech: userData?.role === 'labtech',
+            student: userData?.role === 'student',
             helpers: {
                 formatDate: function (date) {
                     return new Date(date).toLocaleDateString('en-US', {
@@ -608,20 +609,20 @@ router.get('/profile',isAuthenticated, async (req, res) => {
 
 // edit profile Page
 router.get('/edit-profile', (req, res) => {
-    const userData = req.session.user || {};  
+    const userData = req.session.user || null;     
 
     res.render('edit-profile', {
         title: "Edit Profile",
         pageStyle: "edit-profile",
         pageScripts: ["header-dropdowns"],
         user: userData,
-        labtech: userData.role === 'labtech',
-        student: userData.role === 'student'
+        labtech: userData?.role === 'labtech',
+        student: userData?.role === 'student'
     });
 });
 
 router.post('/update-profile-picture', (req, res) => {
-    const userData = req.session.user || {};  
+    const userData = req.session.user || null;      
     try {
         if (!userData) {
             return res.redirect('/signup-login');
@@ -678,7 +679,7 @@ router.post('/update-profile-picture', (req, res) => {
 
 // Update username route
 router.post('/update-username', async (req, res) => {
-    const userData = req.session.user || {};  
+    const userData = req.session.user || null;     
     try {
         if (!userData) {
             return res.redirect('/signup-login');
@@ -703,7 +704,7 @@ router.post('/update-username', async (req, res) => {
 
 // Update description route
 router.post('/update-description', async (req, res) => {
-    const userData = req.session.user || {};  
+    const userData = req.session.user || null;     
     try {
         if (!userData) {
             return res.redirect('/signup-login');
@@ -728,7 +729,7 @@ router.post('/update-description', async (req, res) => {
 
 // manage account Page
 router.get('/manage-account', async (req, res) => {
-    const userData = req.session.user || {};  
+    const userData = req.session.user || null;     
     try {
         if (!userData) {
             return res.redirect('/signup-login');
@@ -745,8 +746,8 @@ router.get('/manage-account', async (req, res) => {
             pageScripts: ["header-dropdowns"],
             user: userData,
             userSettings,
-            labtech: userData.role === 'labtech',
-            student: userData.role === 'student'
+            labtech: userData?.role === 'labtech',
+            student: userData?.role === 'student'
         });
     } catch (err) {
         console.error(err);
@@ -766,7 +767,7 @@ router.post('/delete-account', (req, res) => { })
 
 // Edit Reservation Page
 router.post('/edit-reservation', async (req, res) => {
-    const userData = req.session.user || {};  
+    const userData = req.session.user || null;     
     try {
         if (!userData) {
             return res.redirect('/signup-login');
@@ -794,8 +795,8 @@ router.post('/edit-reservation', async (req, res) => {
             user: userData,
             reservation,
             labs,
-            labtech: userData.role === 'labtech',
-            student: userData.role === 'student'
+            labtech: userData?.role === 'labtech',
+            student: userData?.role === 'student'
         });
     } catch (err) {
         console.error(err);
@@ -816,7 +817,7 @@ async function getLabId(buildName, labName) {
 
 // Reservation list Page
 router.get('/reservation-list', async (req, res) => {
-    const userData = req.session.user || {};  
+    const userData = req.session.user || null;     
     try {
         if (!userData) {
             return res.redirect('/signup-login');
@@ -848,8 +849,8 @@ router.get('/reservation-list', async (req, res) => {
             reservations,
             user: userData,
             labs,
-            labtech: userData.role === 'labtech',
-            student: userData.role === 'student'
+            labtech: userData?.role === 'labtech',
+            student: userData?.role === 'student'
         });
     }
     catch (err) {
