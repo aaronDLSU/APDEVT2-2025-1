@@ -3,7 +3,28 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const fs = require('fs');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
 
+
+router.use(
+    session({
+      secret: "secret-key",
+      resave:false,
+      saveUninitialized: false
+    })  
+  );
+  
+  router.use(cookieParser());
+  
+const isAuthenticated = (req,res,next) => {
+    if(req.session.user){
+      next();
+    }else{
+      res.redirect("/");
+    }
+  };
+  
 // Add model routes here
 const User = require("../../db/models/DB_users");
 const Reservation = require("../../db/models/DB_reservation");
@@ -12,9 +33,9 @@ const Settings = require('../../db/models/DB_settings');
 const Seat = require("../../db/models/DB_seats");
 
 // Sample user roles
-const student = { _id: "67c6e500b0ce105ba934bcf7", name: "Charlie Chaplin", password: "student", role: "student", description: "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology. Passionate about coding and problem-solving, I am eager to explore new technologies and develop innovative solutions. Currently honing my skills in programming, web development, and algorithms, I aspire to contribute to impactful projects in the tech industry.", profilePic: "/images/student.jpg" };
-const labtech = { name: "Sir", role: "labtech", description: "i am a lab technician", profilePic: "/images/default_profilepic.jpg" };
-let user = ''; // Stores the current logged-in user
+// const student = { _id: "67c6e500b0ce105ba934bcf7", name: "Charlie Chaplin", password: "student", role: "student", description: "I am a first-year Computer Science major at De La Salle University (DLSU), specializing in Software Technology. Passionate about coding and problem-solving, I am eager to explore new technologies and develop innovative solutions. Currently honing my skills in programming, web development, and algorithms, I aspire to contribute to impactful projects in the tech industry.", profilePic: "/images/student.jpg" };
+// const labtech = { name: "Sir", role: "labtech", description: "i am a lab technician", profilePic: "/images/default_profilepic.jpg" };
+// let user = ''; // Stores the current logged-in user
 
 const uploadDir = path.join(__dirname, '../../public/images/temp-uploads');
 if (!fs.existsSync(uploadDir)) {
@@ -24,13 +45,16 @@ if (!fs.existsSync(uploadDir)) {
 
 // Homepage Route
 router.get('/', (req, res) => {
+    const userData = req.session.user || {};  
+    console.log('User data:', userData); // Debugging: Log user data
+    
     res.render('homepage', {
         title: "Homepage",
         pageStyle: "homepage",
         pageScripts: ["header-dropdowns"], // Scripts needed for this page
-        user,
-        labtech: user.role === 'labtech',
-        student: user.role === 'student'
+        user: userData,
+        labtech: userData.role === 'labtech',
+        student: userData.role === 'student'
     });
 });
 
@@ -82,6 +106,7 @@ router.get('/search_user', async (req, res) => {
 
 // Individual profile route
 router.get('/profile/:_id', async (req, res) => {
+    const userData = req.session.user || {};     
     try {
         console.log("Looking up profile for ID:", req.params._id);
 
@@ -235,7 +260,7 @@ router.get('/profile/:_id', async (req, res) => {
             title: `${otheruser.name}'s Profile`,
             pageStyle: "profile",
             pageScripts: ["header-dropdowns"],
-            user,
+            user: userData,
             otheruser, // The user being viewed (with processed data)
             reservations,
             weeklyReservationCount,
@@ -243,8 +268,8 @@ router.get('/profile/:_id', async (req, res) => {
             totalApprovedCount,
             currentWeekDisplay,
             currentMonthDisplay,
-            labtech: user && user.role === 'labtech',
-            student: user && user.role === 'student',
+            labtech: userData && userData.role === 'labtech',
+            student: userData && userData.role === 'student',
             helpers: {
                 formatDate: function (date) {
                     return new Date(date).toLocaleDateString('en-US', {
@@ -311,26 +336,23 @@ router.post('/signup', async (req, res) => {
 });
 
 // Handle User Login
-router.post('/login', express.urlencoded({ extended: true }), (req, res) => {
+router.post('/login', express.urlencoded({ extended: true }), async (req, res) => {
     const { 'email-input': email, 'password-input': password } = req.body;
-
-    // Validate input
-    if (!email || !password) return res.status(400).send("Missing credentials");
-
+    const currUser = await User.findOne({email:email, password: password});
+    console.log(currUser);
     // Simulated login (replace this with database authentication later)
-    if (email === 'student@dlsu.edu.ph' && password === 'student') {
-        user = student;
+    if(currUser.email === email && currUser.password === password){
+        req.session.user = currUser;
+        res.cookie("sessionId", req.sessionID);
         res.redirect('/');
-    } else if (email === 'labtech@dlsu.edu.ph' && password === 'labtech') {
-        user = labtech;
-        res.redirect('/');
-    } else {
+    }else {
         res.send('Invalid Credentials. <p style="color:blue; text-decoration: underline; display:inline-block" onclick="history.back()">Try Again</p>');
     }
 });
 
 // Calendar Dropdown for Bldg names in calendar.js
 router.get('/calendar', async (req, res) => {
+    const userData = req.session.user || {};     
     try {
         const { name } = req.query; // Extracting 'name' from query parameters
         let query = {};
@@ -350,9 +372,9 @@ router.get('/calendar', async (req, res) => {
             title: "Reserve your lab room!",
             pageStyle: "calendar",
             pageScripts: ["header-dropdowns", "calendar"], // Include scripts for calendar functionality
-            user,
-            labtech: user.role === 'labtech',
-            student: user.role === 'student',
+            user: userData,
+            labtech: userData.role === 'labtech',
+            student: userData.role === 'student',
             labs: uniqueLabs // Pass the unique lab objects
         });
 
@@ -415,21 +437,22 @@ router.get('/help-support', (req, res) => {
         title: "Help & Support",
         pageStyle: "help-support",
         pageScripts: ["header-dropdowns"],
-        user,
+        user: userData,
         labtech: user.role === 'labtech',
         student: user.role === 'student'
     });
 });
 
 // User Profile Page
-router.get('/profile', async (req, res) => {
+router.get('/profile',isAuthenticated, async (req, res) => {
+    const userData = req.session.user || {};    
     try {
         // Check if user is logged in
-        if (!user) {
+        if (!userData) {
             return res.redirect('/signup-login');
         }
 
-        console.log("Current user:", user);
+        console.log("Current user:", userData);
 
         // Fetch user's reservations
         let reservations = [];
@@ -460,10 +483,10 @@ router.get('/profile', async (req, res) => {
         const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
         endOfMonth.setHours(23, 59, 59, 999);
 
-        if (user._id || user.id) {
+        if (userData._id || userData.id) {
             try {
                 // Get user ID as string
-                const userIdString = user._id || user.id;
+                const userIdString = userData._id || userData.id;
                 console.log("Looking for reservations with user ID:", userIdString);
 
                 // Get all reservations
@@ -488,7 +511,7 @@ router.get('/profile', async (req, res) => {
                     return resUserId === userIdString;
                 });
 
-                console.log(`Found ${userReservations.length} reservations for ${user.name}`);
+                console.log(`Found ${userReservations.length} reservations for ${userData.name}`);
 
                 const approvedReservations = userReservations.filter(
                     reservation => reservation.status === "approved"
@@ -550,7 +573,7 @@ router.get('/profile', async (req, res) => {
             title: "Profile Page",
             pageStyle: "profile",
             pageScripts: ["header-dropdowns"],
-            user,
+            user: userData,
             reservations,
             weeklyReservationCount,
             monthlyReservationCount,
@@ -558,8 +581,8 @@ router.get('/profile', async (req, res) => {
             currentWeekDisplay,
             currentMonthDisplay,
             reservations,
-            labtech: user.role === 'labtech',
-            student: user.role === 'student',
+            labtech: userData.role === 'labtech',
+            student: userData.role === 'student',
             helpers: {
                 formatDate: function (date) {
                     return new Date(date).toLocaleDateString('en-US', {
@@ -585,19 +608,22 @@ router.get('/profile', async (req, res) => {
 
 // edit profile Page
 router.get('/edit-profile', (req, res) => {
+    const userData = req.session.user || {};  
+
     res.render('edit-profile', {
         title: "Edit Profile",
         pageStyle: "edit-profile",
         pageScripts: ["header-dropdowns"],
-        user,
-        labtech: user.role === 'labtech',
-        student: user.role === 'student'
+        user: userData,
+        labtech: userData.role === 'labtech',
+        student: userData.role === 'student'
     });
 });
 
 router.post('/update-profile-picture', (req, res) => {
+    const userData = req.session.user || {};  
     try {
-        if (!user) {
+        if (!userData) {
             return res.redirect('/signup-login');
         }
 
@@ -638,7 +664,7 @@ router.post('/update-profile-picture', (req, res) => {
             }
 
             // Update user session with new profile pic path (without saving to DB)
-            user.profilePic = relativePath;
+            userData.profilePic = relativePath;
 
             console.log(`Updated profile picture in session to: ${relativePath}`);
 
@@ -652,8 +678,9 @@ router.post('/update-profile-picture', (req, res) => {
 
 // Update username route
 router.post('/update-username', async (req, res) => {
+    const userData = req.session.user || {};  
     try {
-        if (!user) {
+        if (!userData) {
             return res.redirect('/signup-login');
         }
 
@@ -664,7 +691,7 @@ router.post('/update-username', async (req, res) => {
         }
 
         // Update the user's name in the session
-        user.username = newUsername;
+        userData.username = newUsername;
 
         // Redirect with success message
         res.redirect('/edit-profile?success=Username updated successfully');
@@ -676,8 +703,9 @@ router.post('/update-username', async (req, res) => {
 
 // Update description route
 router.post('/update-description', async (req, res) => {
+    const userData = req.session.user || {};  
     try {
-        if (!user) {
+        if (!userData) {
             return res.redirect('/signup-login');
         }
 
@@ -688,7 +716,7 @@ router.post('/update-description', async (req, res) => {
         }
 
         // Update the user's description in the session
-        user.description = newDescription;
+        userData.description = newDescription;
 
         // Redirect with success message
         res.redirect('/edit-profile?success=Description updated successfully');
@@ -700,13 +728,14 @@ router.post('/update-description', async (req, res) => {
 
 // manage account Page
 router.get('/manage-account', async (req, res) => {
+    const userData = req.session.user || {};  
     try {
-        if (!user) {
+        if (!userData) {
             return res.redirect('/signup-login');
         }
         //console.log("Current user:", user._id);
 
-        const objID = await User.findById(user._id);
+        const objID = await User.findById(userData._id);
         //console.log(objID)
         const userSettings = await Settings.findOne({ user: objID }).populate("user").lean();
         //console.log(userSettings)
@@ -714,9 +743,10 @@ router.get('/manage-account', async (req, res) => {
             title: "Manage Account",
             pageStyle: "manage-account",
             pageScripts: ["header-dropdowns"],
-            user, userSettings,
-            labtech: user.role === 'labtech',
-            student: user.role === 'student'
+            user: userData,
+            userSettings,
+            labtech: userData.role === 'labtech',
+            student: userData.role === 'student'
         });
     } catch (err) {
         console.error(err);
@@ -736,8 +766,9 @@ router.post('/delete-account', (req, res) => { })
 
 // Edit Reservation Page
 router.post('/edit-reservation', async (req, res) => {
+    const userData = req.session.user || {};  
     try {
-        if (!user) {
+        if (!userData) {
             return res.redirect('/signup-login');
         }
 
@@ -752,19 +783,19 @@ router.post('/edit-reservation', async (req, res) => {
             return res.status(404).send("Reservation not found");
         }
         //if student tries to edit another user's reservation. have yet to test.
-        if (user.type === "student" && reservation.user.name !== user.name) {
+        if (userData.type === "student" && reservation.user.name !== userData.name) {
             return res.redirect('/profile')
         }
-        console.log(id, reservation, user)
+        console.log(id, reservation, userData)
         res.render('edit-reservation', {
             title: "Edit Reservation",
             pageStyle: "edit-reservation",
             pageScripts: ["header-dropdowns", "edit-reservation"], // Include edit-reservation scripts
-            user,
+            user: userData,
             reservation,
             labs,
-            labtech: user.role === 'labtech',
-            student: user.role === 'student'
+            labtech: userData.role === 'labtech',
+            student: userData.role === 'student'
         });
     } catch (err) {
         console.error(err);
@@ -785,11 +816,12 @@ async function getLabId(buildName, labName) {
 
 // Reservation list Page
 router.get('/reservation-list', async (req, res) => {
+    const userData = req.session.user || {};  
     try {
-        if (!user) {
+        if (!userData) {
             return res.redirect('/signup-login');
         }
-        if (user.type === 'student') {
+        if (userData.type === 'student') {
             return res.redirect('/')
         }
 
@@ -814,10 +846,10 @@ router.get('/reservation-list', async (req, res) => {
             pageStyle: "reservation-list",
             pageScripts: ["header-dropdowns", "reservation-list"],
             reservations,
-            user,
+            user: userData,
             labs,
-            labtech: user.role === 'labtech',
-            student: user.role === 'student'
+            labtech: userData.role === 'labtech',
+            student: userData.role === 'student'
         });
     }
     catch (err) {
@@ -854,9 +886,15 @@ router.post('/delete-reservation', async (req, res) => {
 
 //signout
 router.post('/signout', (req, res) => {
-    user = '';
-    console.log('User signed out:' + user);
-    res.redirect('/');
+    req.session.destroy(error => {
+        if(error) {
+            return res.status(500)
+            .json({success: false , message: "Error signing out"});
+        }
+        res.clearCookie('connect.sid');
+        res.redirect('/');
+        
+    });
 });
 
 // API Health Check (For debugging purposes)

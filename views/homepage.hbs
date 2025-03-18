@@ -3,13 +3,9 @@
       <div class="welcome">
         RESERVE YOUR LAB<br/> SPACES NOW
       </div>
-      {{#if student}}
+      {{#if user}}
         <button class="get-started-button" 
-        onclick="location.href = '/calendar'">Get Started</button>
-
-        {{else if labtech}}
-        <button class="get-started-button" 
-        onclick="location.href = '/calendar'">Get Started</button>
+        onclick="location.href = '/'">Get Started</button>
       {{else}}
         <button class="get-started-button" 
         onclick="location.href = '/signup-login'">Get Started</button>

@@ -24,10 +24,7 @@
                     <div class="room-list" id="room-list"></div>
                 </div>
 
-                {{#if student}}
-                    <!-- Reserve Room Button -->
-                    <button class="button reserve-room-btn" onclick="reserveRoom()">Reserve Room</button>
-                {{else if labtech}}
+                {{#if user}}
                     <!-- Reserve Room Button -->
                     <button class="button reserve-room-btn" onclick="reserveRoom()">Reserve Room</button>
                 {{else}}
