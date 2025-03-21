@@ -340,16 +340,22 @@ $(document).ready(function() {
     // Reserve room function
     async function reserveRoom() {
 
-        //if (!window.currentUser || !window.currentUser._id) {
-        //    alert("You must be logged in to make a reservation.");
-        //    window.location.href = "/signup-login"; // Redirect to login page
-        //    return;
-        //}
-        console.log("Checking element:", document.getElementById("some-element"));
+        //console.log("Checking element:", document.getElementById("some-element"));
 
-        //const hardcodedUserId = window.currentUser._id;  // Replace after implementing authentication
+        const currentUser = window.currentUser;  // Replace after implementing authentication
+        console.log("1Current User ID from session:", currentUser);
         
-        const hardcodedUserId = '67c66192b0ce105ba934bc95';
+        //Newly added for sessions
+        if (!currentUser || !currentUser._id) {
+            alert("You must be logged in to make a reservation.");
+            window.location.href = "/signup-login"; // Redirect to login page
+            return;
+        }
+
+        const userId = currentUser._id;
+        console.log("3Current User ID from session:", userId);
+
+        //const hardcodedUserId = '67c66192b0ce105ba934bc95';
 
         // Get selected lab room
         const selectedRoom = document.querySelector(".selected-room");
@@ -413,7 +419,7 @@ $(document).ready(function() {
             // Construct the reservation object
             const reservationData = {
                 name: `Reservation for ${selectedLabName}`,
-                user: hardcodedUserId,  // Temporarily hardcoded user
+                user: userId,  // Updated to use sessions
                 isAnonymous: isAnonymous,
                 lab: labId,
                 seat: selectedSeatId, // Store Seat ObjectId
@@ -452,7 +458,7 @@ $(document).ready(function() {
     }
     
     // Assign function globally so it works with the button
-    window.reserveRoom = reserveRoom;    
+    window.reserveRoom = reserveRoom;
     
     function populateReservationDropdowns() {
         const seatDropdown = document.getElementById("seat-selection");

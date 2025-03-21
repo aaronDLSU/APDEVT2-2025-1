@@ -352,7 +352,7 @@ router.post('/login', express.urlencoded({ extended: true }), async (req, res) =
 
 // Calendar Dropdown for Bldg names in calendar.js
 router.get('/calendar', async (req, res) => {
-    const userData = req.session.user || null;     
+    const userData = req.session.user || null;
     try {
         const { name } = req.query; // Extracting 'name' from query parameters
         let query = {};
@@ -935,7 +935,15 @@ router.post("/api/reserveroom", async (req, res) => {
         const { lab, seat, date, startTime, endTime, isAnonymous } = req.body;
 
         // Hardcoded user ID 
-        const userId = "67c66192b0ce105ba934bc95";
+        //const userId = "67c66192b0ce105ba934bc95";
+
+        //Newly added to use sessions
+        const userId = req.session.user?._id;  // Access user ID from the session
+        console.log("2Current User ID from session:", userId);
+
+        if (!userId) {
+            return res.status(401).json({ message: "User is not authenticated" });
+        }
 
         if (!lab || !seat || !date || !startTime || !endTime) {
             return res.status(400).json({ message: "All fields are required!" });
@@ -1011,6 +1019,5 @@ router.post("/api/reserveroom", async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
-
 
 module.exports = router;
