@@ -93,23 +93,44 @@
 
     <div style="display:flex; flex-direction:column">
         <!-- Reserve Time Section (Now inside .seating-reservation-wrapper) -->
-        <div class="reserve-time-container">
-            <h3>Reservation Details</h3>
-            <label for="seat-selection">Seat Number: </label>
-            <select id="seat-selection" class="time-dropdown"></select>
+        <!-- Labtech: Show Student Email input field -->
+        {{#if (eq user.role "labtech")}}
+            <div class="reserve-time-container">
+                <h3>Reservation Details</h3>
+                <label for="seat-selection">Seat Number: </label>
+                <select id="seat-selection" class="time-dropdown"></select>
 
-            <label for="start-time">Start Time:</label>
-            <select id="start-time" class="time-dropdown"></select>
+                <label for="start-time">Start Time:</label>
+                <select id="start-time" class="time-dropdown"></select>
 
-            <label for="end-time">End Time:</label>
-            <select id="end-time" class="time-dropdown"></select>
+                <label for="end-time">End Time:</label>
+                <select id="end-time" class="time-dropdown"></select>
 
-            <!-- Checkbox -->
-            <div class="anonymous-reservation">
+                <label for="student-email">Student Email: </label>
+                <input type="email" id="student-email" class="time-dropdown" placeholder="Enter student email" required>
+
+                <!-- Reserve Anonymously Checkbox -->
                 <label for="anonymous-checkbox">Reserve Anonymously</label>
-                <input type="checkbox" id="anonymous-checkbox">               
+                <input type="checkbox" id="anonymous-checkbox">
             </div>
-        </div>
+        {{else}}
+            <!-- Non-LabTech (Student) Reservation Form -->
+            <div class="reserve-time-container">
+                <h3>Reservation Details</h3>
+                <label for="seat-selection">Seat Number: </label>
+                <select id="seat-selection" class="time-dropdown"></select>
+
+                <label for="start-time">Start Time:</label>
+                <select id="start-time" class="time-dropdown"></select>
+
+                <label for="end-time">End Time:</label>
+                <select id="end-time" class="time-dropdown"></select>
+
+                <!-- Reserve Anonymously Checkbox -->
+                <label for="anonymous-checkbox">Reserve Anonymously</label>
+                <input type="checkbox" id="anonymous-checkbox">
+            </div>
+    {{/if}}
 
         <div id="reserve-details-container" class="reserve-details-container">
             <h3 id="room-availability-label">Reservation Details:</h3>

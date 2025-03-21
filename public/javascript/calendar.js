@@ -342,6 +342,14 @@ $(document).ready(function() {
         try {
             // Fetch the current user's ID from the session using the API
             const userResponse = await fetch('/api/current-user-id');
+
+            if (!userResponse.ok) {
+                const errText = await userResponse.text();
+                console.error("User fetch failed:", errText);
+                alert("Could not determine current user session. Try re-logging in.");
+                return;
+            }
+            
             const currentUserData = await userResponse.json();
             
             if (!currentUserData.success || !currentUserData.userId) {
@@ -352,7 +360,8 @@ $(document).ready(function() {
     
             // Store the user ID as an object
             const currentUser = {
-                _id: currentUserData.userId
+                _id: currentUserData.userId,
+                role: currentUserData.role
             };
     
             // Get selected lab room
@@ -398,7 +407,45 @@ $(document).ready(function() {
             // Check if "Reserve Anonymously" checkbox is checked
             const anonymousCheckbox = document.getElementById("anonymous-checkbox");
             const isAnonymous = anonymousCheckbox.checked;
-    
+            
+            // Check if the current user is a LabTech and handle student email
+            let userIdForReservation = currentUser._id; // Default to the current user's ID
+            if (currentUser.role === "labtech") {
+                const studentEmailInput = document.getElementById("student-email");
+
+                if (!studentEmailInput || !studentEmailInput.value.trim()) {
+                    alert("Please enter the student's email.");
+                    return;
+                }
+
+                const studentEmail = studentEmailInput.value.trim();
+
+                // Checks if email uses @dlsu.edu.ph
+                const emailPattern = /^[a-zA-Z0-9._-]+@dlsu\.edu\.ph$/;
+                if (!emailPattern.test(studentEmail)) {
+                    alert("Please enter a valid DLSU email (e.g., student@dlsu.edu.ph).");
+                    return;
+                }
+
+                // Fetch user data by email to get the user ID for the reservation
+                const emailResponse = await fetch(`/api/users/find-by-email?email=${studentEmail}`);
+                const emailData = await emailResponse.json();
+
+                if (emailData.success && emailData.data.length > 0) {
+                    const student = emailData.data[0];
+                    //Checks if email entered is a student account
+                    if (student.role !== "student") {
+                        alert("This email is not associated with a student account.");
+                        return;
+                    }
+                    userIdForReservation = student._id;
+                    //userIdForReservation = emailData.data[0]._id; // Assign the found user ID
+                } else {
+                    alert("No user found with that email.");
+                    return;
+                }
+            }
+
             // Fetch the seat ObjectId from DB using seat number and lab ID
             const seatResponse = await fetch(`/api/seats?lab=${labId}&seatNumber=${selectedSeatNumber}`);
             if (!seatResponse.ok) {
@@ -416,14 +463,14 @@ $(document).ready(function() {
             // Construct the reservation object
             const reservationData = {
                 name: `Reservation for ${selectedLabName}`,
-                user: currentUser._id,  // Use the session's user ID
+                user: userIdForReservation,  // Use the session's user ID, updated to check if labtech or student role
                 isAnonymous: isAnonymous,
                 lab: labId,
                 seat: selectedSeatId, // Store Seat ObjectId
                 date: reservationDate,
                 startTime: selectedStartTime,
                 endTime: selectedEndTime,
-                status: "pending"  // Default status
+                status: "approved"  // Default status
             };
     
             // Send reservation to backend
@@ -456,7 +503,7 @@ $(document).ready(function() {
     }
     
     // Assign function globally so it works with the button
-    window.reserveRoom = reserveRoom;    
+    window.reserveRoom = reserveRoom;
     
     function populateReservationDropdowns() {
         const seatDropdown = document.getElementById("seat-selection");

@@ -77,6 +77,51 @@ router.get('/api/users', async (req, res) => {
     }
 });
 
+//Use to check users with email key, calendar.js
+router.get('/api/users/find-by-email', async (req, res) => {
+    try {
+        const { email } = req.query;
+
+        if (!email || typeof email !== 'string') {
+            return res.status(400).json({
+                success: false,
+                message: "Email query parameter is required."
+            });
+        }
+
+        // Validate that the email is a DLSU email
+        const isDLSUEmail = email.endsWith('@dlsu.edu.ph');
+        if (!isDLSUEmail) {
+            return res.status(400).json({
+                success: false,
+                message: "Only @dlsu.edu.ph emails are allowed."
+            });
+        }
+
+        // Look for a student with this email
+        const studentUser = await User.findOne({ email, role: 'student' }).lean();
+        //Possibly need to remove
+        if (!studentUser) {
+            return res.status(404).json({
+                success: false,
+                message: "No student found with that email."
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            data: studentUser
+        });
+
+    } catch (error) {
+        console.error('Error in /api/users/find-by-email:', error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
+    }
+});
+
 router.get('/search_user', async (req, res) => {
     try {
         const searchTerm = req.query["search-bar"];
@@ -1022,16 +1067,35 @@ router.post("/api/reserveroom", async (req, res) => {
 
 // API route to get current session user ID, calendar.js
 router.get('/api/current-user-id', (req, res) => {
-    // Check if the user is authenticated
-    if (req.session.user && req.session.user._id) {
+    try {
+        if (!req.session || !req.session.user) {
+            return res.status(401).json({
+                success: false,
+                message: "Session not found or user not logged in"
+            });
+        }
+
+        const { _id, role } = req.session.user;
+
+        if (!_id) {
+            return res.status(400).json({
+                success: false,
+                message: "User ID missing in session"
+            });
+        }
+
         return res.status(200).json({
             success: true,
-            userId: req.session.user._id
+            userId: _id,
+            role: role
         });
-    } else {
-        return res.status(401).json({
+
+    } catch (err) {
+        console.error("Error in /api/current-user-id:", err);
+        res.status(500).json({
             success: false,
-            message: "User is not authenticated"
+            message: "Server error",
+            error: err.message
         });
     }
 });
