@@ -1020,4 +1020,20 @@ router.post("/api/reserveroom", async (req, res) => {
     }
 });
 
+// API route to get current session user ID, calendar.js
+router.get('/api/current-user-id', (req, res) => {
+    // Check if the user is authenticated
+    if (req.session.user && req.session.user._id) {
+        return res.status(200).json({
+            success: true,
+            userId: req.session.user._id
+        });
+    } else {
+        return res.status(401).json({
+            success: false,
+            message: "User is not authenticated"
+        });
+    }
+});
+
 module.exports = router;

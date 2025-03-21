@@ -339,69 +339,66 @@ $(document).ready(function() {
     
     // Reserve room function
     async function reserveRoom() {
-
-        //console.log("Checking element:", document.getElementById("some-element"));
-
-        const currentUser = window.currentUser;  // Replace after implementing authentication
-        console.log("1Current User ID from session:", currentUser);
-        
-        //Newly added for sessions
-        if (!currentUser || !currentUser._id) {
-            alert("You must be logged in to make a reservation.");
-            window.location.href = "/signup-login"; // Redirect to login page
-            return;
-        }
-
-        const userId = currentUser._id;
-        console.log("3Current User ID from session:", userId);
-
-        //const hardcodedUserId = '67c66192b0ce105ba934bc95';
-
-        // Get selected lab room
-        const selectedRoom = document.querySelector(".selected-room");
-        if (!selectedRoom) {
-            alert("Please select a lab room first.");
-            return;
-        }
-    
-        const labId = selectedRoom.dataset.roomId; // Get the selected Lab ID
-        const selectedLabName = selectedRoom.innerText;
-    
-        // Get the selected date
-        const selectedDateElement = document.querySelector(".selected-date");
-        if (!selectedDateElement) {
-            alert("Please select a date first.");
-            return;
-        }
-    
-        const selectedDate = selectedDateElement.innerText;
-        const reservationDate = `${selectedYear}-${(selectedMonth + 1).toString().padStart(2, "0")}-${selectedDate.padStart(2, "0")}`;
-    
-        // Get the selected seat number
-        const seatDropdown = document.getElementById("seat-selection");
-        const selectedSeatNumber = seatDropdown.value;
-        if (!selectedSeatNumber) {
-            alert("Please select a seat.");
-            return;
-        }
-    
-        // Get the selected start and end times
-        const startTimeDropdown = document.getElementById("start-time");
-        const endTimeDropdown = document.getElementById("end-time");
-    
-        const selectedStartTime = startTimeDropdown.value;
-        const selectedEndTime = endTimeDropdown.value;
-    
-        if (!selectedStartTime || !selectedEndTime) {
-            alert("Please select both start and end times.");
-            return;
-        }
-    
-        // Check if "Reserve Anonymously" checkbox is checked
-        const anonymousCheckbox = document.getElementById("anonymous-checkbox");
-        const isAnonymous = anonymousCheckbox.checked;
-    
         try {
+            // Fetch the current user's ID from the session using the API
+            const userResponse = await fetch('/api/current-user-id');
+            const currentUserData = await userResponse.json();
+            
+            if (!currentUserData.success || !currentUserData.userId) {
+                alert("You must be logged in to make a reservation.");
+                window.location.href = "/signup-login"; // Redirect to login page
+                return;
+            }
+    
+            // Store the user ID as an object
+            const currentUser = {
+                _id: currentUserData.userId
+            };
+    
+            // Get selected lab room
+            const selectedRoom = document.querySelector(".selected-room");
+            if (!selectedRoom) {
+                alert("Please select a lab room first.");
+                return;
+            }
+    
+            const labId = selectedRoom.dataset.roomId; // Get the selected Lab ID
+            const selectedLabName = selectedRoom.innerText;
+    
+            // Get the selected date
+            const selectedDateElement = document.querySelector(".selected-date");
+            if (!selectedDateElement) {
+                alert("Please select a date first.");
+                return;
+            }
+    
+            const selectedDate = selectedDateElement.innerText;
+            const reservationDate = `${selectedYear}-${(selectedMonth + 1).toString().padStart(2, "0")}-${selectedDate.padStart(2, "0")}`;
+    
+            // Get the selected seat number
+            const seatDropdown = document.getElementById("seat-selection");
+            const selectedSeatNumber = seatDropdown.value;
+            if (!selectedSeatNumber) {
+                alert("Please select a seat.");
+                return;
+            }
+    
+            // Get the selected start and end times
+            const startTimeDropdown = document.getElementById("start-time");
+            const endTimeDropdown = document.getElementById("end-time");
+    
+            const selectedStartTime = startTimeDropdown.value;
+            const selectedEndTime = endTimeDropdown.value;
+    
+            if (!selectedStartTime || !selectedEndTime) {
+                alert("Please select both start and end times.");
+                return;
+            }
+    
+            // Check if "Reserve Anonymously" checkbox is checked
+            const anonymousCheckbox = document.getElementById("anonymous-checkbox");
+            const isAnonymous = anonymousCheckbox.checked;
+    
             // Fetch the seat ObjectId from DB using seat number and lab ID
             const seatResponse = await fetch(`/api/seats?lab=${labId}&seatNumber=${selectedSeatNumber}`);
             if (!seatResponse.ok) {
@@ -419,7 +416,7 @@ $(document).ready(function() {
             // Construct the reservation object
             const reservationData = {
                 name: `Reservation for ${selectedLabName}`,
-                user: userId,  // Updated to use sessions
+                user: currentUser._id,  // Use the session's user ID
                 isAnonymous: isAnonymous,
                 lab: labId,
                 seat: selectedSeatId, // Store Seat ObjectId
@@ -444,13 +441,14 @@ $(document).ready(function() {
     
             const result = await response.json();
             alert(`Reservation successful! 
-            \nLab: ${selectedLabName}
-            \nSeat: ${selectedSeatNumber}
-            \nDate: ${reservationDate}
-            \nTime: ${selectedStartTime} - ${selectedEndTime}`);
+                \nLab: ${selectedLabName}
+                \nSeat: ${selectedSeatNumber}
+                \nDate: ${reservationDate}
+                \nTime: ${selectedStartTime} - ${selectedEndTime}`);
     
             // Refresh seat availability after booking
             updateSeatAvailability();
+    
         } catch (error) {
             console.error("Error making reservation:", error);
             alert("Error making reservation. Please try again.");
@@ -458,7 +456,7 @@ $(document).ready(function() {
     }
     
     // Assign function globally so it works with the button
-    window.reserveRoom = reserveRoom;
+    window.reserveRoom = reserveRoom;    
     
     function populateReservationDropdowns() {
         const seatDropdown = document.getElementById("seat-selection");
