@@ -810,6 +810,39 @@ router.post('/change-privacy-settings', (req, res) => {
 
 router.post('/delete-account', (req, res) => { })
 
+//check availability
+router.post('/check-availability', async (req, res) => {
+    try {
+        const { building, lab, date } = req.body;
+        if (!building || !lab || !date) {
+            return res.status(400).json({ success: false, message: "Missing parameters" });
+        }
+        let labID = await getLabId(building, lab);
+        if (!labID) {
+            return res.status(404).json({ success: false, message: "Lab room not found" });
+        }
+        const labData = await Lab.findById(labID);
+
+        const reservedSeats = await Reservation.find({
+            lab: labData._id,
+            date: new Date(date)
+        }).distinct("seat");
+
+        console.log(labData.capacity);
+
+        res.status(200).json({
+            success: true,
+            message: "Seats loaded",
+            capacity: labData.capacity,
+            reservedSeats: reservedSeats
+        });
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+})
+
 // Edit Reservation Page
 router.post('/edit-reservation', async (req, res) => {
     const userData = req.session.user || null;     
