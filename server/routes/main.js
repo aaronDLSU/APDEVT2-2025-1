@@ -829,10 +829,12 @@ router.post('/check-availability', async (req, res) => {
         if (!building || !lab || !date) {
             return res.status(400).json({ success: false, message: "Missing parameters" });
         }
-        let labData = await getLabId(building, lab);
-        if (!labData) {
+        let labID = await getLabId(building, lab);
+        if (!labID) {
             return res.status(404).json({ success: false, message: "Lab room not found" });
         }
+
+        let labData = await Lab.findById(labID)
 
         res.status(200).json({
             success: true,
