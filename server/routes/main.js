@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
 
 
 router.use(
@@ -60,7 +61,7 @@ router.get('/', (req, res) => {
 
 router.get('/api/users', async (req, res) => {
     try {
-        const usersList = await User.find({}).lean();
+        const usersList = await User.find({}).sort({name: 1}).lean();
 
         res.json({
             success: true,
@@ -365,14 +366,16 @@ router.post('/signup', async (req, res) => {
         // Extract form data from request
         const { 'signup-email': email, 'signup-password': password, 'signup-role': role } = req.body;
         let name = await getName(email);
-        console.log(name);
+        // console.log(name);
         // Create new user in MongoDB
+        const hashedPass = await bcrypt.hash(password, 13);
         await User.create({
             name: name,
             email: email,
-            password: password,
+            password: hashedPass,
             role: role
         });
+        // console.log(hashedPass);
         res.redirect('/signup-login?success=true'); // Redirect back to login page
     } catch (err) {
         console.error('Signup error:', err);
@@ -385,10 +388,10 @@ router.post('/login', express.urlencoded({ extended: true }), async (req, res) =
     const { 'email-input': email, 'password-input': password, 
     'login-checkbox': remembered} = req.body;
    
-    const currUser = await User.findOne({email:email, password: password});
-    console.log(currUser);
+    const currUser = await User.findOne({email:email});
+    const validPass = await bcrypt.compare(password, currUser.password);
     // Simulated login (replace this with database authentication later)
-    if(currUser.email === email && currUser.password === password){
+    if(currUser.email === email && validPass){
         req.session.user = currUser;
         res.cookie("sessionId", req.sessionID);
 
