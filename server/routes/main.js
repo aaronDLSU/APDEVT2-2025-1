@@ -382,13 +382,22 @@ router.post('/signup', async (req, res) => {
 
 // Handle User Login
 router.post('/login', express.urlencoded({ extended: true }), async (req, res) => {
-    const { 'email-input': email, 'password-input': password } = req.body;
+    const { 'email-input': email, 'password-input': password, 
+    'login-checkbox': remembered} = req.body;
+   
     const currUser = await User.findOne({email:email, password: password});
     console.log(currUser);
     // Simulated login (replace this with database authentication later)
     if(currUser.email === email && currUser.password === password){
         req.session.user = currUser;
         res.cookie("sessionId", req.sessionID);
+
+        if(remembered){
+            req.session.cookie.maxAge = 3 * 7 * 24 * 60 * 60 * 1000;
+        }
+
+        console.log( req.session.cookie.maxAge);
+
         res.redirect('/');
     }else {
         res.send('Invalid Credentials. <p style="color:blue; text-decoration: underline; display:inline-block" onclick="history.back()">Try Again</p>');
