@@ -829,27 +829,116 @@ router.post('/check-availability', async (req, res) => {
         if (!building || !lab || !date) {
             return res.status(400).json({ success: false, message: "Missing parameters" });
         }
-        let labID = await getLabId(building, lab);
-        if (!labID) {
+        let labData = await getLabId(building, lab);
+        if (!labData) {
             return res.status(404).json({ success: false, message: "Lab room not found" });
         }
-        const labData = await Lab.findById(labID);
-
-        const reservedSeats = await Reservation.find({
-            lab: labData._id,
-            date: new Date(date)
-        }).distinct("seat");
-
-        console.log(labData.capacity);
 
         res.status(200).json({
             success: true,
             message: "Seats loaded",
             capacity: labData.capacity,
-            reservedSeats: reservedSeats
+            available: labData.availability
         });
     }
     catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+})
+
+async function overlapsReserve(seatID, startTime, endTime, date) {
+    try {
+        function timeToInt(time) {
+            return parseInt(time.replace(":", ""), 10); //HH:MM to HHMM(int)
+        }
+
+        const startInt = timeToInt(startTime);
+        const endInt = timeToInt(endTime);
+        console.log(seatID, startTime, endTime, date)
+
+        const reservations = await Reservation.find({ seat: seatID, date: date });
+        console.log(reservations)
+
+        for (let res of reservations) {
+            let resStartInt = timeToInt(res.startTime);
+            let resEndInt = timeToInt(res.endTime);
+
+            if (startInt < resEndInt && endInt > resStartInt) {
+                console.log(startInt, endInt);
+                console.log(resStartInt, resEndInt);
+                console.log(res)
+                return true;
+            }
+        }
+
+        return false; // No overlap
+    } catch (error) {
+        console.error(error);
+        return true;
+    }
+}
+
+//save changes to reservation
+router.post('/update-reservation', async (req, res) => {
+    const userData = req.session.user || null;
+    try{
+        if (!userData) {
+            return res.redirect('/signup-login');
+        }
+        const {id, seat, startTime, endTime, lab, building, date} = req.body;
+        if (!id || !seat || !startTime || !endTime || !lab || !building || !date) {
+            return res.status(400).json({ success: false, message: "Missing parameters" });
+        }
+
+        const selectedLab = await getLabId(building, lab);
+        const newDate = new Date(date);
+        const seatID = await Seat.findOne({lab: selectedLab , seatNumber: seat}).select("_id")
+        const overlap = await overlapsReserve(seatID, startTime, endTime, newDate)
+
+        if(overlap) {
+            res.status(200).json({
+                success: false,
+                overlap: true,
+                message: "Existing reservation overlaps",
+                labtech: userData?.role === 'labtech',
+                student: userData?.role === 'student'});
+        }
+        else {
+            const selectedReserve = await Reservation.findById(id);
+
+            if (!selectedReserve) {
+                return res.status(404).send("Reservation not found");
+            }
+
+            const updatedReserve = await Reservation.findByIdAndUpdate(
+                selectedReserve._id,
+                {
+                    seat: seatID,
+                    startTime: startTime,
+                    endTime: endTime,
+                    date: newDate
+                }
+            )
+
+            console.log("Updated User:", updatedReserve);
+
+            res.status(200).json({
+                success: true,
+                overlap: false,
+                message: "Reservation edited successfully",
+                labtech: userData?.role === 'labtech',
+                student: userData?.role === 'student'
+            });
+        }
+        /*
+        if (0) {
+            res.status(200).json({ success: false, message: "Reservation edited failed" });
+        }
+        */
+
+    }
+    catch(err){
         console.error(err);
         res.status(500).send('Server Error');
     }
@@ -966,7 +1055,7 @@ router.post('/delete-reservation', async (req, res) => {
         console.log(deletedRes);
 
         if (!deletedRes) {
-            return res.status(404).send("Reservation not found");
+            res.status(200).json({ success: false, message: "Reservation deleted failed" });
         }
         res.status(200).json({ success: true, message: "Reservation deleted successfully" });
     } catch (err) {
