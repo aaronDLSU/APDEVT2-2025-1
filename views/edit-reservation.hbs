@@ -98,7 +98,7 @@
 
                                 <div class="form-group options">
                                     <label for="startTime" class="form-label">Start Time</label>
-                                    <select class="form-select mb-3" id="startTime" disabled required>
+                                    <select class="form-select mb-3" id="startTime" required>
                                         <option value="">Select Time</option>
                                     </select>
                                 </div>
@@ -111,10 +111,74 @@
 
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary" id="confirm-reserve">Save Reservation</button>
+                                <button type="submit" class="btn btn-primary" id="confirm-reserve" data-id="{{reservation._id}}">Save Reservation</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="failed-modal" tabindex="-1" aria-labelledby="failed-modal-label" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id=failed-modal-label">Lab Not Available!</h5>
+                        </div>
+                        <div class="modal-body text-center">
+                            Selected Lab is not available.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary no-confirm" data-bs-dismiss="modal">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="edit-success" tabindex="-1" aria-labelledby="edit-success-label" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="edit-success-label">Edit Success!</h5>
+                        </div>
+                        <div class="modal-body text-center">
+                            Reservation edited successfully.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary no-confirm" data-bs-dismiss="modal" id="success-ok">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="edit-failed" tabindex="-1" aria-labelledby="edit-failed-label" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="edit-failed-label">Edit Failed!</h5>
+                        </div>
+                        <div class="modal-body text-center">
+                            Reservation edited failed.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary no-confirm" data-bs-dismiss="modal">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="overlap" tabindex="-1" aria-labelledby="overlap-label" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="overlap-label">Edit Failed!</h5>
+                        </div>
+                        <div class="modal-body text-center">
+                            An Existing Reservation overlaps with this Reservation. Please change the time schedule and try again.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary no-confirm" data-bs-dismiss="modal" id="overlap-ok">OK</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -123,25 +187,41 @@
 <script>
     const urlParams = new URLSearchParams(window.location.search);
     const labs = {{{json labs}}}
-        $("#building").val(urlParams.get("building") || "").change(function () {
-            let building = $(this).val();
-            let $itemsDropdown = $("#lab");
+    $("#building").val(urlParams.get("building") || "").change(function () {
+        let building = $(this).val();
+        let itemsDropdown = $("#lab");
 
-            if (building && labs.length) {
-                $itemsDropdown.empty();
+        if (building && labs.length) {
+            itemsDropdown.empty();
+            itemsDropdown.append(new Option("Select Lab", ""))
 
-                $.each(labs, function (index, item) {
-                    if (building === item.building) {
-                        $itemsDropdown.append($('<option>', {
-                            value: item.name,
-                            text: item.name
-                        }));
-                    }
-                });
-                $itemsDropdown.prop("disabled", false);
-            } else {
-                $("#lab").val("")
-                $itemsDropdown.prop("disabled", true);
-            }
-        });
+            $.each(labs, function (index, item) {
+                if (building === item.building) {
+                    itemsDropdown.append($('<option>', {
+                        value: item.name,
+                        text: item.name
+                    }));
+                }
+            });
+            itemsDropdown.prop("disabled", false);
+        } else {
+            $("#lab").val("")
+            itemsDropdown.prop("disabled", true);
+        }
+    });
+
+    $("#startTime").val(urlParams.get("seat") || "").change(function () {
+        let startTime = $(this).val();
+        let endDropdown = $("#endTime");
+
+        if(startTime){
+            endDropdown.empty();
+            endDropdown.append(new Option("Select Time", ""))
+
+            endDropdown.prop("disabled", false);
+        } else {
+            endDropdown.val("")
+            endDropdown.prop("disabled", true);
+        }
+    })
 </script>
