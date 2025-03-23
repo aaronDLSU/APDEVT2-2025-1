@@ -65,7 +65,7 @@ router.get('/api/users', async (req, res) => {
         let filter = {}
         //get only public users if user is student
         if(userData?.role === 'student'){
-            const publicUsers = await Settings.find({accountVisibility: 'Public'}).select("user");
+            const publicUsers = await Settings.find({accVisibility: 'Public'}).select("user");
             const userIds = publicUsers.map(setting => setting.user); //extract user IDs
 
             filter = {_id: { $in: userIds }}

@@ -722,10 +722,13 @@ $(document).ready(function() {
                         throw new Error(`API request failed with status ${settingsResponse.status}`);
                     }
                     const settings = await settingsResponse.json();
-                    //console.log("visible: ", settings[0].accVisibility)
+                    console.log(settings)
+                    console.log("acc visible: ", settings[0].accVisibility)
+                    console.log("res anon:", matchingReservation.isAnonymous);
+                    console.log("role: ", currUserRole);
 
                     //set isAnonymous as "True" if user's account visibility is private. show user information if current user is labtech regardless of settings
-                    const isAnonymous = ((matchingReservation.isAnonymous || (settings[0].accVisibility === 'Private') && (currUserRole !== 'labtech'))) === true;
+                    const isAnonymous = ((matchingReservation.isAnonymous || (settings[0].accVisibility === 'Private')) && (currUserRole !== 'labtech')) === true;
                     const userName = isAnonymous ? "Anonymous" : matchingReservation.user?.name || "Unknown User";
 
                     // Create user profile link
