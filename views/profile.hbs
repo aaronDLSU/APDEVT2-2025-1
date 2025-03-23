@@ -31,6 +31,7 @@
         <!--Dashboard-->
         <div class="pr-5" id="dashboard-section">
             {{#unless (eq otheruser.role 'labtech') }}
+            {{#if showSummary}}
             <div class="card" style="width: 70%; margin-left: auto;">
                 <div class="card-header">
                     Reservations Summary
@@ -66,6 +67,7 @@
 
                 </div>
             </div>
+            {{/if}}
             {{/unless}}
         </div>
     </div>
@@ -75,16 +77,14 @@
 <div class="row-sm-2" style="margin-left:100px;">
     <div id="reservations-title">
         <div class="flex-row pt-4">
-            {{#unless (eq otheruser.role 'labtech') }}
-                <div class="h2">
-                    Reservations
-                </div>
-                {{#if reservations.length}}
-                <div class="text-muted small">
-                    Showing {{reservations.length}} reservation(s)
-                </div>
-                {{/if}}
-            {{/unless}}
+            <div class="h2">
+                Reservations
+            </div>
+            {{#if reservations.length}}
+            <div class="text-muted small">
+                Showing {{reservations.length}} reservation(s)
+            </div>
+            {{/if}}
         </div>
     </div>
 </div>
@@ -221,7 +221,6 @@
 <div class="row-sm-2" style="margin-left:100px;">
     <div id="reservations-title">
         <div class="flex-row pt-4">
-            {{#unless labtech}}
             <div class="h2">
                 My Reservations
             </div>
@@ -230,7 +229,6 @@
                     Showing {{reservations.length}} reservation(s)
                 </div>
                 {{/if}}
-            {{/unless}}
         </div>
     </div>
 </div>

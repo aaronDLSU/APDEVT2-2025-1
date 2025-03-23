@@ -347,6 +347,7 @@ router.get('/profile/:_id', async (req, res) => {
             totalApprovedCount,
             currentWeekDisplay,
             currentMonthDisplay,
+            showSummary: otherSettings.showStats || (userData?.role === 'labtech'),
             labtech: userData?.role === 'labtech',
             student: userData?.role === 'student',
             helpers: {
