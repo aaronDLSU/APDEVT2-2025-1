@@ -950,21 +950,59 @@ router.post('/change-privacy-settings', async (req, res) => {
     }
 })
 
-router.post('/delete-account', (req, res) => {
+router.post('/delete-account', async (req, res) => {
     const userData = req.session.user || null;
     try {
         if (!userData) {
             return res.redirect('/signup-login');
         }
 
-        const {somethin} = req.body;
+        const { email, password } = req.body;
 
-                res.status(200).json({
-                    success: true,
-                    message: "Password changed successfully",
-                });
+        if(!email || !password) {
+            return res.status(400).json({ success: false, message: "Missing parameters" });
+        }
+
+        const isPassEqual = await bcrypt.compare(password, userData.password)
+        if(email === userData.email && isPassEqual) {
+            //signout from account b4 deleting
+            req.session.destroy(error => {
+                if(error) {
+                    return res.status(500)
+                        .json({success: false , message: "Error signing out"});
+                }
+                res.clearCookie('connect.sid');
+            });
 
 
+            const deletedSettings = await Settings.deleteMany({ user: userData._id });
+            if(!deletedSettings) {
+                return res.status(500)
+                    .json({success: false , message: "Error deleting settings"});
+            }
+
+            const deletedReserves = await Reservation.deleteMany({ user: userData._id });
+            if(!deletedReserves) {
+                return res.status(500)
+                    .json({success: false , message: "Error deleting reservations"});
+            }
+
+            const deletedUser = await User.findByIdAndDelete(userData._id)
+            if(!deletedUser) {
+                return res.status(500)
+                    .json({success: false , message: "Error deleting account"});
+            }
+
+            console.log("deleted:", deletedSettings, deletedReserves, deletedUser)
+
+            res.status(200).json({
+                success: true,
+                message: "Account successfully deleted",
+            });
+        }
+        else{
+            return res.status(200).json({ success: false, message: "Email/password mismatch" });
+        }
     } catch (err) {
         console.error(err);
         res.status(500).send('Server Error');

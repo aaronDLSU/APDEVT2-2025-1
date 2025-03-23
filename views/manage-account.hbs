@@ -242,6 +242,22 @@
                     </div>
                   </div>
                 </div>
+
+                  <div class="modal fade" id="delete-fail" tabindex="-1" role="dialog" aria-labelledby="delete-fail-label" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+                          <div class="modal-content">
+                              <div class="modal-header">
+                                  <h5 class="modal-title" id="delete-fail-label">Account Deletion Failed!</h5>
+                              </div>
+                              <div class="modal-body">
+                                  Please enter your account details correctly and try again.
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
               </div>
             </form>
           </div>
@@ -267,33 +283,40 @@
         const deleteYes = $('#delete-yes');
         const checkboxes = $(".reserve-checkbox");
 
-        function loadSettings(){
-            if (settings.accVisibility === "Public") {
+        async function loadSettings(){
+            console.log("user:", settings.user._id)
+            const settingsResponse = await fetch(`/api/settings/?user=${settings.user._id}`); //get user's settings
+            if (!settingsResponse.ok) {
+                throw new Error(`API request failed with status ${settingsResponse.status}`);
+            }
+            const userSettings = await settingsResponse.json();
+
+            if (userSettings[0].accVisibility === "Public") {
                 $('#public').prop('checked', true);
             } else {
                 $('#private').prop('checked', true);
             }
 
-            if (settings.showStats) {
+            if (userSettings[0].showStats) {
                 $('#show-stats').prop('checked', true);
             } else {
                 $('#show-stats').prop('checked', false);
             }
 
-            if (settings.showReserves) {
+            if (userSettings[0].showReserves) {
                 $('#show-reserves').prop('checked', true);
 
                 checkboxes.each(function () {
                     $(this).prop('disabled', false);
                 });
 
-                if (settings.showBooked) {
+                if (userSettings[0].showBooked) {
                     $('#show-booked').prop('checked', true);
                 } else $('#show-booked').prop('checked', false);
-                if (settings.showOngoing) {
+                if (userSettings[0].showOngoing) {
                     $('#show-ongoing').prop('checked', true);
                 } else $('#show-ongoing').prop('checked', false);
-                if (settings.showPrevious) {
+                if (userSettings[0].showPrevious) {
                     $('#show-previous').prop('checked', true);
                 } else $('#show-previous').prop('checked', false);
             } else {
@@ -409,8 +432,27 @@
 
         //redirects to home page upon deleting account
         deleteYes.on("click", function () {
-            alert("Account deleted successfully.");
-            window.location.href = "signup-homepage.html";
+            const emailInput = $("#delete-acc-email").val()
+            const passwordInput = $("#delete-acc-pass").val()
+
+            $.ajax({
+                url: '/delete-account',
+                type: 'POST',
+                data: {
+                    email: emailInput,
+                    password: passwordInput
+                },
+                success: function(response) {
+                    $("#confirm-delete").modal('hide');
+                    if(response.success){
+                        alert("Account deleted successfully.");
+                        window.location.href = "/";
+                    }
+                    else {
+                        $('#delete-fail').modal('show')
+                    }
+                }
+            })
         });
 
         $("#change-priv").on("click", function () {
@@ -444,11 +486,10 @@
                       });
                   } else{
                       $("#change-setting-fail").modal('show')
+                      loadSettings();
                   }
-                  loadSettings();
               }
             })
-
         })
 
         //enable/disable checkboxes in privacy settings based on "show reservations" option
@@ -460,5 +501,6 @@
                 $(this).prop("disabled", !$('#show-reserves').prop("checked"));
             });
         });
+
     });
 </script>
