@@ -61,7 +61,16 @@ router.get('/', (req, res) => {
 
 router.get('/api/users', async (req, res) => {
     try {
-        const usersList = await User.find({}).sort({name: 1}).lean();
+        //get public users
+        const publicUsers = await Settings.find({accountVisibility: 'Public'}).select("user");
+        const userIds = publicUsers.map(setting => setting.user); //extract user IDs
+
+        const usersList = await User.find({
+            _id: { $in: userIds }, //only include public users in search
+        }).sort({name: 1}).lean();
+
+        //console.log("publicUsers", publicUsers);
+        //const usersList = await User.find({}).sort({name: 1}).lean();
 
         res.json({
             success: true,
@@ -227,8 +236,8 @@ router.get('/profile/:_id', async (req, res) => {
                 const userIdString = otheruser._id.toString();
                 console.log("Looking for reservations with user ID:", userIdString);
                 let anonFilter = {}
-                if(userData.role === 'student')
-                    anonFilter = { isAnonymous: false}
+                if(userData?.role === 'student')
+                    anonFilter = { isAnonymous: false }
 
                 // Get all reservations
                 const allReservations = await Reservation.find(anonFilter)
@@ -378,6 +387,9 @@ router.post('/signup', async (req, res) => {
             password: hashedPass,
             role: role,
         });
+        await Settings.create({
+            user: objID
+        })
         // console.log(hashedPass);
         res.redirect('/signup-login?success=true'); // Redirect back to login page
     } catch (err) {
@@ -799,6 +811,12 @@ router.get('/manage-account', async (req, res) => {
         const objID = await User.findById(userData._id);
         //console.log(objID)
         const userSettings = await Settings.findOne({ user: objID }).populate("user").lean();
+        if(!userSettings) {
+            await Settings.create({
+                user: objID
+            })
+        }
+
         //console.log(userSettings)
         res.render('manage-account', {
             title: "Manage Account",
