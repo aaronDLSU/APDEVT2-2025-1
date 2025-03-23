@@ -30,6 +30,7 @@
 
         <!--Dashboard-->
         <div class="pr-5" id="dashboard-section">
+            {{#unless (eq otheruser.role 'labtech') }}
             <div class="card" style="width: 70%; margin-left: auto;">
                 <div class="card-header">
                     Reservations Summary
@@ -65,6 +66,7 @@
 
                 </div>
             </div>
+            {{/unless}}
         </div>
     </div>
 </div>
@@ -73,14 +75,16 @@
 <div class="row-sm-2" style="margin-left:100px;">
     <div id="reservations-title">
         <div class="flex-row pt-4">
-            <div class="h2">
-                Reservations
-            </div>
-            {{#if reservations.length}}
-            <div class="text-muted small">
-                Showing {{reservations.length}} reservation(s)
-            </div>
-            {{/if}}
+            {{#unless (eq otheruser.role 'labtech') }}
+                <div class="h2">
+                    Reservations
+                </div>
+                {{#if reservations.length}}
+                <div class="text-muted small">
+                    Showing {{reservations.length}} reservation(s)
+                </div>
+                {{/if}}
+            {{/unless}}
         </div>
     </div>
 </div>
@@ -171,6 +175,7 @@
 
         <!--Dashboard-->
         <div class="pr-5" id="dashboard-section">
+        {{#unless labtech}} <!-- idk if labtech should have stats (feel free to remove this)-->
             <div class="card" style="width: 70%; margin-left: auto;">
                 <div class="card-header">
                     Reservations Summary
@@ -206,7 +211,9 @@
 
                 </div>
             </div>
+        {{/unless}}
         </div>
+
     </div>
 </div>
 
@@ -214,14 +221,16 @@
 <div class="row-sm-2" style="margin-left:100px;">
     <div id="reservations-title">
         <div class="flex-row pt-4">
+            {{#unless labtech}}
             <div class="h2">
                 My Reservations
             </div>
-            {{#if reservations.length}}
-            <div class="text-muted small">
-                Showing {{reservations.length}} reservation(s)
-            </div>
-            {{/if}}
+                {{#if reservations.length}}
+                <div class="text-muted small">
+                    Showing {{reservations.length}} reservation(s)
+                </div>
+                {{/if}}
+            {{/unless}}
         </div>
     </div>
 </div>
@@ -284,13 +293,15 @@
             </div>
             {{/each}}
             {{else}}
-            <div class="col-12 text-center py-5">
-                <div class="text-muted">
-                    <i class="fa-solid fa-calendar-xmark fa-3x mb-3"></i>
-                    <h4>No reservations found</h4>
-                    <p>You haven't made any reservations yet.</p>
+                <div class="col-12 text-center py-5">
+                    <div class="text-muted">
+                        <i class="fa-solid fa-calendar-xmark fa-3x mb-3"></i>
+                        <h4>No reservations found</h4>
+                        {{#unless labtech}}
+                            <p>You haven't made any reservations yet.</p>
+                        {{/unless}}
+                    </div>
                 </div>
-            </div>
             {{/if}}
         </div>
     </div>

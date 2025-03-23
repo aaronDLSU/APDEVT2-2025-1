@@ -63,16 +63,15 @@ router.get('/api/users', async (req, res) => {
     const userData = req.session.user || null;
     try {
         let filter = {}
-        //get public users if user is student
+        //get only public users if user is student
         if(userData?.role === 'student'){
             const publicUsers = await Settings.find({accountVisibility: 'Public'}).select("user");
             const userIds = publicUsers.map(setting => setting.user); //extract user IDs
-    
+
             filter = {_id: { $in: userIds }}
         }
 
         const usersList = await User.find(filter).sort({name: 1}).lean();
-        //console.log("publicUsers", publicUsers);
 
         res.json({
             success: true,
@@ -173,6 +172,13 @@ router.get('/profile/:_id', async (req, res) => {
         if (!otheruser) {
             return res.status(404).send('User not found');
         }
+        //other user's settings
+        let otherSettings = await Settings.findOne({ user: otheruser._id }).lean();
+        console.log(otherSettings)
+
+        if (!otherSettings) {
+            return res.status(404).send('Users Settings not found');
+        }
 
         // Log the raw user data from database
         console.log("Raw user data from database:", {
@@ -237,12 +243,25 @@ router.get('/profile/:_id', async (req, res) => {
                 // Get user ID as string
                 const userIdString = otheruser._id.toString();
                 console.log("Looking for reservations with user ID:", userIdString);
-                let anonFilter = {}
-                if(userData?.role === 'student')
-                    anonFilter = { isAnonymous: false }
+                let filter = {}
+
+                if(userData?.role !== 'labtech'){
+                    let statusFilters = []
+                    filter = { isAnonymous: false }
+                    if(otherSettings.showReserves){
+                        if(otherSettings.showBooked)
+                            statusFilters.push('approved')
+                        if(otherSettings.showOngoing)
+                            statusFilters.push('pending')
+                        if(otherSettings.showPrevious)
+                            statusFilters.push('completed')
+                    }
+
+                    filter.status = { $in: statusFilters }
+                }
 
                 // Get all reservations
-                const allReservations = await Reservation.find(anonFilter)
+                const allReservations = await Reservation.find(filter)
                     .populate('lab')
                     .populate('seat', 'seatNumber')
                     .sort({ date: 1 }) // Sort by date to get original order
@@ -813,6 +832,7 @@ router.get('/manage-account', async (req, res) => {
         const objID = await User.findById(userData._id);
         //console.log(objID)
         const userSettings = await Settings.findOne({ user: objID }).populate("user").lean();
+        //create user settings (if it does not exist already)
         if(!userSettings) {
             await Settings.create({
                 user: objID
@@ -839,8 +859,53 @@ router.post('/change-password', (req, res) => {
 
 })
 
-router.post('/change-privacy-settings', (req, res) => {
+router.post('/change-privacy-settings', async (req, res) => {
+    const userData = req.session.user || null;
+    try{
+        if (!userData) {
+            return res.redirect('/signup-login');
+        }
 
+        const {id, accVisibility, showStats, showReserves, showBooked, showOngoing, showPrevious} = req.body;
+        if (!id || !accVisibility) {
+            return res.status(400).json({ success: false, message: "Missing parameters" });
+        }
+
+        const userSetting = await Settings.findById(id);
+
+        if (!userSetting) {
+            return res.status(404).send("User's settings not found");
+        }
+        const updatedSettings = await Settings.findByIdAndUpdate(
+            userSetting._id,
+            {
+                accVisibility: accVisibility,
+                showStats: showStats,
+                showReserves: showReserves,
+                showBooked: showBooked,
+                showOngoing: showOngoing,
+                showPrevious: showPrevious,
+            }
+        )
+
+        console.log("Updated User:", updatedSettings);
+        if(updatedSettings) {
+            res.status(200).json({
+                success: true,
+                message: "Priv settings edited successfully",
+            });
+        }
+        else{
+            res.status(200).json({
+                success: false,
+                message: "Priv settings update failed",
+            });
+        }
+    }
+    catch(err){
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
 })
 
 router.post('/delete-account', (req, res) => { })
@@ -957,12 +1022,6 @@ router.post('/update-reservation', async (req, res) => {
                 student: userData?.role === 'student'
             });
         }
-        /*
-        if (0) {
-            res.status(200).json({ success: false, message: "Reservation edited failed" });
-        }
-        */
-
     }
     catch(err){
         console.error(err);

@@ -11,7 +11,7 @@ const ReservationSchema = new mongoose.Schema({
     isAnonymous: { type: Boolean, default: false },
     status: { 
             type: String, 
-            enum: ['pending', 'approved', 'rejected', 'cancelled'], 
+            enum: ['pending', 'approved', 'rejected', 'cancelled', 'completed'],
             default: 'approved' },
     createdAt: { type: Date, default: Date.now }
 });

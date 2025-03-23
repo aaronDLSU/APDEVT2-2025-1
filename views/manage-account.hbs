@@ -8,10 +8,11 @@
         <a class="nav-link" id="change-pass"
            data-bs-toggle="pill" href="#change-pass-tab" role="tab"
            aria-controls="change-pass" aria-selected="true">Change Password</a>
+          {{#if student}}
         <a class="nav-link" id="priv-settings"
            data-bs-toggle="pill" href="#priv-settings-tab" role="tab"
            aria-controls="priv-settings" aria-selected="false">Privacy Settings</a>
-
+            {{/if}}
         <a class="nav-link" id="delete-acc"
            data-bs-toggle="pill" href="#delete-acc-tab" role="tab"
            aria-controls="delete-acc" aria-selected="false">Delete Account</a>
@@ -114,13 +115,13 @@
             <label class="form-label mb-4"><b>Account Visibility</b></label>
 
             <div class="form-check">
-              <input type="radio" class="form-check-input" name="acc-visible" id="public" value="public" checked>
+              <input type="radio" class="form-check-input" name="acc-visible" id="public" value="Public" checked>
               <label class="form-check-label" for="public">Public</label>
               <small class="text-muted d-block">Anyone can see your account.</small>
             </div>
 
             <div class="form-check">
-              <input type="radio" class="form-check-input" name="acc-visible" id="private" value="private">
+              <input type="radio" class="form-check-input" name="acc-visible" id="private" value="Private">
               <label class="form-check-label" for="private">Private</label>
               <small class="text-muted d-block">Only lab technicians can see your account.</small>
               <!-- im not sure if there should be an option to completely make user anonymous lol -->
@@ -160,7 +161,7 @@
           </div>
 
           <div class="d-flex justify-content-center mt-4">
-            <button type="button" class="btn btn-primary" id="change-priv" data-bs-toggle="modal" data-bs-target="#change-setting-success">Save Changes</button>
+            <button type="button" data-id="{{userSettings._id}}" class="btn btn-primary" id="change-priv">Save Changes</button>
           </div>
         </div>
       </div>
@@ -175,11 +176,26 @@
               Your settings has been changed successfully!
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+              <button type="button" class="btn btn-success" data-bs-dismiss="modal" id="setting-success-ok">OK</button>
             </div>
           </div>
         </div>
       </div>
+        <div class="modal fade" id="change-setting-fail" tabindex="-1" aria-labelledby="setting-fail-label" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="setting-fail-label">Failed!</h5>
+                    </div>
+                    <div class="modal-body text-center">
+                        Setting update failed!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
       <!-- delete account tab -->
       <div class="tab-pane fade" id="delete-acc-tab" role="tabpanel" aria-labelledby="delete-acc">
@@ -252,7 +268,7 @@
         const checkboxes = $(".reserve-checkbox");
 
         function loadSettings(){
-            if (settings.accVisibility === "public") {
+            if (settings.accVisibility === "Public") {
                 $('#public').prop('checked', true);
             } else {
                 $('#private').prop('checked', true);
@@ -390,6 +406,44 @@
             window.location.href = "signup-homepage.html";
         });
 
+        $("#change-priv").on("click", function () {
+            let visibility = $('input[name=acc-visible]:checked').val()
+            let showStats = $("#show-stats").prop("checked")
+            let showReserves = $("#show-reserves").prop("checked")
+
+            let booked = $("#show-booked").prop("checked")
+            let ongoing = $("#show-ongoing").prop("checked")
+            let previous = $("#show-previous").prop("checked")
+
+            const settingsID = $(this).data('id')
+
+            $.ajax({
+              url: '/change-privacy-settings',
+              type: 'POST',
+              data: {
+                  id: settingsID,
+                  accVisibility: visibility,
+                  showStats: showStats,
+                  showReserves: showReserves,
+                  showBooked: booked,
+                  showOngoing: ongoing,
+                  showPrevious: previous,
+              },
+              success: function (response) {
+                  if(response.success) {
+                      $("#change-setting-success").modal('show')
+                      $("#setting-success-ok").off("click").on("click", function () {
+                          $("#change-setting-success").modal("hide")
+                          window.location.reload()
+                      });
+                  } else{
+                      $("#change-setting-fail").modal('show')
+                  }
+              }
+            })
+
+        })
+
         //enable/disable checkboxes in privacy settings based on "show reservations" option
         $("#show-reserves").on("change", function () {
             checkboxes.each(function () {
@@ -399,5 +453,7 @@
                 $(this).prop("disabled", !$('#show-reserves').prop("checked"));
             });
         });
+
+
     });
 </script>
