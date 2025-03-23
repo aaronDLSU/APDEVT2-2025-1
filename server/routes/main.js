@@ -360,6 +360,21 @@ async function getName(email) {
     return username;
 }
 
+async function generateUserID(){
+    const users = await User.find().sort({userId: 1 });
+    var i = 1
+    users.forEach((user) => {
+        //find for unavailable userIds
+        if(i !== user.userId){
+            return i
+        }
+        else
+            i++
+    })
+    console.log(i)
+    return i
+}
+
 // Handle User Signup
 router.post('/signup', async (req, res) => {
     try {
@@ -369,7 +384,7 @@ router.post('/signup', async (req, res) => {
         // console.log(name);
         // Create new user in MongoDB
         const hashedPass = await bcrypt.hash(password, 13);
-        const newUserID = await User.countDocuments()
+        const newUserID = await generateUserID()
         await User.create({
             name: name,
             email: email,
