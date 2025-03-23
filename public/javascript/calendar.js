@@ -431,8 +431,8 @@ $(document).ready(function() {
                 const emailResponse = await fetch(`/api/users/find-by-email?email=${studentEmail}`);
                 const emailData = await emailResponse.json();
 
-                if (emailData.success && emailData.data.length > 0) {
-                    const student = emailData.data[0];
+                if (emailData.success && emailData.data) {
+                    const student = emailData.data;
                     //Checks if email entered is a student account
                     if (student.role !== "student") {
                         alert("This email is not associated with a student account.");

@@ -1022,17 +1022,22 @@ router.get("/api/reservations", async (req, res) => {
 // Handles Reservations for calendar.js
 router.post("/api/reserveroom", async (req, res) => {
     try {
-        const { lab, seat, date, startTime, endTime, isAnonymous } = req.body;
+        const { lab, seat, date, startTime, endTime, isAnonymous, user: passedUserId } = req.body;
 
         // Hardcoded user ID 
         //const userId = "67c66192b0ce105ba934bc95";
 
         //Newly added to use sessions
-        const userId = req.session.user?._id;  // Access user ID from the session
-        console.log("2Current User ID from session:", userId);
+        const sessionUser = req.session.user; // Access user ID from the session
+        let userId = sessionUser?._id;
 
         if (!userId) {
             return res.status(401).json({ message: "User is not authenticated" });
+        }
+
+        // Allow labtechs to book for others
+        if (sessionUser.role === "labtech" && passedUserId) {
+            userId = passedUserId;
         }
 
         if (!lab || !seat || !date || !startTime || !endTime) {
