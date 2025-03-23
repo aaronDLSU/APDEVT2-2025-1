@@ -403,7 +403,7 @@ router.post('/signup', async (req, res) => {
         // console.log(name);
         // Create new user in MongoDB
         const hashedPass = await bcrypt.hash(password, 13);
-        await User.create({
+        let newUser = await User.create({
             name: name,
             email: email,
             password: hashedPass,
@@ -411,7 +411,7 @@ router.post('/signup', async (req, res) => {
         });
         //create (Default) settings for new user
         await Settings.create({
-            user: objID
+            user: newUser._id
         })
         // console.log(hashedPass);
         res.redirect('/signup-login?success=true'); // Redirect back to login page
@@ -866,12 +866,13 @@ router.post('/change-password', async (req, res) => {
         }
 
         const {oldPass, newPass} = req.body;
-
+        //check if old pass == new pass
         const isEqual = await bcrypt.compare(oldPass, userData.password);
 
         if(isEqual) {
+            //hash new password
             const hashedPass = await bcrypt.hash(newPass,13);
-
+            //update password
             const updatedUser = await User.findByIdAndUpdate(
                 userData._id, { password: hashedPass }
             )
@@ -949,7 +950,26 @@ router.post('/change-privacy-settings', async (req, res) => {
     }
 })
 
-router.post('/delete-account', (req, res) => { })
+router.post('/delete-account', (req, res) => {
+    const userData = req.session.user || null;
+    try {
+        if (!userData) {
+            return res.redirect('/signup-login');
+        }
+
+        const {somethin} = req.body;
+
+                res.status(200).json({
+                    success: true,
+                    message: "Password changed successfully",
+                });
+
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+})
 
 //check availability
 router.post('/check-availability', async (req, res) => {
