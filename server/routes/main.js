@@ -369,11 +369,13 @@ router.post('/signup', async (req, res) => {
         // console.log(name);
         // Create new user in MongoDB
         const hashedPass = await bcrypt.hash(password, 13);
+        const newUserID = await User.countDocuments()
         await User.create({
             name: name,
             email: email,
             password: hashedPass,
-            role: role
+            role: role,
+            userId: newUserID
         });
         // console.log(hashedPass);
         res.redirect('/signup-login?success=true'); // Redirect back to login page
