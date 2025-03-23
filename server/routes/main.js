@@ -226,9 +226,12 @@ router.get('/profile/:_id', async (req, res) => {
                 // Get user ID as string
                 const userIdString = otheruser._id.toString();
                 console.log("Looking for reservations with user ID:", userIdString);
+                let anonFilter = {}
+                if(userData.role === 'student')
+                    anonFilter = { isAnonymous: false}
 
                 // Get all reservations
-                const allReservations = await Reservation.find()
+                const allReservations = await Reservation.find(anonFilter)
                     .populate('lab')
                     .populate('seat', 'seatNumber')
                     .sort({ date: 1 }) // Sort by date to get original order
