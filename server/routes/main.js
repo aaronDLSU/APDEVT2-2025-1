@@ -369,7 +369,6 @@ router.post('/signup', async (req, res) => {
         // console.log(name);
         // Create new user in MongoDB
         const hashedPass = await bcrypt.hash(password, 13);
-        const newUserID = await generateUserID()
         await User.create({
             name: name,
             email: email,
