@@ -119,10 +119,9 @@ $(document).ready(function () {
 
             function updateEndTimeOptions() {
               let selectedIndex = startTimeDropdown.prop("selectedIndex");
-
               endTimeDropdown.empty().append(new Option("Select end time", ""));
 
-              for (let i = selectedIndex + 1; i < timeSlots.length; i++) {
+              for (let i = selectedIndex; i < timeSlots.length; i++) {
                 endTimeDropdown.append(new Option(timeSlots[i], timeSlots[i]));
               }
               if (endTimeDropdown.find(`option[value="${previousEndTime}"]`).length) {
