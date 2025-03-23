@@ -48,7 +48,7 @@ if (!fs.existsSync(uploadDir)) {
 router.get('/', (req, res) => {
     const userData = req.session.user || null;  
     console.log('User data:', userData); // Debugging: Log user data
-    
+
     res.render('homepage', {
         title: "Homepage",
         pageStyle: "homepage",
@@ -409,6 +409,7 @@ router.post('/signup', async (req, res) => {
             password: hashedPass,
             role: role,
         });
+        //create (Default) settings for new user
         await Settings.create({
             user: objID
         })
@@ -426,6 +427,7 @@ router.post('/login', express.urlencoded({ extended: true }), async (req, res) =
     'login-checkbox': remembered} = req.body;
    
     const currUser = await User.findOne({email:email});
+
     const validPass = await bcrypt.compare(password, currUser.password);
     // Simulated login (replace this with database authentication later)
     if(currUser.email === email && validPass){
@@ -856,8 +858,46 @@ router.get('/manage-account', async (req, res) => {
     }
 })
 
-router.post('/change-password', (req, res) => {
+router.post('/change-password', async (req, res) => {
+    const userData = req.session.user || null;
+    try {
+        if (!userData) {
+            return res.redirect('/signup-login');
+        }
 
+        const {oldPass, newPass} = req.body;
+
+        const isEqual = await bcrypt.compare(oldPass, userData.password);
+
+        if(isEqual) {
+            const hashedPass = await bcrypt.hash(newPass,13);
+
+            const updatedUser = await User.findByIdAndUpdate(
+                userData._id, { password: hashedPass }
+            )
+            if(updatedUser) {
+                res.status(200).json({
+                    success: true,
+                    message: "Password changed successfully",
+                });
+            }
+            else{
+                res.status(200).json({
+                    success: false,
+                    message: "Update password failed",
+                });
+            }
+        }
+        else {
+            res.status(200).json({
+                success: false,
+                message: "Wrong Password!",
+            });
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
 })
 
 router.post('/change-privacy-settings', async (req, res) => {

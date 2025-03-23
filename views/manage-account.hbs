@@ -370,22 +370,29 @@
             confirmModal.hide();
             console.log(user)
 
-            setTimeout(() => {
-                if(oldPass.val() === user.password) {
-                    const successModal = new bootstrap.Modal($('#change-success')[0]);
-                    successModal.show();
+            $.ajax({
+                url: '/change-password',
+                type: 'POST',
+                data: {
+                    oldPass: oldPass.val(),
+                    newPass: newPass.val()
+                },
+                success: function(response) {
+                    if(response.success){
+                        const successModal = new bootstrap.Modal($('#change-success')[0]);
+                        successModal.show();
 
-                    pass_form[0].reset();
+                        pass_form[0].reset();
 
-                    newPass.removeClass("is-valid is-invalid");
-                    confirmPass.removeClass("is-valid is-invalid");
-                    submitBtn.prop("disabled", true);
+                        newPass.removeClass("is-valid is-invalid");
+                        confirmPass.removeClass("is-valid is-invalid");
+                        submitBtn.prop("disabled", true);
+                    } else {
+                        const failedModal = new bootstrap.Modal($('#wrong-pass')[0]);
+                        failedModal.show();
+                    }
                 }
-                else {
-                    const failedModal = new bootstrap.Modal($('#wrong-pass')[0]);
-                    failedModal.show();
-                }
-            }, 500);
+            })
         });
 
         //this is to show "password changed successfully" modal
@@ -434,11 +441,11 @@
                       $("#change-setting-success").modal('show')
                       $("#setting-success-ok").off("click").on("click", function () {
                           $("#change-setting-success").modal("hide")
-                          window.location.reload()
                       });
                   } else{
                       $("#change-setting-fail").modal('show')
                   }
+                  loadSettings();
               }
             })
 
@@ -453,7 +460,5 @@
                 $(this).prop("disabled", !$('#show-reserves').prop("checked"));
             });
         });
-
-
     });
 </script>
