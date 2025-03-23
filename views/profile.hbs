@@ -260,10 +260,8 @@
                                             </form>
                                         </li>
                                         <li>
-                                            <form method="POST" action="/delete-reservation">
-                                                <button class="dropdown-item cancel-reservation"
-                                                    data-id="{{this._id}}">Delete</button>
-                                            </form>
+                                            <button class="dropdown-item cancel-reservation submit-delete"
+                                                data-id="{{this._id}}">Delete</button>
                                         </li>
                                     </ul>
                                 </div>
@@ -297,6 +295,94 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirm-delete-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirm-delete-label">Confirm Deletion</h5>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this reservation?
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" id="confirm-btn">Yes</button>
+                <button type="button" class="btn btn-secondary no-confirm" data-bs-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-success" tabindex="-1" aria-labelledby="delete-success-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="delete-success-label">Success</h5>
+            </div>
+            <div class="modal-body text-center">
+                Reservation deleted successfully.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-fail" tabindex="-1" aria-labelledby="delete-fail-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="delete-fail-label">Failed</h5>
+            </div>
+            <div class="modal-body text-center">
+                Reservation deletion failed.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary no-confirm" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 
 {{/if}}
+
+<script>
+    const confirmDelete = $('.submit-delete')
+    confirmDelete.on("click", function () {
+        const reserveId = $(this).data('id');
+        const confirmModal = new bootstrap.Modal($('#confirm-delete'));
+        console.log("click")
+
+        confirmModal.show();
+
+        // When "Yes" is clicked
+        $('#confirm-btn').off('click').on("click", function () {
+            $.ajax({
+                url: "/delete-reservation",
+                type: "POST",
+                data: {id: reserveId},
+                success: function (response) {
+                    confirmModal.hide();
+                    if (response.success) {
+                        setTimeout(() => {
+                            const successModal = new bootstrap.Modal($('#delete-success'));
+                            successModal.show();
+
+                            $('#delete-success .btn-success').off('click').on("click", function () {
+                                location.reload();
+                            });
+                        }, 500);
+                    } else {
+                        const failModal = new bootstrap.Modal($('#delete-fail'));
+                        failModal.show();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr.responseText);
+                }
+            })
+        });
+    });
+</script>

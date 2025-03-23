@@ -112,7 +112,10 @@
                                         <option value="">Select Time</option>
                                     </select>
                                 </div>
-
+                                {{#if (eq user.role 'student')}}
+                                    <label for="anonymous-checkbox">Make Anonymous</label>
+                                    <input type="checkbox" id="anonymous-checkbox">
+                                {{/if}}
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary" id="confirm-reserve" data-id="{{reservation._id}}">Save Reservation</button>
@@ -228,4 +231,14 @@
             endDropdown.prop("disabled", true);
         }
     })
+
+    $("#view-avail").on(click, loadSetting)
+
+    function loadSetting(){
+        if({{reservation.isAnonymous}})
+            $("#anonymous-checkbox").prop('checked', true)
+        else
+            $("#anonymous-checkbox").prop('false', true)
+    }
+
 </script>
