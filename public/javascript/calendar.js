@@ -709,16 +709,23 @@ $(document).ready(function() {
                 // Update reservation info UI
                 if (matchingReservation) {
                     const userId = matchingReservation.user?._id;
-                    const settingsResponse = await fetch(`/api/settings/?user=${userId}`); //get user's settings
+                    const userResponse = await fetch('/api/current-user-id'); //get current user data (for role)
+                    var currUserRole = "none"
 
+                    if (userResponse.ok) {
+                        const currentUserData = await userResponse.json();
+                        currUserRole = currentUserData.role;
+                    }
+
+                    const settingsResponse = await fetch(`/api/settings/?user=${userId}`); //get user's settings
                     if (!settingsResponse.ok) {
                         throw new Error(`API request failed with status ${settingsResponse.status}`);
                     }
                     const settings = await settingsResponse.json();
                     //console.log("visible: ", settings[0].accVisibility)
 
-                    //set isAnonymous as "True" if user's account visibility is private.
-                    const isAnonymous = (matchingReservation.isAnonymous || (settings[0].accVisibility === 'Private')) === true;
+                    //set isAnonymous as "True" if user's account visibility is private. show user information if current user is labtech regardless of settings
+                    const isAnonymous = ((matchingReservation.isAnonymous || (settings[0].accVisibility === 'Private') && (currUserRole !== 'labtech'))) === true;
                     const userName = isAnonymous ? "Anonymous" : matchingReservation.user?.name || "Unknown User";
 
                     // Create user profile link
