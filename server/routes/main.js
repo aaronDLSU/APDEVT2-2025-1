@@ -360,21 +360,6 @@ async function getName(email) {
     return username;
 }
 
-async function generateUserID(){
-    const users = await User.find().sort({userId: 1 });
-    var i = 1
-    users.forEach((user) => {
-        //find for unavailable userIds
-        if(i !== user.userId){
-            return i
-        }
-        else
-            i++
-    })
-    console.log(i)
-    return i
-}
-
 // Handle User Signup
 router.post('/signup', async (req, res) => {
     try {
@@ -390,7 +375,6 @@ router.post('/signup', async (req, res) => {
             email: email,
             password: hashedPass,
             role: role,
-            userId: newUserID
         });
         // console.log(hashedPass);
         res.redirect('/signup-login?success=true'); // Redirect back to login page
