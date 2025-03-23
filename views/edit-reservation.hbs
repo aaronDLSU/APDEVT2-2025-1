@@ -72,9 +72,13 @@
 
                     <div class="buttons">
                         <button type="button" id="view-avail" class="btn btn-primary" disabled>Check Availability</button>
-                      <a href="/reservation-list">
+                        {{#if (eq user.role 'labtech')}}
+                        <a href="/reservation-list">
+                        {{else}}
+                        <a href="/profile">
+                        {{/if}}
                         <button type="button" class="btn btn-secondary" id="cancel">Cancel</button>
-                      </a>
+                        </a>
                     </div>
               </form>
             </div>
