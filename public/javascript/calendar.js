@@ -639,6 +639,7 @@ $(document).ready(function() {
             const reservationResponse = await fetch(
                 `/api/reservations?lab=${selectedRoomId}&date=${formattedDate}`
             );
+            
             if (!reservationResponse.ok) {
                 throw new Error(`API request failed with status ${reservationResponse.status}`);
             }
