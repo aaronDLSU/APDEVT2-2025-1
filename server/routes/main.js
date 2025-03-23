@@ -888,7 +888,7 @@ router.post('/update-reservation', async (req, res) => {
         if (!userData) {
             return res.redirect('/signup-login');
         }
-        const {id, seat, startTime, endTime, lab, building, date} = req.body;
+        const {id, seat, startTime, endTime, lab, building, date, isAnonymous} = req.body;
         if (!id || !seat || !startTime || !endTime || !lab || !building || !date) {
             return res.status(400).json({ success: false, message: "Missing parameters" });
         }
@@ -912,14 +912,15 @@ router.post('/update-reservation', async (req, res) => {
             if (!selectedReserve) {
                 return res.status(404).send("Reservation not found");
             }
-
+            console.log(isAnonymous)
             const updatedReserve = await Reservation.findByIdAndUpdate(
                 selectedReserve._id,
                 {
                     seat: seatID,
                     startTime: startTime,
                     endTime: endTime,
-                    date: newDate
+                    date: newDate,
+                    isAnonymous: isAnonymous
                 }
             )
 

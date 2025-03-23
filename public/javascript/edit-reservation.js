@@ -42,8 +42,19 @@ $(document).ready(function () {
       save.prop('disabled', !isFilled);
     }
 
+    function loadAnonymous(){
+      let isAnonymous = $("#view-avail").attr("data-anonymous") === "true"
+      if(isAnonymous){
+        $("#anonymous-checkbox").prop('checked', true);
+      }
+      else{
+        $("#anonymous-checkbox").prop('checked', false);
+      }
+    }
+
     edit.on('input change', checkEditForm);
     checkEditForm();
+    loadAnonymous();
 
     $.ajax({
       url: "/check-availability",
@@ -148,6 +159,8 @@ $(document).ready(function () {
     let lab = $("#lab").val();
     let building = $("#building").val()
     let date = $("#date").val()
+    let anonymous = $("#anonymous-checkbox").is(":checked")
+    console.log(anonymous)
 
     const reserveId = $(this).data('id');
 
@@ -162,6 +175,7 @@ $(document).ready(function () {
         lab: lab,
         building: building,
         date: date,
+        isAnonymous: anonymous
       },
       success: function (response) {
         if (response.success) {
