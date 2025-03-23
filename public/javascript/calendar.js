@@ -653,70 +653,79 @@ $(document).ready(function() {
             availabilityTable.parentNode.replaceChild(newTable, availabilityTable);
     
             // Attach event listener for clicking on reserved slots
-            newTable.addEventListener("click", function (event) {
+            newTable.addEventListener("click", async function (event) {
                 let cell = event.target;
-    
+
                 //console.log("Cell clicked:", cell);
-    
+
                 // Ensure only reserved cells trigger this function
                 if (!cell.classList.contains("reserved-hour")) {
                     console.warn("Clicked cell is not reserved.");
                     return;
                 }
-                
+
                 // Seating table
                 // Get clicked column index
                 const columnIndex = Array.from(cell.parentNode.children).indexOf(cell);
-    
+
                 // Get time from column index
                 const slotHour = 7 + Math.floor(columnIndex / 2);
                 const isFirstHalf = columnIndex % 2 === 0;
                 const clickedTime = `${slotHour}:${isFirstHalf ? "00" : "30"}`;
-    
+
                 // Get clicked row index (seat number)
                 const rowIndex = Array.from(cell.parentNode.parentNode.children).indexOf(cell.parentNode);
                 const seatNumber = rowIndex + 1;
-    
+
                 //console.log(`Clicked Seat: ${seatNumber}, Time: ${clickedTime}, Date: ${formattedDate}`);
-    
+
                 // Find matching reservation
                 const matchingReservation = reservations.find(reservation => {
                     let resSeatNumber = seatMap[reservation.seat]; // Convert seat ID to seat number
                     let resStartTime = convertToDateTimeObject(reservation.date, reservation.startTime);
                     let resEndTime = convertToDateTimeObject(reservation.date, reservation.endTime);
                     let slotTime = convertToDateTimeObject(formattedDate, clickedTime);
-    
+
                     return (
                         resSeatNumber === seatNumber &&
                         slotTime >= resStartTime &&
                         slotTime < resEndTime
                     );
                 });
-        
+
                 // Ensure the reservation info container exists
                 let infoContainer = document.getElementById("reserve-details-container");
-                if (!infoContainer) {      
+                if (!infoContainer) {
 
                     // Create the container dynamically
                     infoContainer = document.createElement("div");
                     infoContainer.id = "reservation-info-container";
                     infoContainer.classList.add("reservation-info-container");
-    
+
                     const parentContainer = document.getElementById("reservation-details-container") || document.body;
                     parentContainer.appendChild(infoContainer);
                 }
-    
+
                 // Update reservation info UI
                 if (matchingReservation) {
-                    const isAnonymous = matchingReservation.isAnonymous === true;
                     const userId = matchingReservation.user?._id;
+                    const settingsResponse = await fetch(`/api/settings/?user=${userId}`); //get user's settings
+
+                    if (!settingsResponse.ok) {
+                        throw new Error(`API request failed with status ${settingsResponse.status}`);
+                    }
+                    const settings = await settingsResponse.json();
+                    //console.log("visible: ", settings[0].accVisibility)
+
+                    //set isAnonymous as "True" if user's account visibility is private.
+                    const isAnonymous = (matchingReservation.isAnonymous || (settings[0].accVisibility === 'Private')) === true;
                     const userName = isAnonymous ? "Anonymous" : matchingReservation.user?.name || "Unknown User";
-    
+
                     // Create user profile link
                     let userProfileLink = isAnonymous
                         ? "Anonymous"
                         : `<a href="/profile/${userId}" style="color: blue; text-decoration: underline;">${userName}</a>`;
-    
+
                     infoContainer.innerHTML = `
                         <h3>Reservation Details</h3>
                         <p><strong>Reserved By:</strong> ${userProfileLink}</p>

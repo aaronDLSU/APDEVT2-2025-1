@@ -1193,6 +1193,25 @@ router.get("/api/reservations", async (req, res) => {
     }
 });
 
+//get settings
+router.get("/api/settings", async (req, res) => {
+    try {
+        const { user } = req.query
+        if (!user) return res.status(400).json({ message: "User ID is required" });
+
+        //find user
+        const userId = await User.findById(user).select("_id")
+        if (!userId) return res.status(404).json({ message: "User not found" });
+
+        //find user's settings
+        const settings = await Settings.find({user: userId}).lean(); // Convert to plain JS object for performance boost
+        res.json(settings);
+    } catch (error) {
+        console.error("Error fetching user settings:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+})
+
 // Handles Reservations for calendar.js
 router.post("/api/reserveroom", async (req, res) => {
     try {
