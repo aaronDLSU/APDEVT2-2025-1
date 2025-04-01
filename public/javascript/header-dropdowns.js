@@ -150,7 +150,8 @@ $(document).ready(function () {
       });
     })
     .catch(error => {
-      console.error("Error fetching users:", error)
+      console.error("Error fetching users:", error);
+        alert("Failed to load users. Please try again later.");
     });
 
 
