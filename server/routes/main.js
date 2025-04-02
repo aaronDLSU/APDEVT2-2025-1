@@ -62,13 +62,13 @@ router.get('/', (req, res) => {
 router.get('/api/users', async (req, res) => {
     const userData = req.session.user || null;
     try {
-        let filter = {}
+        let filter = {isActivated: true} //only show activated users
         //get only public users if user is student
         if(userData?.role === 'student'){
             const publicUsers = await Settings.find({accVisibility: 'Public'}).select("user");
             const userIds = publicUsers.map(setting => setting.user); //extract user IDs
 
-            filter = {_id: { $in: userIds }}
+            filter = {...filter, _id: { $in: userIds }}
         }
 
         const usersList = await User.find(filter).sort({name: 1}).lean();
