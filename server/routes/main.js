@@ -883,14 +883,14 @@ router.post('/change-password', async (req, res) => {
                 });
             }
             else{
-                res.status(200).json({
+                res.status(500).json({
                     success: false,
                     message: "Update password failed",
                 });
             }
         }
         else {
-            res.status(200).json({
+            res.status(400).json({
                 success: false,
                 message: "Wrong Password!",
             });
@@ -938,7 +938,7 @@ router.post('/change-privacy-settings', async (req, res) => {
             });
         }
         else{
-            res.status(200).json({
+            res.status(400).json({
                 success: false,
                 message: "Priv settings update failed",
             });
@@ -1001,7 +1001,7 @@ router.post('/delete-account', async (req, res) => {
             });
         }
         else{
-            return res.status(200).json({ success: false, message: "Email/password mismatch" });
+            return res.status(400).json({ success: false, message: "Email/password mismatch" });
         }
     } catch (err) {
         console.error(err);
@@ -1086,7 +1086,7 @@ router.post('/update-reservation', async (req, res) => {
         const overlap = await overlapsReserve(seatID, startTime, endTime, newDate)
 
         if(overlap) {
-            res.status(200).json({
+            res.status(400).json({
                 success: false,
                 overlap: true,
                 message: "Existing reservation overlaps",
@@ -1239,7 +1239,7 @@ router.post('/delete-reservation', async (req, res) => {
         console.log(deletedRes);
 
         if (!deletedRes) {
-            res.status(200).json({ success: false, message: "Reservation deleted failed" });
+            res.status(400).json({ success: false, message: "Reservation deleted failed" });
         }
         res.status(200).json({ success: true, message: "Reservation deleted successfully" });
     } catch (err) {
