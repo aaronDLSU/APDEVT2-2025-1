@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const LabSchema = new mongoose.Schema({
     name: { type: String, required: true, unique: true },
-    building: { type: String, required: true, unique: true },
+    building: { type: String, required: true },
     capacity: { type: Number, required: true }, 
     availability: { type: Boolean, default: true }, 
     createdAt: { type: Date, default: Date.now }
