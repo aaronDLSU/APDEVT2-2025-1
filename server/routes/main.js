@@ -64,7 +64,7 @@ router.get('/api/users', async (req, res) => {
     try {
         let filter = {} //only show activated users
         //get only public users if user is student
-        if(userData?.role === 'student'){
+        if(userData?.role === 'student' || !userData){
             const publicUsers = await Settings.find({accVisibility: 'Public'}).select("user");
             const userIds = publicUsers.map(setting => setting.user); //extract user IDs
 
