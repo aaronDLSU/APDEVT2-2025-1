@@ -90,7 +90,9 @@
 }
 
 .back-button{
-
   margin-top: 10px;
 }
  
+.status{
+  width: 30%;
+}

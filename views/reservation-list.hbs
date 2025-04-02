@@ -52,9 +52,26 @@
                                         <li class="list-group-item">{{formatDate this.date}}<br/> {{this.startTime}} - {{this.endTime}}</li>
                                         <li class="list-group-item">{{this.lab.name}}, Seat {{this.seat.seatNumber}}</li>
                                     </ul>
+                                    Status:
+                                    {{#if (eq this.status "approved")}}
+                                        <span class="badge rounded-pill bg-success mb-2 status">Approved</span>
+                                    {{else if (eq this.status "pending")}}
+                                        <span class="badge rounded-pill bg-warning text-dark mb-2 status">Pending</span>
+                                    {{else if (eq this.status "rejected")}}
+                                        <span class="badge rounded-pill bg-danger mb-2 status">Rejected</span>
+                                    {{else if (eq this.status "cancelled")}}
+                                        <span class="badge rounded-pill bg-secondary mb-2 status">Cancelled</span>
+                                    {{else}}
+                                        <span class="badge rounded-pill bg-dark mb-2 status">Completed</span>
+                                    {{/if}}
+                                    {{#if this.isAnonymous}}
+                                        <span class="badge rounded-pill bg-dark mb-2 status">Anonymous</span>
+                                    {{/if}}
                                 </div>
                             </div>
+                            <!-- only allow edit/delete if the reservation is not yet completed -->
                             <div class="col-buttons">
+                                {{#unless (eq this.status "completed")}}
                                 <form method="POST" action="/edit-reservation">
                                     <input type="hidden" name="id" value="{{this._id}}">
                                     <button type="submit" class="edit-reserve btn">
@@ -62,6 +79,7 @@
                                     </button>
                                 </form>
                                 <button class="btn submit-delete" data-id="{{this._id}}"><i class="fa-solid fa-trash"></i></button>
+                                {{/unless}}
                             </div>
                         </div>
                     </div>
@@ -79,7 +97,7 @@
                         <h5 class="modal-title" id="confirm-delete-label">Confirm Deletion</h5>
                     </div>
                     <div class="modal-body">
-                        Are you sure you want to delete this reservation?
+                        Are you sure you want to cancel this reservation?
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" id="confirm-btn">Yes</button>
@@ -96,7 +114,7 @@
                         <h5 class="modal-title" id="delete-success-label">Success</h5>
                     </div>
                     <div class="modal-body text-center">
-                        Reservation deleted successfully.
+                        Reservation cancelled successfully.
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
@@ -112,7 +130,7 @@
                         <h5 class="modal-title" id="delete-fail-label">Failed</h5>
                     </div>
                     <div class="modal-body text-center">
-                        Reservation deletion failed.
+                        Reservation cancellation failed.
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary no-confirm" data-bs-dismiss="modal">OK</button>

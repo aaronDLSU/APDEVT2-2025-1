@@ -974,26 +974,40 @@ router.post('/delete-account', async (req, res) => {
                 res.clearCookie('connect.sid');
             });
 
-
+            /*delete settings from the DB
             const deletedSettings = await Settings.deleteMany({ user: userData._id });
             if(!deletedSettings) {
                 return res.status(500)
                     .json({success: false , message: "Error deleting settings"});
-            }
+            }*/
 
-            const deletedReserves = await Reservation.deleteMany({ user: userData._id });
+
+            /*delete reservations from the DB
+            const deletedReserves = await Reservation.deleteMany({ user: userData._id });*/
+
+            //CANCEL ALL USER'S PENDING AND APPROVED RESERVATIONS
+            const deletedReserves = await Reservation.updateMany({
+                $and: [
+                    { user: userData._id },
+                    { $or: [ { status: "pending" }, { status: "approved" } ] }
+                ]
+            }, { status: "cancelled" });
+
             if(!deletedReserves) {
                 return res.status(500)
                     .json({success: false , message: "Error deleting reservations"});
             }
 
-            const deletedUser = await User.findByIdAndDelete(userData._id)
+            /* DELETE ACCOUNT IN THE DB
+            const deletedUser = await User.findByIdAndDelete(userData._id) */
+            const deletedUser = await User.findByIdAndUpdate(userData._id, { isActivated: false });
+
+            // console.log("deleted:", deletedSettings, deletedReserves, deletedUser)
+
             if(!deletedUser) {
                 return res.status(500)
                     .json({success: false , message: "Error deleting account"});
             }
-
-            console.log("deleted:", deletedSettings, deletedReserves, deletedUser)
 
             res.status(200).json({
                 success: true,
@@ -1190,14 +1204,17 @@ router.get('/reservation-list', async (req, res) => {
         }
 
         const { building, lab, date } = req.query; //get filter query
-
-        let filter = {};
+        //only reservations not cancelled nor rejected
+        let filter = {
+            $nor: [ { status: "cancelled" }, { status: "rejected" } ]
+        };
         //console.log(building,lab, date);
         const labId = await getLabId(building, lab); //call getlabId function to get the ObjectId of the lab
 
         if (labId || date) { //only apply filters if there are actual queries in the filter.
-            filter = { lab: labId, date: new Date(date) };
+            filter = { ...filter, lab: labId, date: new Date(date) };
         }
+
         //console.log(filter);
         //select data based on filter (returns everything if there are no filters)
         const reservations = await Reservation.find(filter).populate('user lab seat').sort({ date: 1 }).lean()
@@ -1235,7 +1252,10 @@ router.post('/delete-reservation', async (req, res) => {
         }
 
         const ObjID = selectedReserve._id;
-        const deletedRes = await Reservation.findByIdAndDelete(ObjID);
+        /* delete reservation from the DB
+        const deletedRes = await Reservation.findByIdAndDelete(ObjID);*/
+
+        const deletedRes = await Reservation.findByIdAndUpdate(ObjID, {status: "cancelled"})
         console.log(deletedRes);
 
         if (!deletedRes) {
