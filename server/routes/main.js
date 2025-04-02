@@ -62,13 +62,13 @@ router.get('/', (req, res) => {
 router.get('/api/users', async (req, res) => {
     const userData = req.session.user || null;
     try {
-        let filter = {isActivated: true} //only show activated users
+        let filter = {} //only show activated users
         //get only public users if user is student
         if(userData?.role === 'student'){
             const publicUsers = await Settings.find({accVisibility: 'Public'}).select("user");
             const userIds = publicUsers.map(setting => setting.user); //extract user IDs
 
-            filter = {...filter, _id: { $in: userIds }}
+            filter = {_id: { $in: userIds }}
         }
 
         const usersList = await User.find(filter).sort({name: 1}).lean();
@@ -974,33 +974,24 @@ router.post('/delete-account', async (req, res) => {
                 res.clearCookie('connect.sid');
             });
 
-            /*delete settings from the DB
+            /*delete settings from the DB*/
             const deletedSettings = await Settings.deleteMany({ user: userData._id });
             if(!deletedSettings) {
                 return res.status(500)
                     .json({success: false , message: "Error deleting settings"});
-            }*/
+            }
 
 
-            /*delete reservations from the DB
-            const deletedReserves = await Reservation.deleteMany({ user: userData._id });*/
-
-            //CANCEL ALL USER'S PENDING AND APPROVED RESERVATIONS
-            const deletedReserves = await Reservation.updateMany({
-                $and: [
-                    { user: userData._id },
-                    { $or: [ { status: "pending" }, { status: "approved" } ] }
-                ]
-            }, { status: "cancelled" });
+            /*delete reservations from the DB*/
+            const deletedReserves = await Reservation.deleteMany({ user: userData._id });
 
             if(!deletedReserves) {
                 return res.status(500)
                     .json({success: false , message: "Error deleting reservations"});
             }
 
-            /* DELETE ACCOUNT IN THE DB
-            const deletedUser = await User.findByIdAndDelete(userData._id) */
-            const deletedUser = await User.findByIdAndUpdate(userData._id, { isActivated: false });
+            /* DELETE ACCOUNT IN THE DB*/
+            const deletedUser = await User.findByIdAndDelete(userData._id)
 
             // console.log("deleted:", deletedSettings, deletedReserves, deletedUser)
 
@@ -1252,10 +1243,9 @@ router.post('/delete-reservation', async (req, res) => {
         }
 
         const ObjID = selectedReserve._id;
-        /* delete reservation from the DB
-        const deletedRes = await Reservation.findByIdAndDelete(ObjID);*/
+        /* delete reservation from the DB*/
+        const deletedRes = await Reservation.findByIdAndDelete(ObjID);
 
-        const deletedRes = await Reservation.findByIdAndUpdate(ObjID, {status: "cancelled"})
         console.log(deletedRes);
 
         if (!deletedRes) {

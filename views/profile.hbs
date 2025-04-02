@@ -112,7 +112,7 @@
                                     <span class="badge rounded-pill bg-dark mb-2">Completed</span>
                                     {{/if}}
                                     {{#if this.isAnonymous}}
-                                    <span class="badge rounded-pill bg-dark mb-2">Anonymous</span>
+                                    <span class="badge rounded-pill bg-primary mb-2">Anonymous</span>
                                     {{/if}}
                                 </div>
                             </div>
@@ -258,6 +258,9 @@
                                     {{else}}
                                     <span class="badge rounded-pill bg-dark mb-2">Completed</span>
                                     {{/if}}
+                                    {{#if this.isAnonymous}}
+                                        <span class="badge rounded-pill bg-primary mb-2">Anonymous</span>
+                                    {{/if}}
                                 </div>
                                 <div class="dropdown">
                                     <button class="align-button btn" type="button" data-bs-toggle="dropdown"
@@ -271,7 +274,7 @@
                                         </li>
                                         <li>
                                             <button class="dropdown-item cancel-reservation submit-delete"
-                                                data-id="{{this._id}}">Cancel</button>
+                                                data-id="{{this._id}}">Delete</button>
                                         </li>
                                     </ul>
                                 </div>
@@ -315,7 +318,7 @@
                 <h5 class="modal-title" id="confirm-delete-label">Confirm Deletion</h5>
             </div>
             <div class="modal-body">
-                Are you sure you want to cancel this reservation?
+                Are you sure you want to delete this reservation?
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary" id="confirm-btn">Yes</button>
@@ -332,7 +335,7 @@
                 <h5 class="modal-title" id="delete-success-label">Success</h5>
             </div>
             <div class="modal-body text-center">
-                Reservation cancelled successfully.
+                Reservation deleted successfully.
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
@@ -348,7 +351,7 @@
                 <h5 class="modal-title" id="delete-fail-label">Failed</h5>
             </div>
             <div class="modal-body text-center">
-                Reservation cancellation failed.
+                Reservation deletion failed.
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary no-confirm" data-bs-dismiss="modal">OK</button>
