@@ -447,13 +447,18 @@ async function getName(email) {
     return username;
 }
 
-// Handle User Signup
 router.post('/signup', async (req, res) => {
     try {
         // Extract form data from request
         const { 'signup-email': email, 'signup-password': password, 'signup-role': role } = req.body;
+
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ success: false, message: "Email already in use" });
+        }
+
+
         let name = await getName(email);
-        // console.log(name);
         // Create new user in MongoDB
         const hashedPass = await bcrypt.hash(password, 13);
         let newUser = await User.create({
@@ -467,40 +472,54 @@ router.post('/signup', async (req, res) => {
             user: newUser._id
         })
         // console.log(hashedPass);
-        res.redirect('/signup-login?success=true'); // Redirect back to login page
+        res.json({ success: true, message: "Signup successful!" });
     } catch (err) {
         console.error('Signup error:', err);
-        res.redirect('/signup-login?success=false');
+        res.status(500).json({ success: false, message: "An error occurred during signup" });
     }
 });
 
 // Handle User Login
 router.post('/login', express.urlencoded({ extended: true }), async (req, res) => {
     try{
-        const { 'email-input': email, 'password-input': password,
-        'login-checkbox': remembered} = req.body;
+    const { 'email-input': email, 'password-input': password, 
+    'login-checkbox': remembered} = req.body;
+   
+    const currUser = await User.findOne({email:email});
 
-        const currUser = await User.findOne({email:email});
+    if (!currUser) {
+        return res.status(400).json({
+            success: false,
+            message: "Invalid Credentials Try Again!"
+        });
+    }
 
-        const validPass = await bcrypt.compare(password, currUser.password);
-        // Simulated login (replace this with database authentication later)
-        if(currUser.email === email && validPass){
-            req.session.user = currUser;
-            res.cookie("sessionId", req.sessionID);
+    const validPass = await bcrypt.compare(password, currUser.password);
+    // Simulated login (replace this with database authentication later)
+    if(currUser.email === email && validPass){
+        req.session.user = currUser;
+        res.cookie("sessionId", req.sessionID);
 
-            if(remembered){
-                req.session.cookie.maxAge = 3 * 7 * 24 * 60 * 60 * 1000;
-            }
-
-            console.log( req.session.cookie.maxAge);
-
-            res.redirect('/');
-        }else {
-            res.send('Invalid Credentials. <p style="color:blue; text-decoration: underline; display:inline-block" onclick="history.back()">Try Again</p>');
+        if(remembered){
+            req.session.cookie.maxAge = 3 * 7 * 24 * 60 * 60 * 1000;
         }
-    } catch(err) {
+
+        return res.json({
+            success: true,
+            message: "Login successful!"
+        });
+    }else {
+        return res.status(400).json({
+            sucess: false,
+            message: "Invalid Credentials Try Again!"
+        });
+    }
+    }catch(error){
         console.error('Login error:', err);
-        res.send('Account not found. <p style="color:blue; text-decoration: underline; display:inline-block" onclick="history.back()">Try Again</p>');
+        res.status(500).json({
+            success: false,
+            message: "An error occurred during login"
+        });
     }
 });
 
