@@ -102,14 +102,44 @@ function validateSignup() {
   return true; // Allow form submission
 }
 
-const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('success') && urlParams.get('success') === 'true') {
-        alert('Account Successfully Added!');
-    }
-    else if (urlParams.has('success') && urlParams.get('success') === 'false') {
-      alert('Email has been used to make an account already!');
+document.querySelector('#signup-form').addEventListener('submit', async (e) => {  
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const response = await fetch('/signup', {
+      method: 'POST',
+      body: formData
+  });
+  
+  const result = await response.json();
+  
+  if (result.success) {
+      alert(result.message || 'Signup successful!');
+      window.location.href = '/signup-login';
+  } else {
+      alert(result.message || 'Signup failed. Please try again.');
   }
+});
 
+document.querySelector('#login-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const formData = new FormData(e.target);
+  const response = await fetch('/login', {
+      method: 'POST',
+      body: formData
+  });
+  
+  const result = await response.json();
+  
+  if (result.success) {
+      // Show success message and redirect
+      alert(result.message || 'Login successful!');
+      window.location.href = '/'; // Redirect to home page
+  } else {
+      // Show error message
+      alert(result.message || 'Login failed. Please try again.');
+  }
+});
 
 function clearSignUp(){
     $("#signup-email").css("border-color","#ccc");
