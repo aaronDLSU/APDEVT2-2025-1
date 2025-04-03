@@ -266,18 +266,21 @@
                                     <button class="align-button btn" type="button" data-bs-toggle="dropdown"
                                         aria-expanded="false"> <i class="fa-solid fa-ellipsis"></i></button>
                                     <ul class="dropdown-menu">
+                                        {{#if (eq this.status "approved")}}
                                         <li>
                                             <form method="POST" action="/edit-reservation">
                                                 <input type="hidden" name="id" value="{{this._id}}">
                                                 <button type="submit" class="dropdown-item">Edit</button>
                                             </form>
                                         </li>
+                                        {{/if}}
                                         <li>
                                             <button class="dropdown-item cancel-reservation submit-delete"
                                                 data-id="{{this._id}}">Delete</button>
                                         </li>
                                     </ul>
                                 </div>
+
                             </div>
                         </div>
 

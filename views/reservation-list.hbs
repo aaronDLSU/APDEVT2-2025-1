@@ -71,15 +71,15 @@
                             </div>
                             <!-- only allow edit/delete if the reservation is not yet completed -->
                             <div class="col-buttons">
-                                {{#unless (eq this.status "completed")}}
+                                {{#if (eq this.status "approved")}}
                                 <form method="POST" action="/edit-reservation">
                                     <input type="hidden" name="id" value="{{this._id}}">
                                     <button type="submit" class="edit-reserve btn">
                                         <i class="fa-regular fa-pen-to-square"></i>
                                     </button>
                                 </form>
+                                {{/if}}
                                 <button class="btn submit-delete" data-id="{{this._id}}"><i class="fa-solid fa-trash"></i></button>
-                                {{/unless}}
                             </div>
                         </div>
                     </div>

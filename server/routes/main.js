@@ -44,8 +44,60 @@ if (!fs.existsSync(uploadDir)) {
     console.log('Created temp uploads directory:', uploadDir);
 }
 
+
+async function updateReserveStatus() {
+    try {
+        const now = new Date();
+        const date = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const todayDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000) //convert date object to local time
+
+        const currentTime = String(now.getHours()).padStart(2, "0") + ":" + String(now.getMinutes()).padStart(2, "0"); //change current time to string
+        //console.log(todayDate)
+        //console.log(currentTime);
+
+        const reservations = await Reservation.find({
+            status: "approved",
+            date: { $lte: todayDate }
+        }).lean();
+
+        for (const reservation of reservations){
+            console.log(reservation.date, todayDate, reservation.date <= todayDate);
+            if (reservation.date.getTime() === todayDate.getTime()) {
+                let resEndTime;
+                let resStartTime;
+
+                if (reservation.endTime.length === 4)
+                    resEndTime = "0" + reservation.endTime;
+                else
+                    resEndTime = reservation.endTime;
+
+                if (reservation.startTime.length === 4)
+                    resStartTime = "0" + reservation.startTime;
+                else
+                    resStartTime = reservation.startTime;
+
+                //console.log(resStartTime);
+                //console.log(resEndTime);
+
+                if (resEndTime <= currentTime){
+                    //console.log("COMPLETED ", reservation)
+                    await Reservation.findByIdAndUpdate(reservation._id, {status: "completed"});
+                }
+                else if (currentTime >= resStartTime)
+                    //console.log("PENDING", reservation)
+                    await Reservation.findByIdAndUpdate(reservation._id, {status: "pending"});
+            } else if(reservation.date.getTime() < todayDate.getTime())
+                //console.log("COMPLETED", reservation)
+                await Reservation.findByIdAndUpdate(reservation._id, {status: "completed"})
+        }
+    } catch (err) {
+        console.error("Error updating reservations:", err);
+    }
+}
+
 // Homepage Route
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+    await updateReserveStatus();
     const userData = req.session.user || null;  
     console.log('User data:', userData); // Debugging: Log user data
 
@@ -164,6 +216,7 @@ router.get('/search_user', async (req, res) => {
 router.get('/profile/:_id', async (req, res) => {
     const userData = req.session.user || null;     
     try {
+        await updateReserveStatus(); //update reservation status
         console.log("Looking up profile for ID:", req.params._id);
 
         // Find the user by ID
@@ -423,26 +476,31 @@ router.post('/signup', async (req, res) => {
 
 // Handle User Login
 router.post('/login', express.urlencoded({ extended: true }), async (req, res) => {
-    const { 'email-input': email, 'password-input': password, 
-    'login-checkbox': remembered} = req.body;
-   
-    const currUser = await User.findOne({email:email});
+    try{
+        const { 'email-input': email, 'password-input': password,
+        'login-checkbox': remembered} = req.body;
 
-    const validPass = await bcrypt.compare(password, currUser.password);
-    // Simulated login (replace this with database authentication later)
-    if(currUser.email === email && validPass){
-        req.session.user = currUser;
-        res.cookie("sessionId", req.sessionID);
+        const currUser = await User.findOne({email:email});
 
-        if(remembered){
-            req.session.cookie.maxAge = 3 * 7 * 24 * 60 * 60 * 1000;
+        const validPass = await bcrypt.compare(password, currUser.password);
+        // Simulated login (replace this with database authentication later)
+        if(currUser.email === email && validPass){
+            req.session.user = currUser;
+            res.cookie("sessionId", req.sessionID);
+
+            if(remembered){
+                req.session.cookie.maxAge = 3 * 7 * 24 * 60 * 60 * 1000;
+            }
+
+            console.log( req.session.cookie.maxAge);
+
+            res.redirect('/');
+        }else {
+            res.send('Invalid Credentials. <p style="color:blue; text-decoration: underline; display:inline-block" onclick="history.back()">Try Again</p>');
         }
-
-        console.log( req.session.cookie.maxAge);
-
-        res.redirect('/');
-    }else {
-        res.send('Invalid Credentials. <p style="color:blue; text-decoration: underline; display:inline-block" onclick="history.back()">Try Again</p>');
+    } catch(err) {
+        console.error('Login error:', err);
+        res.send('Account not found. <p style="color:blue; text-decoration: underline; display:inline-block" onclick="history.back()">Try Again</p>');
     }
 });
 
@@ -450,6 +508,7 @@ router.post('/login', express.urlencoded({ extended: true }), async (req, res) =
 router.get('/calendar', async (req, res) => {
     const userData = req.session.user || null;
     try {
+        await updateReserveStatus(); //update reservation status
         const { name } = req.query; // Extracting 'name' from query parameters
         let query = {};
 
@@ -548,7 +607,7 @@ router.get('/profile',isAuthenticated, async (req, res) => {
         if (!userData) {
             return res.redirect('/signup-login');
         }
-
+        await updateReserveStatus(); //update reservation status
         console.log("Current user:", userData);
 
         // Fetch user's reservations
@@ -831,7 +890,7 @@ router.get('/manage-account', async (req, res) => {
             return res.redirect('/signup-login');
         }
         //console.log("Current user:", user._id);
-
+        await updateReserveStatus(); //update reservation status
         const objID = await User.findById(userData._id);
         //console.log(objID)
         const userSettings = await Settings.findOne({ user: objID }).populate("user").lean();
@@ -1085,6 +1144,8 @@ router.post('/update-reservation', async (req, res) => {
             return res.status(400).json({ success: false, message: "Missing parameters" });
         }
 
+        await updateReserveStatus()
+
         const selectedLab = await getLabId(building, lab);
         const newDate = new Date(date);
         const seatID = await Seat.findOne({lab: selectedLab , seatNumber: seat}).select("_id")
@@ -1105,26 +1166,30 @@ router.post('/update-reservation', async (req, res) => {
                 return res.status(404).send("Reservation not found");
             }
             console.log(isAnonymous)
-            const updatedReserve = await Reservation.findByIdAndUpdate(
-                selectedReserve._id,
-                {
-                    seat: seatID,
-                    startTime: startTime,
-                    endTime: endTime,
-                    date: newDate,
-                    isAnonymous: isAnonymous
-                }
-            )
+            if(selectedReserve.status === "approved") {
+                const updatedReserve = await Reservation.findByIdAndUpdate(
+                    selectedReserve._id,
+                    {
+                        seat: seatID,
+                        startTime: startTime,
+                        endTime: endTime,
+                        date: newDate,
+                        isAnonymous: isAnonymous
+                    }
+                )
 
-            console.log("Updated User:", updatedReserve);
+                console.log("Updated User:", updatedReserve);
 
-            res.status(200).json({
-                success: true,
-                overlap: false,
-                message: "Reservation edited successfully",
-                labtech: userData?.role === 'labtech',
-                student: userData?.role === 'student'
-            });
+                res.status(200).json({
+                    success: true,
+                    overlap: false,
+                    message: "Reservation edited successfully",
+                    labtech: userData?.role === 'labtech',
+                    student: userData?.role === 'student'
+                });
+            }
+            else
+                res.send('You cannot edit this reservation anymore!. <p style="color:blue; text-decoration: underline; display:inline-block" onclick="history.back()">Back</p>');
         }
     }
     catch(err){
@@ -1141,6 +1206,8 @@ router.post('/edit-reservation', async (req, res) => {
             return res.redirect('/signup-login');
         }
 
+        await updateReserveStatus()
+
         const { id } = req.body;
         if (!id) {
             return res.status(400).send("Reservation ID is required");
@@ -1156,16 +1223,21 @@ router.post('/edit-reservation', async (req, res) => {
             return res.redirect('/profile')
         }
         console.log(id, reservation, userData)
-        res.render('edit-reservation', {
-            title: "Edit Reservation",
-            pageStyle: "edit-reservation",
-            pageScripts: ["header-dropdowns", "edit-reservation"], // Include edit-reservation scripts
-            user: userData,
-            reservation,
-            labs,
-            labtech: userData?.role === 'labtech',
-            student: userData?.role === 'student'
-        });
+        if(reservation.status === "approved") {
+            res.render('edit-reservation', {
+                title: "Edit Reservation",
+                pageStyle: "edit-reservation",
+                pageScripts: ["header-dropdowns", "edit-reservation"], // Include edit-reservation scripts
+                user: userData,
+                reservation,
+                labs,
+                labtech: userData?.role === 'labtech',
+                student: userData?.role === 'student'
+            });
+        }
+        else {
+            res.send('You cannot edit this reservation anymore!. <p style="color:blue; text-decoration: underline; display:inline-block" onclick="history.back()">Back</p>');
+        }
     } catch (err) {
         console.error(err);
         res.status(500).send('Server Error');
@@ -1194,6 +1266,8 @@ router.get('/reservation-list', async (req, res) => {
             return res.redirect('/')
         }
 
+        await updateReserveStatus(); //update reservation status
+
         const { building, lab, date } = req.query; //get filter query
         //only reservations not cancelled nor rejected
         let filter = {
@@ -1212,6 +1286,27 @@ router.get('/reservation-list', async (req, res) => {
         const labs = await Lab.find().sort({ name: 1 }).lean()
         //console.log(reservations)
         console.log(labs)
+
+        const statusPriority = {
+            'approved': 1,
+            'pending': 2,
+            'rejected': 3,
+            'cancelled': 4
+        };
+
+        // Sort reservations by status priority, then by date
+        reservations.sort((a, b) => {
+            // First sort by status priority
+            const priorityA = statusPriority[a.status] || 99;
+            const priorityB = statusPriority[b.status] || 99;
+
+            if (priorityA !== priorityB) {
+                return priorityA - priorityB;
+            }
+
+            // If same status, sort by date (newest first)
+            return new Date(b.date) - new Date(a.date);
+        });
 
         res.render('reservation-list', {
             title: "Reservation List",
