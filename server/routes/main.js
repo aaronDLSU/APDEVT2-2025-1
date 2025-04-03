@@ -56,7 +56,10 @@ async function updateReserveStatus() {
         //console.log(currentTime);
 
         const reservations = await Reservation.find({
-            status: "approved",
+            $or: [
+                {status: "approved"},
+                {status: "pending"}
+            ],
             date: { $lte: todayDate }
         }).lean();
 
