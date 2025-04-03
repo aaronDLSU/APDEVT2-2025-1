@@ -117,6 +117,7 @@ document.querySelector('#signup-form').addEventListener('submit', async (e) => {
       window.location.href = '/signup-login';
   } else {
       alert(result.message || 'Signup failed. Please try again.');
+      clearSignUp();
   }
 });
 
@@ -148,6 +149,7 @@ function clearSignUp(){
     $(".signup-warning").removeClass("show");//unshow warning icons
     $("#signup-email").val('');
     $("#signup-password").val('');
+    $("#confirm-password").val('');
     $("#signup-role").prop("selectedIndex", 0); // makes dropdown choice back to student or default
 }
 
