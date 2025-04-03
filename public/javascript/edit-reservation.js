@@ -188,8 +188,22 @@ $(document).ready(function () {
               window.location.href = "/profile"
           });
         }
-        else{
-          if(response.overlap){
+        else {
+          console.log(response.cannotEdit)
+          if (response.cannotEdit) {
+            console.log("click")
+            $("#edit-modal").modal("hide");
+            $("#cant-edit").modal("show");
+
+            $("#cant-edit-ok").off("click").on("click", function () {
+              $("#cant-edit").modal("hide");
+              if(response.labtech)
+                window.location.href = "/reservation-list"
+              else if (response.student)
+                window.location.href = "/profile"
+            });
+          }
+          else if(response.overlap){
             $("#edit-modal").modal("hide");
             $("#overlap").modal("show");
 

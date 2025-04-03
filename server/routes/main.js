@@ -971,7 +971,7 @@ router.post('/change-password', async (req, res) => {
             }
         }
         else {
-            res.status(400).json({
+            res.status(200).json({
                 success: false,
                 message: "Wrong Password!",
             });
@@ -1087,7 +1087,7 @@ router.post('/delete-account', async (req, res) => {
             });
         }
         else{
-            return res.status(400).json({ success: false, message: "Email/password mismatch" });
+            return res.status(200).json({ success: false, message: "Email/password mismatch" });
         }
     } catch (err) {
         console.error(err);
@@ -1168,27 +1168,28 @@ router.post('/update-reservation', async (req, res) => {
 
         await updateReserveStatus()
 
-        const selectedLab = await getLabId(building, lab);
-        const newDate = new Date(date);
-        const seatID = await Seat.findOne({lab: selectedLab , seatNumber: seat}).select("_id")
-        const overlap = await overlapsReserve(seatID, startTime, endTime, newDate)
+        const selectedReserve = await Reservation.findById(id);
 
-        if(overlap) {
-            res.status(400).json({
-                success: false,
-                overlap: true,
-                message: "Existing reservation overlaps",
-                labtech: userData?.role === 'labtech',
-                student: userData?.role === 'student'});
+        if (!selectedReserve) {
+            return res.status(404).send("Reservation not found");
         }
-        else {
-            const selectedReserve = await Reservation.findById(id);
 
-            if (!selectedReserve) {
-                return res.status(404).send("Reservation not found");
+        if(selectedReserve.status === "approved") {
+            const selectedLab = await getLabId(building, lab);
+            const newDate = new Date(date);
+            const seatID = await Seat.findOne({lab: selectedLab , seatNumber: seat}).select("_id")
+            const overlap = await overlapsReserve(seatID, startTime, endTime, newDate)
+
+            if(overlap) {
+                res.status(200).json({
+                    success: false,
+                    overlap: true,
+                    message: "Existing reservation overlaps",
+                    labtech: userData?.role === 'labtech',
+                    student: userData?.role === 'student'});
             }
-            console.log(isAnonymous)
-            if(selectedReserve.status === "approved") {
+            else {
+                console.log(isAnonymous)
                 const updatedReserve = await Reservation.findByIdAndUpdate(
                     selectedReserve._id,
                     {
@@ -1200,7 +1201,7 @@ router.post('/update-reservation', async (req, res) => {
                     }
                 )
 
-                console.log("Updated User:", updatedReserve);
+                console.log("Updated Reservation:", updatedReserve);
 
                 res.status(200).json({
                     success: true,
@@ -1210,8 +1211,15 @@ router.post('/update-reservation', async (req, res) => {
                     student: userData?.role === 'student'
                 });
             }
-            else
-                res.send('You cannot edit this reservation anymore!. <p style="color:blue; text-decoration: underline; display:inline-block" onclick="history.back()">Back</p>');
+        }
+        else{
+            res.status(200).json({
+                success: false,
+                cannotEdit: true,
+                message: "You cannot edit this reservation anymore!",
+                labtech: userData?.role === 'labtech',
+                student: userData?.role === 'student'
+            });
         }
     }
     catch(err){
