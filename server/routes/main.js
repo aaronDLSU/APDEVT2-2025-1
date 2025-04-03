@@ -10,22 +10,22 @@ const bcrypt = require('bcrypt');
 
 router.use(
     session({
-      secret: "secret-key",
-      resave:false,
-      saveUninitialized: false
-    })  
-  );
-  
-  router.use(cookieParser());
-  
-const isAuthenticated = (req,res,next) => {
-    if(req.session.user){
-      next();
-    }else{
-      res.redirect("/");
+        secret: "secret-key",
+        resave: false,
+        saveUninitialized: false
+    })
+);
+
+router.use(cookieParser());
+
+const isAuthenticated = (req, res, next) => {
+    if (req.session.user) {
+        next();
+    } else {
+        res.redirect("/");
     }
-  };
-  
+};
+
 // Add model routes here
 const User = require("../../db/models/DB_users");
 const Reservation = require("../../db/models/DB_reservation");
@@ -57,13 +57,13 @@ async function updateReserveStatus() {
 
         const reservations = await Reservation.find({
             $or: [
-                {status: "approved"},
-                {status: "pending"}
+                { status: "approved" },
+                { status: "pending" }
             ],
             date: { $lte: todayDate }
         }).lean();
 
-        for (const reservation of reservations){
+        for (const reservation of reservations) {
             console.log(reservation.date, todayDate, reservation.date <= todayDate);
             if (reservation.date.getTime() === todayDate.getTime()) {
                 let resEndTime;
@@ -82,16 +82,16 @@ async function updateReserveStatus() {
                 //console.log(resStartTime);
                 //console.log(resEndTime);
 
-                if (resEndTime <= currentTime){
+                if (resEndTime <= currentTime) {
                     //console.log("COMPLETED ", reservation)
-                    await Reservation.findByIdAndUpdate(reservation._id, {status: "completed"});
+                    await Reservation.findByIdAndUpdate(reservation._id, { status: "completed" });
                 }
                 else if (currentTime >= resStartTime)
                     //console.log("PENDING", reservation)
-                    await Reservation.findByIdAndUpdate(reservation._id, {status: "pending"});
-            } else if(reservation.date.getTime() < todayDate.getTime())
+                    await Reservation.findByIdAndUpdate(reservation._id, { status: "pending" });
+            } else if (reservation.date.getTime() < todayDate.getTime())
                 //console.log("COMPLETED", reservation)
-                await Reservation.findByIdAndUpdate(reservation._id, {status: "completed"})
+                await Reservation.findByIdAndUpdate(reservation._id, { status: "completed" })
         }
     } catch (err) {
         console.error("Error updating reservations:", err);
@@ -101,7 +101,7 @@ async function updateReserveStatus() {
 // Homepage Route
 router.get('/', async (req, res) => {
     await updateReserveStatus();
-    const userData = req.session.user || null;  
+    const userData = req.session.user || null;
     console.log('User data:', userData); // Debugging: Log user data
 
     res.render('homepage', {
@@ -119,14 +119,14 @@ router.get('/api/users', async (req, res) => {
     try {
         let filter = {} //only show activated users
         //get only public users if user is student
-        if(userData?.role === 'student' || !userData){
-            const publicUsers = await Settings.find({accVisibility: 'Public'}).select("user");
+        if (userData?.role === 'student' || !userData) {
+            const publicUsers = await Settings.find({ accVisibility: 'Public' }).select("user");
             const userIds = publicUsers.map(setting => setting.user); //extract user IDs
 
-            filter = {_id: { $in: userIds }}
+            filter = { _id: { $in: userIds } }
         }
 
-        const usersList = await User.find(filter).sort({name: 1}).lean();
+        const usersList = await User.find(filter).sort({ name: 1 }).lean();
 
         res.json({
             success: true,
@@ -217,7 +217,7 @@ router.get('/search_user', async (req, res) => {
 
 // Individual profile route
 router.get('/profile/:_id', async (req, res) => {
-    const userData = req.session.user || null;     
+    const userData = req.session.user || null;
     try {
         await updateReserveStatus(); //update reservation status
         console.log("Looking up profile for ID:", req.params._id);
@@ -301,15 +301,15 @@ router.get('/profile/:_id', async (req, res) => {
                 console.log("Looking for reservations with user ID:", userIdString);
                 let filter = {}
 
-                if(userData?.role !== 'labtech'){
+                if (userData?.role !== 'labtech') {
                     let statusFilters = []
                     filter = { isAnonymous: false }
-                    if(otherSettings.showReserves){
-                        if(otherSettings.showBooked)
+                    if (otherSettings.showReserves) {
+                        if (otherSettings.showBooked)
                             statusFilters.push('approved')
-                        if(otherSettings.showOngoing)
+                        if (otherSettings.showOngoing)
                             statusFilters.push('pending')
-                        if(otherSettings.showPrevious)
+                        if (otherSettings.showPrevious)
                             statusFilters.push('completed')
                     }
 
@@ -484,40 +484,40 @@ router.post('/signup', async (req, res) => {
 
 // Handle User Login
 router.post('/login', express.urlencoded({ extended: true }), async (req, res) => {
-    try{
-    const { 'email-input': email, 'password-input': password, 
-    'login-checkbox': remembered} = req.body;
-   
-    const currUser = await User.findOne({email:email});
+    try {
+        const { 'email-input': email, 'password-input': password,
+            'login-checkbox': remembered } = req.body;
 
-    if (!currUser) {
-        return res.status(400).json({
-            success: false,
-            message: "Invalid Credentials Try Again!"
-        });
-    }
+        const currUser = await User.findOne({ email: email });
 
-    const validPass = await bcrypt.compare(password, currUser.password);
-    // Simulated login (replace this with database authentication later)
-    if(currUser.email === email && validPass){
-        req.session.user = currUser;
-        res.cookie("sessionId", req.sessionID);
-
-        if(remembered){
-            req.session.cookie.maxAge = 3 * 7 * 24 * 60 * 60 * 1000;
+        if (!currUser) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid Credentials Try Again!"
+            });
         }
 
-        return res.json({
-            success: true,
-            message: "Login successful!"
-        });
-    }else {
-        return res.status(400).json({
-            sucess: false,
-            message: "Invalid Credentials Try Again!"
-        });
-    }
-    }catch(error){
+        const validPass = await bcrypt.compare(password, currUser.password);
+        // Simulated login (replace this with database authentication later)
+        if (currUser.email === email && validPass) {
+            req.session.user = currUser;
+            res.cookie("sessionId", req.sessionID);
+
+            if (remembered) {
+                req.session.cookie.maxAge = 3 * 7 * 24 * 60 * 60 * 1000;
+            }
+
+            return res.json({
+                success: true,
+                message: "Login successful!"
+            });
+        } else {
+            return res.status(400).json({
+                sucess: false,
+                message: "Invalid Credentials Try Again!"
+            });
+        }
+    } catch (error) {
         console.error('Login error:', err);
         res.status(500).json({
             success: false,
@@ -610,7 +610,7 @@ router.get("/api/seats", async (req, res) => {
 
 // Help & Support Page
 router.get('/help-support', (req, res) => {
-    const userData = req.session.user || null;     
+    const userData = req.session.user || null;
     res.render('help-support', {
         title: "Help & Support",
         pageStyle: "help-support",
@@ -622,8 +622,8 @@ router.get('/help-support', (req, res) => {
 });
 
 // User Profile Page
-router.get('/profile',isAuthenticated, async (req, res) => {
-    const userData = req.session.user || null;     
+router.get('/profile', isAuthenticated, async (req, res) => {
+    const userData = req.session.user || null;
     try {
         // Check if user is logged in
         if (!userData) {
@@ -786,7 +786,7 @@ router.get('/profile',isAuthenticated, async (req, res) => {
 
 // edit profile Page
 router.get('/edit-profile', (req, res) => {
-    const userData = req.session.user || null;     
+    const userData = req.session.user || null;
 
     res.render('edit-profile', {
         title: "Edit Profile",
@@ -799,7 +799,7 @@ router.get('/edit-profile', (req, res) => {
 });
 
 router.post('/update-profile-picture', (req, res) => {
-    const userData = req.session.user || null;      
+    const userData = req.session.user || null;
     try {
         if (!userData) {
             return res.redirect('/signup-login');
@@ -856,7 +856,7 @@ router.post('/update-profile-picture', (req, res) => {
 
 // Update username route
 router.post('/update-username', async (req, res) => {
-    const userData = req.session.user || null;     
+    const userData = req.session.user || null;
     try {
         if (!userData) {
             return res.redirect('/signup-login');
@@ -881,7 +881,7 @@ router.post('/update-username', async (req, res) => {
 
 // Update description route
 router.post('/update-description', async (req, res) => {
-    const userData = req.session.user || null;     
+    const userData = req.session.user || null;
     try {
         if (!userData) {
             return res.redirect('/signup-login');
@@ -891,6 +891,17 @@ router.post('/update-description', async (req, res) => {
 
         if (!newDescription || newDescription.trim() === '') {
             return res.redirect('/edit-profile?error=Description cannot be empty');
+        }
+
+        // Update the user's description in the database
+        const updatedUser = await User.findByIdAndUpdate(
+            userData._id,
+            { description: newDescription },
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedUser) {
+            return res.redirect('/edit-profile?error=Failed to update description in database');
         }
 
         // Update the user's description in the session
@@ -906,7 +917,7 @@ router.post('/update-description', async (req, res) => {
 
 // manage account Page
 router.get('/manage-account', async (req, res) => {
-    const userData = req.session.user || null;     
+    const userData = req.session.user || null;
     try {
         if (!userData) {
             return res.redirect('/signup-login');
@@ -917,7 +928,7 @@ router.get('/manage-account', async (req, res) => {
         //console.log(objID)
         const userSettings = await Settings.findOne({ user: objID }).populate("user").lean();
         //create user settings (if it does not exist already)
-        if(!userSettings) {
+        if (!userSettings) {
             await Settings.create({
                 user: objID
             })
@@ -946,24 +957,24 @@ router.post('/change-password', async (req, res) => {
             return res.redirect('/signup-login');
         }
 
-        const {oldPass, newPass} = req.body;
+        const { oldPass, newPass } = req.body;
         //check if old pass == new pass
         const isEqual = await bcrypt.compare(oldPass, userData.password);
 
-        if(isEqual) {
+        if (isEqual) {
             //hash new password
-            const hashedPass = await bcrypt.hash(newPass,13);
+            const hashedPass = await bcrypt.hash(newPass, 13);
             //update password
             const updatedUser = await User.findByIdAndUpdate(
                 userData._id, { password: hashedPass }
             )
-            if(updatedUser) {
+            if (updatedUser) {
                 res.status(200).json({
                     success: true,
                     message: "Password changed successfully",
                 });
             }
-            else{
+            else {
                 res.status(500).json({
                     success: false,
                     message: "Update password failed",
@@ -984,12 +995,12 @@ router.post('/change-password', async (req, res) => {
 
 router.post('/change-privacy-settings', async (req, res) => {
     const userData = req.session.user || null;
-    try{
+    try {
         if (!userData) {
             return res.redirect('/signup-login');
         }
 
-        const {id, accVisibility, showStats, showReserves, showBooked, showOngoing, showPrevious} = req.body;
+        const { id, accVisibility, showStats, showReserves, showBooked, showOngoing, showPrevious } = req.body;
         if (!id || !accVisibility) {
             return res.status(400).json({ success: false, message: "Missing parameters" });
         }
@@ -1012,20 +1023,20 @@ router.post('/change-privacy-settings', async (req, res) => {
         )
 
         console.log("Updated User:", updatedSettings);
-        if(updatedSettings) {
+        if (updatedSettings) {
             res.status(200).json({
                 success: true,
                 message: "Priv settings edited successfully",
             });
         }
-        else{
+        else {
             res.status(400).json({
                 success: false,
                 message: "Priv settings update failed",
             });
         }
     }
-    catch(err){
+    catch (err) {
         console.error(err);
         res.status(500).send('Server Error');
     }
@@ -1040,35 +1051,35 @@ router.post('/delete-account', async (req, res) => {
 
         const { email, password } = req.body;
 
-        if(!email || !password) {
+        if (!email || !password) {
             return res.status(400).json({ success: false, message: "Missing parameters" });
         }
 
         const isPassEqual = await bcrypt.compare(password, userData.password)
-        if(email === userData.email && isPassEqual) {
+        if (email === userData.email && isPassEqual) {
             //signout from account b4 deleting
             req.session.destroy(error => {
-                if(error) {
+                if (error) {
                     return res.status(500)
-                        .json({success: false , message: "Error signing out"});
+                        .json({ success: false, message: "Error signing out" });
                 }
                 res.clearCookie('connect.sid');
             });
 
             /*delete settings from the DB*/
             const deletedSettings = await Settings.deleteMany({ user: userData._id });
-            if(!deletedSettings) {
+            if (!deletedSettings) {
                 return res.status(500)
-                    .json({success: false , message: "Error deleting settings"});
+                    .json({ success: false, message: "Error deleting settings" });
             }
 
 
             /*delete reservations from the DB*/
             const deletedReserves = await Reservation.deleteMany({ user: userData._id });
 
-            if(!deletedReserves) {
+            if (!deletedReserves) {
                 return res.status(500)
-                    .json({success: false , message: "Error deleting reservations"});
+                    .json({ success: false, message: "Error deleting reservations" });
             }
 
             /* DELETE ACCOUNT IN THE DB*/
@@ -1076,9 +1087,9 @@ router.post('/delete-account', async (req, res) => {
 
             // console.log("deleted:", deletedSettings, deletedReserves, deletedUser)
 
-            if(!deletedUser) {
+            if (!deletedUser) {
                 return res.status(500)
-                    .json({success: false , message: "Error deleting account"});
+                    .json({ success: false, message: "Error deleting account" });
             }
 
             res.status(200).json({
@@ -1086,7 +1097,7 @@ router.post('/delete-account', async (req, res) => {
                 message: "Account successfully deleted",
             });
         }
-        else{
+        else {
             return res.status(200).json({ success: false, message: "Email/password mismatch" });
         }
     } catch (err) {
@@ -1157,11 +1168,11 @@ async function overlapsReserve(seatID, startTime, endTime, date) {
 //save changes to reservation
 router.post('/update-reservation', async (req, res) => {
     const userData = req.session.user || null;
-    try{
+    try {
         if (!userData) {
             return res.redirect('/signup-login');
         }
-        const {id, seat, startTime, endTime, lab, building, date, isAnonymous} = req.body;
+        const { id, seat, startTime, endTime, lab, building, date, isAnonymous } = req.body;
         if (!id || !seat || !startTime || !endTime || !lab || !building || !date) {
             return res.status(400).json({ success: false, message: "Missing parameters" });
         }
@@ -1174,19 +1185,20 @@ router.post('/update-reservation', async (req, res) => {
             return res.status(404).send("Reservation not found");
         }
 
-        if(selectedReserve.status === "approved") {
+        if (selectedReserve.status === "approved") {
             const selectedLab = await getLabId(building, lab);
             const newDate = new Date(date);
-            const seatID = await Seat.findOne({lab: selectedLab , seatNumber: seat}).select("_id")
+            const seatID = await Seat.findOne({ lab: selectedLab, seatNumber: seat }).select("_id")
             const overlap = await overlapsReserve(seatID, startTime, endTime, newDate)
 
-            if(overlap) {
+            if (overlap) {
                 res.status(200).json({
                     success: false,
                     overlap: true,
                     message: "Existing reservation overlaps",
                     labtech: userData?.role === 'labtech',
-                    student: userData?.role === 'student'});
+                    student: userData?.role === 'student'
+                });
             }
             else {
                 console.log(isAnonymous)
@@ -1212,7 +1224,7 @@ router.post('/update-reservation', async (req, res) => {
                 });
             }
         }
-        else{
+        else {
             res.status(200).json({
                 success: false,
                 cannotEdit: true,
@@ -1222,7 +1234,7 @@ router.post('/update-reservation', async (req, res) => {
             });
         }
     }
-    catch(err){
+    catch (err) {
         console.error(err);
         res.status(500).send('Server Error');
     }
@@ -1230,7 +1242,7 @@ router.post('/update-reservation', async (req, res) => {
 
 // Edit Reservation Page
 router.post('/edit-reservation', async (req, res) => {
-    const userData = req.session.user || null;     
+    const userData = req.session.user || null;
     try {
         if (!userData) {
             return res.redirect('/signup-login');
@@ -1253,7 +1265,7 @@ router.post('/edit-reservation', async (req, res) => {
             return res.redirect('/profile')
         }
         console.log(id, reservation, userData)
-        if(reservation.status === "approved") {
+        if (reservation.status === "approved") {
             res.render('edit-reservation', {
                 title: "Edit Reservation",
                 pageStyle: "edit-reservation",
@@ -1264,11 +1276,11 @@ router.post('/edit-reservation', async (req, res) => {
                 labtech: userData?.role === 'labtech',
                 student: userData?.role === 'student',
                 helpers: {
-                    uniqueBuildings: function(labs){
+                    uniqueBuildings: function (labs) {
                         const buildings = [];
                         const seen = new Set();
 
-                        labs.forEach(function(lab) {
+                        labs.forEach(function (lab) {
                             if (!seen.has(lab.building)) {
                                 buildings.push(lab);
                                 seen.add(lab.building);
@@ -1301,7 +1313,7 @@ async function getLabId(buildName, labName) {
 
 // Reservation list Page
 router.get('/reservation-list', async (req, res) => {
-    const userData = req.session.user || null;     
+    const userData = req.session.user || null;
     try {
         if (!userData) {
             return res.redirect('/signup-login');
@@ -1315,7 +1327,7 @@ router.get('/reservation-list', async (req, res) => {
         const { building, lab, date } = req.query; //get filter query
         //only reservations not cancelled nor rejected
         let filter = {
-            $nor: [ { status: "cancelled" }, { status: "rejected" } ]
+            $nor: [{ status: "cancelled" }, { status: "rejected" }]
         };
         //console.log(building,lab, date);
         const labId = await getLabId(building, lab); //call getlabId function to get the ObjectId of the lab
@@ -1400,13 +1412,13 @@ router.post('/delete-reservation', async (req, res) => {
 //signout
 router.post('/signout', (req, res) => {
     req.session.destroy(error => {
-        if(error) {
+        if (error) {
             return res.status(500)
-            .json({success: false , message: "Error signing out"});
+                .json({ success: false, message: "Error signing out" });
         }
         res.clearCookie('connect.sid');
         res.redirect('/');
-        
+
     });
 });
 
@@ -1452,7 +1464,7 @@ router.get("/api/settings", async (req, res) => {
         if (!userId) return res.status(404).json({ message: "User not found" });
 
         //find user's settings
-        const settings = await Settings.find({user: userId}).lean(); // Convert to plain JS object for performance boost
+        const settings = await Settings.find({ user: userId }).lean(); // Convert to plain JS object for performance boost
         res.json(settings);
     } catch (error) {
         console.error("Error fetching user settings:", error);
