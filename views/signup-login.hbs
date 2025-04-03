@@ -6,7 +6,7 @@
         <div class="form-content" id="login-box" style="display: none;">
           <h1 class="login-signup">Login</h1>
 
-           <form action="/login" method="post" onsubmit="validateLogin()">
+           <form id="login-form" action="/login" method="post" onsubmit="validateLogin()">
             <div class="input-container">
               <input id="email-input" name="email-input" type="text" placeholder="Email"/>
               <i class="fa-solid fa-circle-exclamation login-warning" style="color: #ff6f61;"></i>
@@ -36,7 +36,7 @@
         <div class="form-content" id="signup-box">
           <h1 class="login-signup">Sign Up</h1>
 
-           <form action="/signup" method="post" onsubmit="return validateSignup()">
+           <form id="signup-form" action="/signup" method="post" onsubmit="return validateSignup()">
             <div class="input-container">
               <input id="signup-email" name="signup-email" type="text" placeholder="Email">
               <i class="fa-solid fa-circle-exclamation signup-warning" style="color: #ff6f61;"></i>
@@ -61,8 +61,6 @@
             <button type="submit" class="login-signup-btn">Sign Up</button>
           </form>
 
-          
-         
           <div>
             Have an account?
             <button class="switch-signup-login" onclick="showLogin()">Login</button>
