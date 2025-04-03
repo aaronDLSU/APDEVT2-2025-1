@@ -51,7 +51,7 @@
                   <select class="form-select mb-3" id="building" required>
                       <option value="">Select Building</option>
                       {{#if labs.length}} <!-- Check if labs array is not empty -->
-                          {{#each labs}}
+                          {{#each (uniqueBuildings labs)}}
                               <option value="{{this.building}}">{{this.building}}</option>
                           {{/each}}
                       {{/if}}
@@ -213,6 +213,7 @@
     $("#building").val(urlParams.get("building") || "").change(function () {
         let building = $(this).val();
         let itemsDropdown = $("#lab");
+
 
         if (building && labs.length) {
             itemsDropdown.empty();

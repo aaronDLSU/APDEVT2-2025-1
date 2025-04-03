@@ -1262,7 +1262,21 @@ router.post('/edit-reservation', async (req, res) => {
                 reservation,
                 labs,
                 labtech: userData?.role === 'labtech',
-                student: userData?.role === 'student'
+                student: userData?.role === 'student',
+                helpers: {
+                    uniqueBuildings: function(labs){
+                        const buildings = [];
+                        const seen = new Set();
+
+                        labs.forEach(function(lab) {
+                            if (!seen.has(lab.building)) {
+                                buildings.push(lab);
+                                seen.add(lab.building);
+                            }
+                        });
+                        return buildings;
+                    }
+                }
             });
         }
         else {
