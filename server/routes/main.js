@@ -16,10 +16,10 @@ router.use(
       secret: "secret-key",
       resave:false,
       saveUninitialized: false,
+      proxy: true,
       store: MongoStore.create({
         mongoUrl: process.env.MONGO_URI,
       }),
-      proxy: true,
       cookie:{
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
