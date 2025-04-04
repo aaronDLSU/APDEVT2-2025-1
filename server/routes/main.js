@@ -1,4 +1,3 @@
-const config = require('../../config');
 const mongoose = require("mongoose");
 const express = require('express');
 const router = express.Router();
@@ -18,7 +17,7 @@ router.use(
       resave:false,
       saveUninitialized: false,
       store: MongoStore.create({
-        mongoUrl: config.mongoURI,
+        mongoUrl: process.env.MONGO_URI,
       }),
       proxy: true,
       cookie:{
