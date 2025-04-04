@@ -512,7 +512,9 @@ router.post('/login', express.urlencoded({ extended: true }), async (req, res) =
         if (currUser.email === email && validPass) {
             req.session.user = currUser;
             res.cookie("sessionId", req.sessionID);
-
+            console.log(req.session);
+            console.log(req.session.user);
+            
             if (remembered) {
                 req.session.cookie.maxAge = 3 * 7 * 24 * 60 * 60 * 1000;
             }
