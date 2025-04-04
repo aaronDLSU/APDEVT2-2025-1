@@ -3,5 +3,4 @@ module.exports = {
     mongoURI: process.env.MONGO_URI,        // MongoDB URL
     port: process.env.PORT || 3000,         // Default port
     sessionKey: process.env.SESSION_SECRET,  // For using sessions
-    node: process.env.NODE_ENV || production
 };
