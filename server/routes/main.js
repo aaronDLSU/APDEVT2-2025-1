@@ -21,7 +21,7 @@ router.use(
       }),
       proxy: true,
       cookie:{
-        secure: config.node === 'production',
+        secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24
       }
