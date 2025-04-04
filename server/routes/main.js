@@ -13,19 +13,10 @@ router.use(cookieParser());
 
 router.use(
     session({
-      secret: "secret-key",
-      resave:false,
-      saveUninitialized: false,
-      store: MongoStore.create({
-        mongoUrl: process.env.MONGO_URI,
-      }),
-      proxy: true,
-      cookie:{
-        secure: process.env.NODE_ENV === 'production',
-        httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24
-      }
-    })  
+        secret: "secret-key",
+        resave: false,
+        saveUninitialized: false
+    })
   );
 
 const isAuthenticated = (req, res, next) => {
