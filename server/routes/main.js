@@ -1,4 +1,3 @@
-const config = require('../../config');
 const mongoose = require("mongoose");
 const express = require('express');
 const router = express.Router();
@@ -7,26 +6,17 @@ const fs = require('fs');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
-const MongoStore = require('connect-mongo');
 
-
-router.use(cookieParser());
 
 router.use(
     session({
-      secret: "secret-key",
-      resave:false,
-      saveUninitialized: false,
-      store: MongoStore.create({
-        mongoUrl: config.mongoURI,
-      }),
-      cookie:{
-        secure: process.env.NODE_ENV === 'production',
-        httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24
-      }
-    })  
-  );
+        secret: "secret-key",
+        resave: false,
+        saveUninitialized: false
+    })
+);
+
+router.use(cookieParser());
 
 const isAuthenticated = (req, res, next) => {
     if (req.session.user) {
