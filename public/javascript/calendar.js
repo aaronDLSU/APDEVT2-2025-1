@@ -337,7 +337,7 @@ $(document).ready(function() {
     });
     
     
-    // Reserve room function
+    // Reserve seat* function, room is a typo
     async function reserveRoom() {
         try {
             // Fetch the current user's ID from the session using the API
@@ -495,6 +495,7 @@ $(document).ready(function() {
     
             // Refresh seat availability after booking
             updateSeatAvailability();
+            generateReservationInfo();
     
         } catch (error) {
             console.error("Error making reservation:", error);

@@ -25,7 +25,7 @@ router.use(
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24
       }
-    });  
+    })
   );
 
 const isAuthenticated = (req, res, next) => {
