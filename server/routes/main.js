@@ -525,7 +525,7 @@ router.post('/login', express.urlencoded({ extended: true }), async (req, res) =
             });
         } else {
             return res.status(400).json({
-                sucess: false,
+                success: false,
                 message: "Invalid Credentials Try Again!"
             });
         }
