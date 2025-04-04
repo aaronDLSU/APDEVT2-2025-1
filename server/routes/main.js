@@ -13,9 +13,17 @@ router.use(cookieParser());
 
 router.use(
     session({
-        secret: "secret-key",
-        resave: false,
-        saveUninitialized: false
+           secret: "secret-key",
+      resave:false,
+      saveUninitialized: false,
+
+      proxy: true,
+      cookie:{
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24
+      }
+    })  
     })
   );
 
