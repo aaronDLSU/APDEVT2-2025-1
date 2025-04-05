@@ -18,7 +18,7 @@ router.use(
       saveUninitialized: false,
       proxy: true,
       store: MongoStore.create({
-        mongoUrl: process.env.MONGO_URI,
+        mongoUrl: process.env.MONGO_URI
       }),
       cookie:{
         secure: process.env.NODE_ENV === 'production',
@@ -463,11 +463,21 @@ async function getName(email) {
 router.post('/signup', async (req, res) => {
     try {
         // Extract form data from request
-        const { 'signup-email': email, 'signup-password': password, 'signup-role': role } = req.body;
+        const { 'signup-email': email, 'signup-password': password, 'confirm-password': confirmed_pass, 'signup-role': role } = req.body;
 
         const existingUser = await User.findOne({ email });
-        if (existingUser) {
+        if(!email || !confirmed_pass || !password){
+            return res.status(400).json({ success: false, message: "All fields are required!" });
+        }else if(!email.includes("@")){
+            return res.status(400).json({ success: false, message: "Invalid Email Input!" });
+        }else if(email.split('@')[1] != "dlsu.edu.ph"){
+            return res.status(400).json({ success: false, message: "Only DLSU Emails Allowed!" });
+        }else if(existingUser){
             return res.status(400).json({ success: false, message: "Email already in use" });
+        }else if(password.length < 8 || confirmed_pass.length < 8){
+            return res.status(400).json({ success: false, message: "Password Minimum Length is 8 Characters!" });
+        }else if(confirmed_pass != password){
+            return res.status(400).json({ success: false, message: "Passwords do not match!" });
         }
 
 
@@ -498,10 +508,15 @@ router.post('/login', express.urlencoded({ extended: true }), async (req, res) =
         const { 'email-input': email, 'password-input': password,
             'login-checkbox': remembered } = req.body;
 
+        if(!email || !password){
+            return res.status(400).json({ success: false, message: "All fields are required!" });
+        }
+
         const currUser = await User.findOne({ email: email });
 
+       
         if (!currUser) {
-            return res.status(400).json({
+            return res.status(401).json({
                 success: false,
                 message: "Invalid Credentials Try Again!"
             });
@@ -524,7 +539,7 @@ router.post('/login', express.urlencoded({ extended: true }), async (req, res) =
                 message: "Login successful!"
             });
         } else {
-            return res.status(400).json({
+            return res.status(401).json({
                 success: false,
                 message: "Invalid Credentials Try Again!"
             });

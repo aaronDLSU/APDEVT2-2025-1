@@ -41,65 +41,10 @@ function remembered() {
   }
 }
 
-function validateSignup() {
-  const email = document.getElementById('signup-email').value.trim();
-  const password = document.getElementById('signup-password').value.trim();
-  const confirmPassword = document.getElementById('confirm-password').value.trim();
-  console.log('Validation running');
-  // Clear previous errors
-  
-  if (!email || !password || !confirmPassword) {
-    $("#signup-email").css("border-color","red");
-    $("#signup-password").css("border-color","red");
-    $("#confirm-password").css("border-color","red");
-    $(".invalid-message").html("Invalid Email or Password Input!");
-    $(".invalid-message").css("opacity", "1");
-    $(".signup-warning").addClass("show");
-    console.log('invalid');
-    return false; // Block form submission
-  }
-
-  if (checkPasswordLength(password)) {
-    $("#signup-email").css("border-color","red");
-    $("#signup-password").css("border-color","red");
-    $("#confirm-password").css("border-color","red");
-    $(".invalid-message").html("Password Minimum Length is 8 Characters");
-    $(".invalid-message").css("opacity", "1");
-    $(".signup-warning").addClass("show");
-    return false; // Block form submission
-  }
-
-  if(!email.includes("@")){
-    $("#signup-email").css("border-color","red");
-    $("#signup-password").css("border-color","red");
-    $("#confirm-password").css("border-color","red");
-    $(".invalid-message").html("Invalid Email Input");
-    $(".invalid-message").css("opacity", "1");
-    $(".signup-warning").addClass("show");
-    return false;
-  }
-
-  if(email.split('@')[1] != "dlsu.edu.ph"){
-    $("#signup-email").css("border-color","red");
-    $("#signup-password").css("border-color","red");
-    $("#confirm-password").css("border-color","red");
-    $(".invalid-message").html("Only DLSU Emails Allowed");
-    $(".invalid-message").css("opacity", "1");
-    $(".signup-warning").addClass("show");
-    return false;
-  }
-
-  if (password != confirmPassword) {
-    $("#signup-email").css("border-color","red");
-    $("#signup-password").css("border-color","red");
-    $("#confirm-password").css("border-color","red");
-    $(".invalid-message").html("Passwords do not match");
-    $(".invalid-message").css("opacity", "1");
-    $(".signup-warning").addClass("show");
-    return false; // Block form submission
-  }
-
-  return true; // Allow form submission
+function showSignupError(message) {
+  $(".invalid-message").html(message).css("opacity", "1");
+  $(".signup-warning").addClass("show");
+  $("#signup-email, #signup-password, #confirm-password").css("border-color", "red");
 }
 
 document.querySelector('#signup-form').addEventListener('submit', async (e) => {  
@@ -116,8 +61,7 @@ document.querySelector('#signup-form').addEventListener('submit', async (e) => {
       alert(result.message || 'Signup successful!');
       window.location.href = '/signup-login';
   } else {
-      alert(result.message || 'Signup failed. Please try again.');
-      clearSignUp();
+    showSignupError(result.message || 'Signup failed. Please try again.');
   }
 });
 
@@ -138,13 +82,14 @@ document.querySelector('#login-form').addEventListener('submit', async (e) => {
       window.location.href = '/'; // Redirect to home page
   } else {
       // Show error message
-      alert(result.message || 'Login failed. Please try again.');
+      showLoginError(result.message || 'Login failed. Please try again.');
   }
 });
 
 function clearSignUp(){
     $("#signup-email").css("border-color","#ccc");
     $("#signup-password").css("border-color","#ccc");
+    $("#confirm-password").css("border-color","#ccc");
     $(".invalid-message").css("opacity", "0");
     $(".signup-warning").removeClass("show");//unshow warning icons
     $("#signup-email").val('');
@@ -153,25 +98,10 @@ function clearSignUp(){
     $("#signup-role").prop("selectedIndex", 0); // makes dropdown choice back to student or default
 }
 
-function checkPasswordLength(password){
-  return password.length < 8;
-}
-
-function validateLogin(){
-  const email = $("#email-input").val();
-  const password = $("#password-input").val();
-  const Invalid = email === '' || password === '';
-
-  if(Invalid){
-    $("#email-input").css("border-color","red");
-    $("#password-input").css("border-color","red");
-    $(".invalid-message").html("Invalid email or password input!");
-    $(".invalid-message").css("opacity", "1");
-    $(".login-warning").addClass("show");
-    console.log('invalid');
-    return false;
-  }else return true;
-  
+function showLoginError(message) {
+  $(".invalid-message").html(message).css("opacity", "1");
+  $(".login-warning").addClass("show");
+  $("#email-input, #password-input").css("border-color", "red");
 }
 
 function clearLogin(){
