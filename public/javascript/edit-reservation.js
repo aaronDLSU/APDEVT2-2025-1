@@ -216,4 +216,8 @@ $(document).ready(function () {
       }
     })
   })
+
+  document.addEventListener("click", () => {
+        window.scrollTo(window.scrollX, window.scrollY);
+    });
 });
