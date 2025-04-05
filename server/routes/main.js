@@ -797,7 +797,7 @@ router.get('/profile', isAuthenticated, async (req, res) => {
 });
 
 // edit profile Page
-router.get('/edit-profile', (req, res) => {
+router.get('/edit-profile',isAuthenticated, (req, res) => {
     const userData = req.session.user || null;
 
     res.render('edit-profile', {
@@ -928,7 +928,7 @@ router.post('/update-description', async (req, res) => {
 });
 
 // manage account Page
-router.get('/manage-account', async (req, res) => {
+router.get('/manage-account',isAuthenticated , async (req, res) => {
     const userData = req.session.user || null;
     try {
         if (!userData) {
@@ -1324,7 +1324,7 @@ async function getLabId(buildName, labName) {
 }
 
 // Reservation list Page
-router.get('/reservation-list', async (req, res) => {
+router.get('/reservation-list', isAuthenticated, async (req, res) => {
     const userData = req.session.user || null;
     try {
         if (!userData) {
