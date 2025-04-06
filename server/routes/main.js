@@ -9,24 +9,27 @@ const bcrypt = require('bcrypt');
 
 const MongoStore = require('connect-mongo');
 
+const { uploadFileToGridFS, getFileStream, deleteFileFromGridFS, findFileById } = require('../utils/gridfs-helper');
+
+
 router.use(cookieParser());
 
 router.use(
     session({
-      secret: "secret-key",
-      resave:false,
-      saveUninitialized: false,
-      proxy: true,
-      store: MongoStore.create({
-        mongoUrl: process.env.MONGO_URI
-      }),
-      cookie:{
-        secure: process.env.NODE_ENV === 'production',
-        httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24
-      }
-    })  
-  );
+        secret: "secret-key",
+        resave: false,
+        saveUninitialized: false,
+        proxy: true,
+        store: MongoStore.create({
+            mongoUrl: process.env.MONGO_URI
+        }),
+        cookie: {
+            secure: process.env.NODE_ENV === 'production',
+            httpOnly: true,
+            maxAge: 1000 * 60 * 60 * 24
+        }
+    })
+);
 
 const isAuthenticated = (req, res, next) => {
     if (req.session.user) {
@@ -48,11 +51,7 @@ const Seat = require("../../db/models/DB_seats");
 // const labtech = { name: "Sir", role: "labtech", description: "i am a lab technician", profilePic: "/images/default_profilepic.jpg" };
 // let user = ''; // Stores the current logged-in user
 
-const uploadDir = path.join(__dirname, '../../public/images/temp-uploads');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-    console.log('Created temp uploads directory:', uploadDir);
-}
+
 
 
 async function updateReserveStatus() {
@@ -107,6 +106,8 @@ async function updateReserveStatus() {
         console.error("Error updating reservations:", err);
     }
 }
+
+
 
 // Homepage Route
 router.get('/', async (req, res) => {
@@ -466,17 +467,17 @@ router.post('/signup', async (req, res) => {
         const { 'signup-email': email, 'signup-password': password, 'confirm-password': confirmed_pass, 'signup-role': role } = req.body;
 
         const existingUser = await User.findOne({ email });
-        if(!email || !confirmed_pass || !password){
+        if (!email || !confirmed_pass || !password) {
             return res.status(400).json({ success: false, message: "All fields are required!" });
-        }else if(!email.includes("@")){
+        } else if (!email.includes("@")) {
             return res.status(400).json({ success: false, message: "Invalid Email Input!" });
-        }else if(email.split('@')[1] != "dlsu.edu.ph"){
+        } else if (email.split('@')[1] != "dlsu.edu.ph") {
             return res.status(400).json({ success: false, message: "Only DLSU Emails Allowed!" });
-        }else if(existingUser){
+        } else if (existingUser) {
             return res.status(400).json({ success: false, message: "Email already in use" });
-        }else if(password.length < 8 || confirmed_pass.length < 8){
+        } else if (password.length < 8 || confirmed_pass.length < 8) {
             return res.status(400).json({ success: false, message: "Password Minimum Length is 8 Characters!" });
-        }else if(confirmed_pass != password){
+        } else if (confirmed_pass != password) {
             return res.status(400).json({ success: false, message: "Passwords do not match!" });
         }
 
@@ -508,13 +509,13 @@ router.post('/login', express.urlencoded({ extended: true }), async (req, res) =
         const { 'email-input': email, 'password-input': password,
             'login-checkbox': remembered } = req.body;
 
-        if(!email || !password){
+        if (!email || !password) {
             return res.status(400).json({ success: false, message: "All fields are required!" });
         }
 
         const currUser = await User.findOne({ email: email });
 
-       
+
         if (!currUser) {
             return res.status(401).json({
                 success: false,
@@ -529,7 +530,7 @@ router.post('/login', express.urlencoded({ extended: true }), async (req, res) =
             res.cookie("sessionId", req.sessionID);
             console.log(req.session);
             console.log(req.session.user);
-            
+
             if (remembered) {
                 req.session.cookie.maxAge = 3 * 7 * 24 * 60 * 60 * 1000;
             }
@@ -812,7 +813,7 @@ router.get('/profile', isAuthenticated, async (req, res) => {
 });
 
 // edit profile Page
-router.get('/edit-profile',isAuthenticated, (req, res) => {
+router.get('/edit-profile', isAuthenticated, (req, res) => {
     const userData = req.session.user || null;
 
     res.render('edit-profile', {
@@ -825,59 +826,115 @@ router.get('/edit-profile',isAuthenticated, (req, res) => {
     });
 });
 
-router.post('/update-profile-picture', (req, res) => {
-    const userData = req.session.user || null;
+// Upload profile picture using express-fileupload and GridFS
+router.post('/update-profile-picture', isAuthenticated, async (req, res) => {
     try {
+        console.log('Profile picture upload request received');
+        const userData = req.session.user;
+
         if (!userData) {
             return res.redirect('/signup-login');
         }
 
+        console.log('Request files:', req.files);
+
         // Check if a file was uploaded
         if (!req.files || !req.files.profilePicture) {
+            console.log('No file found in request');
             return res.redirect('/edit-profile?error=Please select an image file');
         }
 
-        const profilePicture = req.files.profilePicture;
+        const file = req.files.profilePicture;
+        console.log('File received:', file.name, file.mimetype, file.size);
 
         // Check if it's an image
-        if (!profilePicture.mimetype.startsWith('image/')) {
+        if (!file.mimetype.startsWith('image/')) {
             return res.redirect('/edit-profile?error=Please upload only image files');
         }
 
         // Create a unique filename
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        const fileExtension = path.extname(profilePicture.name);
-        const fileName = 'profile-' + uniqueSuffix + fileExtension;
+        const fileExtension = path.extname(file.name);
+        const fileName = 'profile-' + userData._id + '-' + uniqueSuffix + fileExtension;
 
-        // Ensure the upload directory exists
-        const uploadDir = path.join(__dirname, '../../public/images/temp-uploads');
-        if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir, { recursive: true });
+        // Upload file to GridFS
+        const fileId = await uploadFileToGridFS(
+            file.data,
+            fileName,
+            file.mimetype,
+            {
+                userId: userData._id.toString(),
+                originalName: file.name,
+                uploadDate: new Date()
+            }
+        );
+
+        console.log('File uploaded to GridFS with ID:', fileId);
+
+        // If user already has a profile image, delete the old one
+        const user = await User.findById(userData._id);
+        if (user.profileImageId) {
+            try {
+                await deleteFileFromGridFS(user.profileImageId);
+                console.log(`Deleted old profile image: ${user.profileImageId}`);
+            } catch (err) {
+                console.error('Error deleting old profile image:', err);
+                // Continue anyway - we'll update with the new image
+            }
         }
 
-        // The upload path
-        const uploadPath = path.join(uploadDir, fileName);
+        // Update user with the new file ID
+        const updatedUser = await User.findByIdAndUpdate(
+            userData._id,
+            {
+                profileImageId: fileId,
+                profilePic: `/profile-image/${fileId}`
+            },
+            { new: true }
+        );
 
-        // The relative path for the browser
-        const relativePath = `/images/temp-uploads/${fileName}`;
+        // Update session
+        userData.profileImageId = fileId;
+        userData.profilePic = `/profile-image/${fileId}`;
 
-        // Move the file to the upload directory
-        profilePicture.mv(uploadPath, function (err) {
-            if (err) {
-                console.error('File upload error:', err);
-                return res.redirect('/edit-profile?error=Error uploading file');
-            }
-
-            // Update user session with new profile pic path (without saving to DB)
-            userData.profilePic = relativePath;
-
-            console.log(`Updated profile picture in session to: ${relativePath}`);
-
-            return res.redirect('/edit-profile?success=Profile picture updated for this session');
-        });
+        return res.redirect('/edit-profile?success=Profile picture updated successfully');
     } catch (error) {
         console.error('Profile picture upload error:', error);
         return res.redirect('/edit-profile?error=' + encodeURIComponent(error.message));
+    }
+});
+
+// Route to serve profile images
+router.get('/profile-image/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        // Find the file in GridFS
+        const file = await findFileById(id);
+
+        if (!file) {
+            // File not found, serve default image
+            return res.sendFile(path.join(__dirname, '../../public/images/default_profilepic.jpg'));
+        }
+
+        // Check if image
+        if (!file.contentType || !file.contentType.startsWith('image/')) {
+            return res.status(400).send('Not an image');
+        }
+
+        // Set content type
+        res.set('Content-Type', file.contentType);
+
+        // Set cache headers
+        res.set('Cache-Control', 'public, max-age=86400'); // Cache for 1 day
+
+        // Stream the file to the response
+        const downloadStream = getFileStream(id);
+        downloadStream.pipe(res);
+    } catch (error) {
+        console.error('Error serving profile image:', error);
+        // Serve default image on error
+        res.sendFile(path.join(__dirname, '../../public/images/default_profilepic.jpg'));
     }
 });
 
@@ -943,7 +1000,7 @@ router.post('/update-description', async (req, res) => {
 });
 
 // manage account Page
-router.get('/manage-account',isAuthenticated , async (req, res) => {
+router.get('/manage-account', isAuthenticated, async (req, res) => {
     const userData = req.session.user || null;
     try {
         if (!userData) {

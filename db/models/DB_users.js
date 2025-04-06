@@ -10,7 +10,8 @@ const UserSchema = new mongoose.Schema({
     role: { type: String, enum: ['student', 'labtech'], default: 'student' },
     isActivated: { type: Boolean, default: true },             // If account for deletion: can deactivate first
     activationToken: { type: String },                          // Token for emails activation / verification; can delete
-    createdAt: { type: Date, default: Date.now }
+    createdAt: { type: Date, default: Date.now },
+    profilePicId: { type: mongoose.Schema.Types.ObjectId } //GridFS profile pic
 });
 
 const User = mongoose.model('User', UserSchema);

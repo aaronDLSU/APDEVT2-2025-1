@@ -19,12 +19,15 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
+require('./server/utils/gridfs-helper');
+
 // Middleware
 app.use(express.json());                          // use json
 app.use(express.urlencoded({ extended: true })); // files consist of more than strings
 app.use(express.static(path.join(__dirname, 'public'))); // Serve static files (CSS, JS, images)
 app.use(cors());
 app.use(fileUpload()); // for fileuploads
+
 
 
 // Set up Handlebars as the view engine
