@@ -953,7 +953,17 @@ router.post('/update-username', async (req, res) => {
         }
 
         // Update the user's name in the session
-        userData.username = newUsername;
+        const updatedUser = await User.findByIdAndUpdate(
+            userData._id,
+            { name: newUsername },
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedUser) {
+            return res.redirect('/edit-profile?error=Failed to update username');
+        }
+
+        userData.name = newUsername;
 
         // Redirect with success message
         res.redirect('/edit-profile?success=Username updated successfully');

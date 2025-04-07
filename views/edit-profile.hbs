@@ -43,6 +43,42 @@
             </div>
         </div>
 
+        <!-- Username Modal Button -->
+        <button id="button" type="button" class="btn left-align-text" data-bs-toggle="modal"
+            data-bs-target="#usernameModal">
+            <div class="d-flex justify-content-between">
+                <h4 class="p-2">Username</h4>
+                <div class="d-flex align-items-center">
+                    <i id="icon" class="fa-solid fa-chevron-right"></i>
+                </div>
+            </div>
+        </button>
+
+        <!-- Username Modal -->
+        <div class="modal fade" id="usernameModal" tabindex="-1" aria-labelledby="usernameModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Update username</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="/update-username" method="POST">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="new-username" class="col-form-label">New username:</label>
+                                <input type="text" class="form-control" id="new-username" name="newUsername"
+                                    value="{{user.username}}">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         
         <!-- Description Modal Button -->
         <button id="button" type="button" class="btn left-align-text" data-bs-toggle="modal"
