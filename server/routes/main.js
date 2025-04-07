@@ -774,6 +774,9 @@ router.get('/profile', isAuthenticated, async (req, res) => {
                 console.error("Error fetching reservations:", error);
             }
         }
+            if (!userData.description) {
+                userData.description = "No description available.";
+            }
 
         res.render('profile', {
             title: "Profile Page",
