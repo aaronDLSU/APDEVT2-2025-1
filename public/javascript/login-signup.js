@@ -135,8 +135,6 @@ $(window).on("resize", function () {
 
   window.showLogin = showLogin;
   window.showSignUp = showSignUp;
-  window.validateLogin = validateLogin;
-  window.validateSignup = validateSignup;
   window.remembered =remembered;
 
 });
